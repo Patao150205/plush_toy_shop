@@ -19,7 +19,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 MyApp.getServerSideProps = async (ctx: any) => {
   const res = await axios.get("https://jsonplaceholder.typicode.com/comments");
   console.log(res);
-  console.log(ctx);
 };
 
 export default MyApp;
