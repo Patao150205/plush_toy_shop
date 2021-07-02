@@ -1,0 +1,37 @@
+@import "config";
+
+body {
+  font-family: $Ffirst;
+}
+
+$space: (
+  sm: 12px,
+  md: 20px,
+  lg: 28px,
+  xl: 36px,
+);
+
+// スマホ
+@each $size, $value in $space {
+  .module-spacer--#{$size} {
+    height: $value;
+  }
+}
+
+// タブレット
+@include mq(sm) {
+  @each $size, $value in $space {
+    .module-spacer--#{$size} {
+      height: $value * 1.2;
+    }
+  }
+}
+
+// PC
+@include mq(sm) {
+  @each $size, $value in $space {
+    .module-spacer--#{$size} {
+      height: $value * 1.4;
+    }
+  }
+}
