@@ -1,0 +1,10 @@
+@import "config";
+
+.ui {
+  &.menu {
+    background-color: $Sthirdry;
+  }
+  &.header {
+    color: aqua;
+  }
+}

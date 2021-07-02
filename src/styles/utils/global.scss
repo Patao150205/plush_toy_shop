@@ -4,6 +4,7 @@ body {
   font-family: $Ffirst;
 }
 
+// スペース
 $space: (
   sm: 12px,
   md: 20px,
@@ -34,4 +35,8 @@ $space: (
       height: $value * 1.4;
     }
   }
+}
+
+.u-display-flex {
+  display: flex;
 }

@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import { useAppDispatch, useAppSelector } from "../src/stores/store";
 import { increment } from "../src/stores/userSlice";
-import axios from "axios";
 import Link from "next/link";
 import styles from "styles/test.module.scss";
 
