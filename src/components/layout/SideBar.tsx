@@ -1,40 +1,37 @@
 import React, { FC } from "react";
-import { Sidebar, Menu, Segment, Icon, Header, Image } from "semantic-ui-react";
+import {} from "semantic-ui-react";
+import style from "./SideBar.module.scss";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import classNames from "classnames";
+import { useAppSelector } from "../../stores/store";
+import { useAppDispatch } from "stores/store";
+import { SideToggle } from "stores/settingSlice";
 
-type Props = {
-  setSideVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  sideVisible: boolean;
-};
+const SideBar: FC = ({ children }) => {
+  const hasSide = useAppSelector((state) => state.setting.hasSide);
+  const dispatch = useAppDispatch();
 
-const SideBar: FC<Props> = ({ setSideVisible, sideVisible, children }) => {
+  const router = useRouter();
   return (
     <>
-      <Sidebar.Pushable as={Segment}>
-        <Sidebar
-          as={Menu}
-          animation="overlay"
-          icon="labeled"
-          inverted
-          onHide={() => setSideVisible(false)}
-          vertical
-          visible={sideVisible}
-          width="thin">
-          <Menu.Item as="a">
-            <Icon name="home" />
-            Home
-          </Menu.Item>
-          <Menu.Item as="a">
-            <Icon name="gamepad" />
-            Games
-          </Menu.Item>
-          <Menu.Item as="a">
-            <Icon name="camera" />
-            Channels
-          </Menu.Item>
-        </Sidebar>
-
-        <Sidebar.Pusher dimmed={sideVisible}>{children}</Sidebar.Pusher>
-      </Sidebar.Pushable>
+      {children}
+      <div className={classNames(style.root, { [style.active]: hasSide })} onClick={() => dispatch(SideToggle())}>
+        <div className={style.left}></div>
+        <div className={style.right}>
+          <div className={style.sidebar}>
+            <ul>
+              <li className={style.menuItem} onClick={() => router.push("/")}>
+                <i className="fas fa-home"></i>
+                <p className={style.menuText}>HOME</p>
+              </li>
+              <li className={style.menuItem} onClick={() => router.push("/login")}>
+                <p className={style.menuText}>LOGIN</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

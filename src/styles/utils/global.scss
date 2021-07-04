@@ -1,7 +1,23 @@
 @import "config";
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+*::selection {
+  background-color: darken($color: $Ssecondary, $amount: 10);
+}
 
 body {
   font-family: $Ffirst;
+  min-height: 100vh;
+  height: 100%;
+  background-color: $Sthirdry;
+}
+
+.u-dispaly--none {
+  display: none;
 }
 
 // スペース
@@ -14,6 +30,10 @@ $space: (
 
 // スマホ
 @each $size, $value in $space {
+  html {
+    font-size: 12px;
+  }
+
   .module-spacer--#{$size} {
     height: $value;
   }
@@ -21,6 +41,10 @@ $space: (
 
 // タブレット
 @include mq(sm) {
+  html {
+    font-size: 14px;
+  }
+
   @each $size, $value in $space {
     .module-spacer--#{$size} {
       height: $value * 1.2;
@@ -29,7 +53,11 @@ $space: (
 }
 
 // PC
-@include mq(sm) {
+@include mq(lg) {
+  html {
+    font-size: 16px;
+  }
+
   @each $size, $value in $space {
     .module-spacer--#{$size} {
       height: $value * 1.4;

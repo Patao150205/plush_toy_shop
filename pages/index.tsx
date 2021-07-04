@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import { useAppDispatch, useAppSelector } from "../src/stores/store";
 import { increment } from "../src/stores/userSlice";
 import Link from "next/link";
-import styles from "styles/test.module.scss";
 
 type Props = {
   data: any[];
@@ -13,7 +12,6 @@ const Home: FC<Props> = ({ data }) => {
   const ammount = useAppSelector((state) => state.user.value);
   return (
     <>
-      <div className={styles.test}></div>
       <p>{ammount}</p>
       <button onClick={() => dispatch(increment())}>増加</button>
       <Link href="/login">

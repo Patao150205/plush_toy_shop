@@ -1,0 +1,87 @@
+@import "config";
+.btn {
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.5;
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  color: #212529;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  padding: 0;
+  font-family: "Font Awesome 5 Free";
+  border: none;
+
+  &:hover {
+    transform: translate(0, 0.25rem);
+    background: $Sprimary;
+    color: $Ssecondary;
+    &:before {
+      transform: translate3d(0, 0.5rem, -1rem);
+      box-shadow: 0 0.35rem 0 0 rgba(0, 0, 0, 0.2);
+    }
+  }
+  &:active {
+    transform: translate(0rem, 0.75rem);
+    &::before {
+      transform: translate3d(0, 0, -1rem);
+      box-shadow: 0 0.35rem 0 0 rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .btnContent {
+    position: relative;
+    display: block;
+    padding: 1.5rem 3.5rem 1.5rem 3.5rem;
+    transition: all 0.3s;
+    border: 2px solid #000;
+    border-radius: inherit;
+    background: $Sprimary;
+  }
+  .btnContent::after {
+    z-index: 1000;
+    font-size: 2rem;
+    font-weight: normal;
+    line-height: 1;
+    position: absolute;
+    top: calc(50% - 1rem);
+    left: 1.5rem;
+    margin: 0;
+    padding: 0;
+    content: "";
+  }
+  .btnContent:hover::after {
+    font-weight: 900;
+  }
+  .btnContent::before {
+    z-index: -1000;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 100%;
+    height: 100%;
+    content: "";
+
+    transition: all 0.3s;
+    transform: translate3d(0, 0.75rem, -1rem);
+
+    border: 2px solid #000;
+    border-radius: inherit;
+    background: darken($color: $Sprimary, $amount: 10);
+    box-shadow: 0 0.6rem 0 0 rgba(0, 0, 0, 0.2);
+  }
+  .btnContent:hover::before {
+    box-shadow: 0 0.3rem 0 0 rgba(0, 0, 0, 0.2);
+  }
+  .btnContent:active::before {
+    transform: translate3d(0, 0, 0);
+  }
+}

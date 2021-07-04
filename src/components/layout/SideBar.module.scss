@@ -1,0 +1,50 @@
+@import "config";
+
+.root {
+  width: 100vw;
+  height: 100vh;
+  top: 5rem;
+  left: 0;
+  position: fixed;
+  display: none;
+  .left {
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+  }
+}
+.active {
+  display: flex;
+}
+
+.sidebar {
+  width: 300px;
+  height: 100vh;
+  background-color: white;
+  text-align: center;
+  & > ul {
+    list-style: none;
+  }
+  .menuItem {
+    &:hover {
+      background-color: darken($color: white, $amount: 10);
+    }
+    position: relative;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-top-style: none;
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    .menuText {
+      display: inline-block;
+      font-size: 20px;
+    }
+    & > i {
+      position: absolute;
+      left: 80px;
+      font-size: 25px;
+      margin-right: 10px;
+    }
+  }
+}

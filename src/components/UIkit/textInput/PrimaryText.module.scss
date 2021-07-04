@@ -1,0 +1,42 @@
+@import "config";
+
+.wrapper {
+  position: relative;
+  margin-top: 40px;
+  width: 100%;
+}
+
+.label {
+  position: absolute;
+  top: 1.5rem;
+  color: white;
+  font-size: 1.7rem;
+  padding: 0 10px;
+  transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+}
+
+.labelActive {
+  top: -30px;
+  font-size: 1.3rem;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid white;
+  background-color: transparent;
+  font-size: 1.3rem;
+  color: white;
+  padding: 1.3rem;
+  outline: none;
+  border-radius: 10px;
+  box-shadow: 0 0 0.75rem 0.13rem;
+}
+.input[type="number"]::-webkit-outer-spin-button,
+.input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+.inputActive {
+  border: 1px solid $Ssecondary;
+  box-shadow: 0 0 0.75rem 0.13rem $Ssecondary;
+}

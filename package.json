@@ -8,17 +8,22 @@
     "start": "next start"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.0",
     "@reduxjs/toolkit": "^1.6.0",
     "axios": "^0.21.1",
+    "classnames": "^2.2.6",
     "express": "^4.17.1",
+    "mongoose": "^5.13.2",
     "next": "11.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-hook-form": "^7.10.0",
     "react-redux": "^7.2.4",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.3"
   },
   "devDependencies": {
+    "@types/classnames": "^2.3.1",
     "@types/express": "^4.17.12",
     "@types/node": "^15.12.5",
     "@types/react": "17.0.11",

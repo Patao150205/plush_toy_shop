@@ -2,9 +2,32 @@
 
 .ui {
   &.menu {
-    background-color: $Sthirdry;
+    background: linear-gradient(
+      135deg,
+      rgb(255, 0, 0),
+      rgb(255, 20, 172),
+      rgb(90, 40, 255),
+      rgb(60, 120, 255),
+      rgb(80, 255, 237),
+      rgb(100, 255, 169),
+      rgb(170, 255, 120),
+      rgb(221, 255, 140),
+      rgb(255, 236, 160),
+      rgb(255, 208, 180),
+      rgb(255, 208, 200),
+      #ff0000
+    );
+    position: sticky !important;
+    z-index: 99999 !important;
   }
-  &.header {
-    color: aqua;
+}
+
+.search {
+  display: none;
+}
+
+@include mq(sm) {
+  .search {
+    display: inline-block;
   }
 }

@@ -1,27 +1,38 @@
 import React, { FC } from "react";
-import { Menu, Image, Header, Icon } from "semantic-ui-react";
+import { Menu, Image, Header, Icon, Container, Search } from "semantic-ui-react";
 import style from "./TopHeader.module.scss";
-console.log(style);
+import { Color } from "styles/style";
+import { useAppDispatch } from "stores/store";
+import { SideToggle } from "stores/settingSlice";
+import { useRouter } from "next/router";
 
-type Props = {
-  setSideVisible: React.Dispatch<React.SetStateAction<boolean>>;
-};
+const TopHeader: FC = () => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
-const TopHeader: FC<Props> = ({ setSideVisible }) => {
   return (
     <>
-      <Menu borderless fixed="top" className={`${style.menu} ${style.ui}`}>
-        <Menu.Item>
-          <Image size="mini" src="shopLogo.jpg" spaced="left" avatar inline />
-        </Menu.Item>
-        <Menu.Item fitted="horizontally">
-          <Header className={`${style.ui} ${style.header}`} size="large">
-            Yuruhuwa
-          </Header>
-        </Menu.Item>
-        <Menu.Item position="right">
-          <Icon name="bars" size="large" link={true} onClick={() => setSideVisible(true)} />
-        </Menu.Item>
+      <Menu size="large" borderless fixed="top" className={`${style.ui} ${style.menu}`}>
+        <Container>
+          <Menu.Item onClick={() => router.push("/")}>
+            <Image size="mini" src="shopLogo.jpg" spaced="left" avatar inline />
+          </Menu.Item>
+          <Menu.Item onClick={() => router.push("/")} fitted="horizontally">
+            <Header style={{ color: Color.secondary }} size="large">
+              Yuruhuwa
+            </Header>
+          </Menu.Item>
+          <Menu.Item position="right">
+            <Search className={style.search} />
+            <Icon
+              style={{ marginLeft: "30px" }}
+              name="bars"
+              size="large"
+              link={true}
+              onClick={() => dispatch(SideToggle())}
+            />
+          </Menu.Item>
+        </Container>
       </Menu>
     </>
   );
