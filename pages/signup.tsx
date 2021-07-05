@@ -7,11 +7,8 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch } from "stores/store";
 import { LoadingOFF, LoadingON } from "stores/settingSlice";
 import { ErrorMessage } from "@hookform/error-message";
-
-type SendData = {
-  email: string;
-  password: string;
-};
+import { SignUpState, signUp } from "utils/auth";
+import { useRouter } from "next/router";
 
 const Signup = () => {
   const {
@@ -21,14 +18,17 @@ const Signup = () => {
     formState: { errors },
   } = useForm<FormData>();
   const dispatch = useAppDispatch();
-  const [render, setRender] = useState(false);
+  const router = useRouter();
 
-  const sendInfo = (data: SendData) => {
+  const sendInfo = async (data: SignUpState) => {
     dispatch(LoadingON());
-    setTimeout(() => {
-      console.log("いえす", data);
-      dispatch(LoadingOFF());
-    }, 5000);
+    const res = await signUp(data);
+    dispatch(LoadingOFF());
+    if (!res.err) {
+      router.push("/");
+    } else {
+      alert(res.err);
+    }
   };
 
   return (
@@ -37,17 +37,15 @@ const Signup = () => {
         <Grid.Column width="10" textAlign="center">
           <div className="module-spacer--xl" />
           <h1 style={{ textShadow: "2px 2px 3px white", color: Color.secondary }}>会員登録</h1>
-          <form onSubmit={handleSubmit(sendInfo)}>
+          <form autoComplete="new-password" onSubmit={handleSubmit(sendInfo)}>
             <PrimaryText
               getValues={getValues}
               register={register}
               required={true}
-              name="lastname"
+              name="nickname"
               type="text"
-              label="姓"
-              setRender={setRender}
+              label="ニックネーム"
             />
-            <PrimaryText getValues={getValues} register={register} name="firstname" type="text" label="名" />
             <PrimaryText
               getValues={getValues}
               register={register}
@@ -65,92 +63,6 @@ const Signup = () => {
             <ErrorMessage
               errors={errors}
               name="email"
-              render={({ message }) => <p style={{ color: "red", marginTop: "10px" }}>{message}</p>}
-            />
-            <PrimaryText
-              getValues={getValues}
-              register={register}
-              required={true}
-              validation={{
-                pattern: {
-                  value: /^0\d{9,10}$/,
-                  message: "電話番号を正しく入力してください。",
-                },
-              }}
-              name="phonenumber"
-              type="number"
-              label="電話番号"
-            />
-            <ErrorMessage
-              errors={errors}
-              name="phone"
-              render={({ message }) => <p style={{ color: "red", marginTop: "10px" }}>{message}</p>}
-            />
-            <PrimaryText
-              getValues={getValues}
-              register={register}
-              required={true}
-              validation={{ pattern: { value: /^\d{7}$/, message: "郵便番号を正しく入力してください。" } }}
-              name="postcord"
-              type="number"
-              label="郵便番号"
-            />
-            <ErrorMessage
-              errors={errors}
-              name="postcord"
-              render={({ message }) => <p style={{ color: "red", marginTop: "10px" }}>{message}</p>}
-            />
-
-            <PrimaryText
-              getValues={getValues}
-              register={register}
-              required={true}
-              name="prefecture"
-              type="text"
-              label="都道府県"
-            />
-            <ErrorMessage
-              errors={errors}
-              name="prefecture"
-              render={({ message }) => <p style={{ color: "red", marginTop: "10px" }}>{message}</p>}
-            />
-            <PrimaryText
-              getValues={getValues}
-              register={register}
-              required={true}
-              name="city"
-              type="text"
-              label="市区町村"
-            />
-            <ErrorMessage
-              errors={errors}
-              name="city"
-              render={({ message }) => <p style={{ color: "red", marginTop: "10px" }}>{message}</p>}
-            />
-            <PrimaryText
-              getValues={getValues}
-              register={register}
-              required={true}
-              name="postcode"
-              type="text"
-              label="番地"
-            />
-            <ErrorMessage
-              errors={errors}
-              name="postcord"
-              render={({ message }) => <p style={{ color: "red", marginTop: "10px" }}>{message}</p>}
-            />
-            <PrimaryText
-              getValues={getValues}
-              register={register}
-              required={true}
-              name="building"
-              type="text"
-              label="建物名・部屋番号"
-            />
-            <ErrorMessage
-              errors={errors}
-              name="building"
               render={({ message }) => <p style={{ color: "red", marginTop: "10px" }}>{message}</p>}
             />
             <PrimaryText
