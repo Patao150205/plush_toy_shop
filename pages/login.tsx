@@ -10,9 +10,15 @@ import Link from "next/link";
 import style from "styles/pages/login.module.scss";
 import { signIn, SignInState } from "utils/auth";
 import { useRouter } from "next/router";
+import { ErrorMessage } from "@hookform/error-message";
 
 const login: FC = () => {
-  const { register, handleSubmit, getValues } = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<FormData>();
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -38,18 +44,35 @@ const login: FC = () => {
             <PrimaryText
               getValues={getValues}
               register={register}
-              validation={{ required: true }}
+              validation={{
+                pattern: {
+                  value: /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/,
+                  message: "メールアドレスを正しく入力してください。",
+                },
+              }}
               name="email"
-              type="text"
+              type="email"
+              required={true}
               label="メールアドレス"
+            />
+            <ErrorMessage
+              errors={errors}
+              name="email"
+              render={({ message }) => <p style={{ color: "red", marginTop: "10px" }}>{message}</p>}
             />
             <PrimaryText
               getValues={getValues}
               register={register}
-              validation={{ required: true }}
+              validation={{ minLength: { value: 6, message: "パスワードを６文字以上で入力してください。" } }}
               name="password"
               type="password"
+              required={true}
               label="パスワード"
+            />
+            <ErrorMessage
+              errors={errors}
+              name="password"
+              render={({ message }) => <p style={{ color: "red", marginTop: "10px" }}>{message}</p>}
             />
             <div className="module-spacer--xl" />
             <PrimaryButton type="submit" content="ログイン" />

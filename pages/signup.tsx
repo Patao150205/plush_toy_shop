@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { Grid } from "semantic-ui-react";
 import PrimaryText from "components/UIkit/textInput/PrimaryText";
 import PrimaryButton from "components/UIkit/button/PrimaryButton";
