@@ -5,11 +5,8 @@ import "styles/utils/global.scss";
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import { store } from "../src/stores/store";
-import TopHeader from "../src/components/layout/TopHeader";
-import SideBar from "components/layout/SideBar";
 import Head from "next/head";
-import MainLoading from "../src/components/layout/MainLoading";
-import style from "styles/pages/app.module.scss";
+import Layout from "components/layout/Layout";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
@@ -27,14 +24,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           crossOrigin="anonymous"></link>
       </Head>
       <Provider store={store}>
-        <TopHeader />
-        <SideBar>
-          <div className={style.wrapper}>
-            <MainLoading>
-              <Component {...pageProps} />
-            </MainLoading>
-          </div>
-        </SideBar>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </Provider>
     </>
   );

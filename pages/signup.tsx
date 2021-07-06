@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Grid } from "semantic-ui-react";
 import PrimaryText from "components/UIkit/textInput/PrimaryText";
 import PrimaryButton from "components/UIkit/button/PrimaryButton";
 import { Color } from "styles/style";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "stores/store";
-import { LoadingOFF, LoadingON } from "stores/settingSlice";
+import { LoadingOFF, LoadingON, ModalOpen } from "stores/settingSlice";
 import { ErrorMessage } from "@hookform/error-message";
 import { SignUpState, signUp } from "utils/auth";
 import { useRouter } from "next/router";
 
-const Signup = () => {
+const Signup: FC = () => {
   const {
     register,
     handleSubmit,
@@ -27,7 +27,7 @@ const Signup = () => {
     if (!res.err) {
       router.push("/");
     } else {
-      alert(res.err);
+      dispatch(ModalOpen({ status: "error", title: "エラー", message: res.errMsg }));
     }
   };
 

@@ -1,25 +1,30 @@
 import { Grid } from "semantic-ui-react";
-import React from "react";
+import React, { FC } from "react";
 import PrimaryText from "components/UIkit/textInput/PrimaryText";
 import PrimaryButton from "components/UIkit/button/PrimaryButton";
 import { Color } from "styles/style";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "stores/store";
-import { LoadingOFF, LoadingON } from "stores/settingSlice";
+import { LoadingOFF, LoadingON, ModalOpen } from "stores/settingSlice";
 import Link from "next/link";
 import style from "styles/pages/login.module.scss";
-import { SignInState } from "utils/auth";
+import { signIn, SignInState } from "utils/auth";
+import { useRouter } from "next/router";
 
-const login = () => {
+const login: FC = () => {
   const { register, handleSubmit, getValues } = useForm<FormData>();
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
-  const sendInfo = (data: SignInState) => {
+  const sendInfo = async (data: SignInState) => {
     dispatch(LoadingON());
-    setTimeout(() => {
-      console.log("いえす", data);
-      dispatch(LoadingOFF());
-    }, 5000);
+    const res = await signIn(data);
+    dispatch(LoadingOFF());
+    if (!res.err) {
+      router.push("/");
+    } else {
+      dispatch(ModalOpen({ status: "error", title: "エラー", message: res.errMsg }));
+    }
   };
 
   return (
@@ -34,7 +39,7 @@ const login = () => {
               getValues={getValues}
               register={register}
               validation={{ required: true }}
-              name="mail"
+              name="email"
               type="text"
               label="メールアドレス"
             />

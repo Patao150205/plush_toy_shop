@@ -1,18 +1,16 @@
 import React, { FC } from "react";
-import {} from "semantic-ui-react";
 import style from "./SideBar.module.scss";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import classNames from "classnames";
 import { useAppSelector } from "../../stores/store";
 import { useAppDispatch } from "stores/store";
-import { SideToggle } from "stores/settingSlice";
+import { sideSelector, SideToggle } from "stores/settingSlice";
 
 const SideBar: FC = ({ children }) => {
-  const hasSide = useAppSelector((state) => state.setting.hasSide);
+  const hasSide = useAppSelector(sideSelector);
   const dispatch = useAppDispatch();
-
   const router = useRouter();
+
   return (
     <>
       {children}

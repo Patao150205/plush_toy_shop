@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import axios from "axios";
 import BaseUrl from "./BaseUrl";
+import cookie from "js-cookie";
 
 export type SignInState = {
   email: string;
@@ -27,12 +28,10 @@ export const signUp = async (userInfo: SignUpState) => {
     const res = await axios.post(`${BaseUrl}/api/auth/register`, {
       ...userInfo,
     });
+    console.log(res);
     return res.data;
   } catch (err) {
-    console.log(err.response);
-    console.log(err.request);
-    console.log(err.message);
-    return { err };
+    return { err: true, errMsg: err.response.data };
   }
 };
 
@@ -43,7 +42,10 @@ export const signIn = async (userInfo: SignInState) => {
     });
     return res.data;
   } catch (err) {
-    console.error(err);
-    return { err };
+    return { err: true, errMsg: err.response.data };
   }
+};
+
+export const logOut = () => {
+  cookie.remove("token");
 };

@@ -11,13 +11,12 @@ router.post("/register", async (req, res) => {
 
   try {
     const isExistUser = await UserModel.findOne({ email });
-    console.log(isExistUser, "取得した");
     if (isExistUser) {
-      return res.status(400).send("ユーザーが既に存在しています❗");
+      return res.status(400).send("ユーザーが既に存在しています");
     }
+    console.log("取得した");
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = new UserModel({
       nickname,
       email,
@@ -51,11 +50,9 @@ router.post("/", async (req, res) => {
     if (!user) return res.status(404).send("メールアドレスまたはパスワードが違います。");
 
     const isCurrectPass = await bcrypt.compare(password, user.password);
-
     if (!isCurrectPass) {
       return res.status(404).send("メールアドレスまたはパスワードが違います。");
     }
-    console.log("User", user);
 
     const token = jwt.sign({ userId: user._id.toString() }, process.env.jwtSecret, {
       expiresIn: "2d",

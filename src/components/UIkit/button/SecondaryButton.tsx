@@ -4,13 +4,15 @@ console.log(style);
 
 type Props = {
   content: string;
-  handleSubmit: () => void;
+  onClick: () => void;
 };
 
-const SecondaryButton: FC<Props> = ({ content, handleSubmit }) => {
+const SecondaryButton: FC<Props> = ({ content, onClick }) => {
   return (
     <>
-      <div className={style.test}></div>
+      <button className={style.btn} onClick={onClick}>
+        {content}
+      </button>
     </>
   );
 };
