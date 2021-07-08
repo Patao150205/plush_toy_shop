@@ -1,18 +1,30 @@
 import React, { FC, useState, useRef } from "react";
-import { Form, Header, Segment, Icon, Button, Image } from "semantic-ui-react";
+import { Form, Header, Segment, Image } from "semantic-ui-react";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "stores/store";
 import { ModalOpen } from "stores/settingSlice";
-
-type ProductData = {};
+import { uploadImg } from "utils/uploadImg";
+import { ProductData, registProduct } from "utils/products";
+import DragAndDrop from "components/layout/DragAndDrop";
 
 const Register: FC = () => {
   const { register, handleSubmit } = useForm();
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<any>(null);
   const dispatch = useAppDispatch();
-  const [productsImg, setProductsImg] = useState<string[]>([]);
+  const [productsImg, setProductsImg] = useState<File[]>([]);
+  const [previewImg, setPreviewImg] = useState<any[]>([]);
 
+  // ドラッグ＆ドロップ
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    const url = URL.createObjectURL(files[0]);
+    setProductsImg((prev) => [...prev, files[0]]);
+    setPreviewImg((prev) => [...prev, url]);
+  };
+
+  // プレビュー 送信用の配列作成
   const handleImgs = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (productsImg.length === 5) {
       return dispatch(
@@ -21,22 +33,26 @@ const Register: FC = () => {
     }
     const { files } = e.target;
     if (!files) return;
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      if (reader.result) {
-        setProductsImg((prev) => [...prev, reader.result]);
-      }
-    };
-    reader.readAsDataURL(files[0] as Blob);
+    const url = URL.createObjectURL(files[0]);
+    setProductsImg((prev) => [...prev, files[0]]);
+    setPreviewImg((prev) => [...prev, url]);
   };
 
-  const sendData = (data: ProductData) => {
+  const sendData = async (data: ProductData) => {
     setLoading(true);
-    setTimeout(() => {
-      console.log(data);
-      setLoading(false);
-    }, 3000);
+    if (productsImg.length > 0) {
+      const urls = await uploadImg(productsImg);
+      if (urls) {
+        data.productsPic = urls;
+      }
+    }
+    const res = await registProduct(data);
+    if (!res.err) {
+      dispatch(ModalOpen({ status: "success", title: "登録成功", message: res }));
+    } else {
+      dispatch(ModalOpen({ status: "error", title: "エラー", message: res.errMsg }));
+    }
+    setLoading(false);
   };
 
   return (
@@ -55,30 +71,27 @@ const Register: FC = () => {
             <div className="module-spacer--sm" />
             <input type="file" onChange={handleImgs} accept="image/*" ref={fileInputRef} style={{ display: "none" }} />
 
-            <div style={{ maxWidth: "700px", width: "100%", margin: "0 auto" }}>
-              <Segment placeholder size="huge">
-                <Header icon>
-                  <Icon name="file image outline" />
-                  画像をドラッグ＆ドロップしてください。
-                </Header>
-                <div className="module-spacer--sm" />
-                <Button primary type="button" onClick={() => fileInputRef.current?.click() as any}>
-                  画像を追加
-                </Button>
-              </Segment>
-            </div>
+            <DragAndDrop inputRef={fileInputRef} handleDrop={handleDrop} />
 
-            {productsImg.length > 0 && (
+            {previewImg.length > 0 && (
               <Segment style={{ maxWidth: "700px", width: "100%", margin: "0 auto" }}>
-                <Header content="画像のプレビュー" textAlign="center"></Header>
+                <Header content="画像のプレビュー" textAlign="center" />
                 <Image.Group>
-                  {productsImg.map((url, i) => (
+                  {previewImg.map((url, i) => (
                     <Image size="small" bordered centered key={i} src={url} />
                   ))}
                 </Image.Group>
               </Segment>
             )}
-
+            <div className="module-spacer--sm" />
+            <Form.Field style={{ margin: "0 auto" }} required width="3">
+              <label>値段</label>
+              <input autoFocus type="number" min="0" {...register("price")} required placeholder="値段" />
+            </Form.Field>
+            <Form.Field style={{ margin: "0 auto" }} required width="3">
+              <label>在庫数</label>
+              <input autoFocus type="number" {...register("stock")} required placeholder="在庫数" />
+            </Form.Field>
             <div className="module-spacer--sm" />
             <Form.Field required style={{ margin: "0 auto" }} width="10">
               <label>カテゴリー</label>
@@ -94,43 +107,25 @@ const Register: FC = () => {
           <Form.Group style={{ justifyContent: "center" }}>
             <Form.Field required>
               <label>W (Width)</label>
-              <input
-                type="text"
-                style={{ textAlign: "right" }}
-                {...register("width", { value: "cm" })}
-                required
-                placeholder="幅"
-              />
+              <input min="1" type="number" {...register("width")} required placeholder="幅" />
             </Form.Field>
             <Form.Field required>
               <label>H (Height)</label>
-              <input
-                type="text"
-                style={{ textAlign: "right" }}
-                {...register("height", { value: "cm" })}
-                required
-                placeholder="幅"
-              />
+              <input type="number" min="1" {...register("height")} required placeholder="幅" />
             </Form.Field>
             <Form.Field required>
               <label>D (Deepth)</label>
-              <input
-                type="text"
-                style={{ textAlign: "right" }}
-                {...register("deepth", { value: "cm" })}
-                required
-                placeholder="奥行き"
-              />
+              <input type="number" min="1" {...register("deepth")} required placeholder="奥行き" />
             </Form.Field>
           </Form.Group>
-          <Form.Group grouped>
+          <Form.Group style={{ justifyContent: "center" }}>
             <Form.Field>
               <label>新着商品(New)</label>
-              <input style={{ width: "30px", height: "30px" }} type="checkbox" {...register("isNew")} required />
+              <input style={{ width: "30px", height: "30px" }} type="checkbox" {...register("New", { value: true })} />
             </Form.Field>
             <Form.Field>
               <label>人気商品(Hot)</label>
-              <input style={{ width: "30px", height: "30px" }} type="checkbox" {...register("isHot")} required />
+              <input style={{ width: "30px", height: "30px" }} type="checkbox" {...register("Hot")} />
             </Form.Field>
           </Form.Group>
           <Form.Group>

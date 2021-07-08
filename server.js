@@ -14,6 +14,7 @@ app.prepare().then(() => {
 
   server.use(express.json());
   server.use("/api/auth", require("./api/auth"));
+  server.use("/api/products", require("./api/products"));
 
   server.all("*", (req, res) => handle(req, res));
 

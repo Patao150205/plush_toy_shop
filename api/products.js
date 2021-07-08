@@ -1,16 +1,14 @@
 const ProductsModel = require("../models/ProductsModel");
-
 const router = require("express").Router();
 
 // @route POST api/products
 // @desc 商品情報の登録
 // @access Private
 router.post("/", async (req, res) => {
-  const product = new ProductsModel({
-    ...req.body,
-  });
-
   try {
+    const product = new ProductsModel({
+      ...req.body,
+    });
     await product.save();
     res.send("商品情報の登録に成功しました。");
   } catch (error) {
@@ -35,7 +33,7 @@ router.delete("/", async (req, res) => {
 // @route GET api/products
 // @desc 商品情報の取得
 // @access Public
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const products = await ProductsModel.sort({ createdAt: -1 }).find();
     res.json(products);
@@ -44,3 +42,5 @@ router.get("/", (req, res) => {
     res.status(500).send("サーバーエラー");
   }
 });
+
+module.exports = router;

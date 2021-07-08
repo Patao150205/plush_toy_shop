@@ -15,7 +15,7 @@ const TopHeader: FC = () => {
       <Menu size="large" borderless fixed="top" className={`${style.ui} ${style.menu}`}>
         <Container>
           <Menu.Item onClick={() => router.push("/")}>
-            <Image size="mini" src="shopLogo.jpg" spaced="left" avatar inline />
+            <Image size="mini" src="/shopLogo.jpg" spaced="left" avatar inline />
           </Menu.Item>
           <Menu.Item onClick={() => router.push("/")} fitted="horizontally">
             <Header style={{ color: Color.secondary }} size="large">
