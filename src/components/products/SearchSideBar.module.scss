@@ -1,0 +1,108 @@
+@import "config";
+
+.root {
+  width: 300px;
+  height: 1150px;
+  background-color: gray;
+  .parentUL {
+    text-align: left;
+    list-style: none;
+    .parentLI {
+      width: 100%;
+      height: 50px;
+      padding: 10px 20px;
+      font-weight: 900;
+      position: relative;
+      transition: all 1s;
+      line-height: 30px;
+      border: 1px dotted orange;
+      vertical-align: middle;
+      &:hover {
+        color: $Ssecondary;
+        cursor: pointer;
+        background-color: $Sprimary;
+      }
+    }
+  }
+}
+
+.childUL {
+  display: none;
+  text-align: center;
+  list-style: none;
+  width: 100%;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  transition: all 1s;
+  .childLI {
+    border-style: solid;
+    border-width: 2px 2px 0 2px;
+    color: black;
+    &:last-child {
+      border: 2px solid black;
+      &:hover {
+        border: 2px solid black;
+      }
+    }
+    &:hover {
+      background-color: $Ssecondary;
+    }
+  }
+}
+
+.open1 {
+  margin-bottom: 80px;
+}
+.open2 {
+  margin-bottom: 220px;
+}
+.open3 {
+  margin-bottom: 200px;
+}
+
+@for $i from 1 through 3 {
+  .open#{$i} {
+    .childUL {
+      display: block;
+    }
+  }
+}
+
+.roundIcon {
+  display: inline-block;
+  width: 50px;
+  height: 30px;
+  padding: 5px;
+  font-weight: bold;
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
+  color: white;
+}
+.all {
+  background: blue;
+}
+.hot {
+  background: red;
+}
+.new {
+  background: orange;
+}
+.allow {
+  display: inline-block;
+  width: 50px;
+  height: 30px;
+  padding: 5px;
+  font-weight: bold;
+  position: absolute;
+  transform: translateY(-50%);
+  line-height: 30px;
+  font-size: 20px;
+  top: 40%;
+  right: 7px;
+}

@@ -1,5 +1,12 @@
 @import "config";
 
+.root {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+}
+
 .ui {
   &.menu {
     background: linear-gradient(
@@ -17,13 +24,30 @@
       rgb(255, 208, 200),
       #ff0000
     );
-    position: sticky !important;
-    z-index: 99999 !important;
+    border-radius: 0;
+    margin: 0;
   }
 }
 
 .search {
   display: none;
+}
+
+.numberBatch {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: bold;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: red;
+  color: white;
+  position: absolute;
+  border-radius: 50%;
+  bottom: 15px;
+  right: 5px;
 }
 
 @include mq(sm) {

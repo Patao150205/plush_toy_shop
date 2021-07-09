@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Menu, Image, Header, Icon, Container, Search } from "semantic-ui-react";
+import { Menu, Image, Header, Icon, Container, Search, Label } from "semantic-ui-react";
 import style from "./TopHeader.module.scss";
 import { Color } from "styles/style";
 import { useAppDispatch } from "stores/store";
@@ -11,8 +11,8 @@ const TopHeader: FC = () => {
   const router = useRouter();
 
   return (
-    <>
-      <Menu size="large" borderless fixed="top" className={`${style.ui} ${style.menu}`}>
+    <div className={style.root}>
+      <Menu size="large" borderless className={`${style.ui} ${style.menu} ${style.rainbow}`}>
         <Container>
           <Menu.Item onClick={() => router.push("/")}>
             <Image size="mini" src="/shopLogo.jpg" spaced="left" avatar inline />
@@ -24,17 +24,60 @@ const TopHeader: FC = () => {
           </Menu.Item>
           <Menu.Item position="right">
             <Search className={style.search} />
+          </Menu.Item>
+          <Menu.Item fitted="horizontally">
             <Icon
               style={{ marginLeft: "30px" }}
+              name="user"
+              size="big"
+              link={true}
+              onClick={() => dispatch(SideToggle())}></Icon>
+          </Menu.Item>
+          <Menu.Item fitted="horizontally">
+            <Icon
+              style={{ position: "relavant" }}
+              name="heart"
+              size="big"
+              link={true}
+              onClick={() => dispatch(SideToggle())}
+            />
+            <span className={style.numberBatch}>1</span>
+          </Menu.Item>
+          <Menu.Item fitted="horizontally">
+            <Icon name="cart" size="big" link={true} onClick={() => dispatch(SideToggle())}>
+              <span className={style.numberBatch}>5</span>
+            </Icon>
+          </Menu.Item>
+          <Menu.Item fitted="horizontally">
+            <Icon
+              style={{ marginLeft: "15px" }}
               name="bars"
-              size="large"
+              size="big"
               link={true}
               onClick={() => dispatch(SideToggle())}
             />
           </Menu.Item>
         </Container>
       </Menu>
-    </>
+      <Menu className={`${style.ui} ${style.menu}`} compact pointing size="huge" widths="4" inverted>
+        <Container>
+          <Menu.Item name="TOP" link active={router.pathname === "/"} onClick={() => router.push("/")} />
+          <Menu.Item
+            name="PRODUCTS"
+            link
+            active={router.pathname === "/products"}
+            onClick={() => router.push("/products")}
+          />
+          <Menu.Item name="INFO" link active={router.pathname === "/info"} onClick={() => router.push("/info")} />
+          <Menu.Item
+            name="CONTACT"
+            link
+            active={router.pathname === "/contact"}
+            onClick={() => router.push("/contact")}
+          />
+        </Container>
+      </Menu>
+    </div>
   );
 };
 

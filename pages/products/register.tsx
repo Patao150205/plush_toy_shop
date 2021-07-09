@@ -90,7 +90,7 @@ const Register: FC = () => {
             </Form.Field>
             <Form.Field style={{ margin: "0 auto" }} required width="3">
               <label>在庫数</label>
-              <input autoFocus type="number" {...register("stock")} required placeholder="在庫数" />
+              <input autoFocus type="number" min="0" {...register("stock")} required placeholder="在庫数" />
             </Form.Field>
             <div className="module-spacer--sm" />
             <Form.Field required style={{ margin: "0 auto" }} width="10">

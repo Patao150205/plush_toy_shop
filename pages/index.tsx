@@ -1,24 +1,14 @@
 import React, { FC } from "react";
 import { useAppDispatch, useAppSelector } from "../src/stores/store";
-import { increment } from "../src/stores/userSlice";
 import Link from "next/link";
 
 type Props = {
-  data: any[];
+  data: any;
 };
 
 const Home: FC<Props> = ({ data }) => {
   const dispatch = useAppDispatch();
-  const ammount = useAppSelector((state) => state.user.value);
-  return (
-    <>
-      <p>{ammount}</p>
-      <button onClick={() => dispatch(increment())}>増加</button>
-      <Link href="/login">
-        <a>クリック</a>
-      </Link>
-    </>
-  );
+  return <></>;
 };
 
 export default Home;
