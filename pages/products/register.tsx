@@ -6,6 +6,7 @@ import { ModalOpen } from "stores/settingSlice";
 import { uploadImg } from "utils/uploadImg";
 import { ProductData, registProduct } from "utils/products";
 import DragAndDrop from "components/layout/DragAndDrop";
+import style from "styles/pages/products/register.module.scss";
 
 const Register: FC = () => {
   const { register, handleSubmit } = useForm();
@@ -23,13 +24,12 @@ const Register: FC = () => {
     setProductsImg((prev) => [...prev, files[0]]);
     setPreviewImg((prev) => [...prev, url]);
   };
+  console.log(previewImg);
 
   // プレビュー 送信用の配列作成
   const handleImgs = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (productsImg.length === 5) {
-      return dispatch(
-        ModalOpen({ status: "error", title: "画像エラー", message: "登録可能な画像の枚数は、5枚までです。" })
-      );
+      return;
     }
     const { files } = e.target;
     if (!files) return;
@@ -38,14 +38,30 @@ const Register: FC = () => {
     setPreviewImg((prev) => [...prev, url]);
   };
 
+  const deletePic = (index: number) => {
+    setProductsImg((prev) => prev.filter((_, i) => i !== index));
+    setPreviewImg((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const sendData = async (data: ProductData) => {
     setLoading(true);
+    console.log(data);
+    // cloudinaryにアップロード
     if (productsImg.length > 0) {
       const urls = await uploadImg(productsImg);
       if (urls) {
-        data.productsPic = urls;
+        data.productPic = urls;
       }
+
+      // PrimaryPicの生成
+      if (!data.selectPic || !data.productPic) return;
+
+      const primaryPicIndex = parseInt(data.selectPic);
+      data.primaryPic = data.productPic[primaryPicIndex];
+      delete data.selectPic;
     }
+
+    console.log(data);
     const res = await registProduct(data);
     if (!res.err) {
       dispatch(ModalOpen({ status: "success", title: "登録成功", message: res }));
@@ -75,12 +91,18 @@ const Register: FC = () => {
 
             {previewImg.length > 0 && (
               <Segment style={{ maxWidth: "700px", width: "100%", margin: "0 auto" }}>
-                <Header content="画像のプレビュー" textAlign="center" />
-                <Image.Group>
+                <Header content="画像のプレビュー" subheader="メインの画像を選択してください。" textAlign="center" />
+                <div className={style.preview}>
                   {previewImg.map((url, i) => (
-                    <Image size="small" bordered centered key={i} src={url} />
+                    <label key={i}>
+                      <div className={style.picWrapper}>
+                        <Image style={{ cursor: "pointer" }} size="small" bordered centered src={url} />
+                        <i onClick={() => deletePic(i)} className={`fas fa-times ${style.delete}`}></i>
+                        <input {...register("selectPic")} required type="radio" value={i} name="selectPic" />
+                      </div>
+                    </label>
                   ))}
-                </Image.Group>
+                </div>
               </Segment>
             )}
             <div className="module-spacer--sm" />

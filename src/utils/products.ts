@@ -11,8 +11,19 @@ export type ProductData = {
   Hot: boolean;
   New: boolean;
   price: string | number;
-  productsPic?: string[];
+  productPic?: string[];
   stock: string | number;
+  selectPic?: string;
+  primaryPic: string;
+};
+
+export const getProducts = async () => {
+  try {
+    const res = await axios.get(`${BaseUrl}/api/products`);
+    return res.data;
+  } catch (error) {
+    return { err: true, errMsg: error.response.data };
+  }
 };
 
 export const registProduct = async (data: ProductData) => {

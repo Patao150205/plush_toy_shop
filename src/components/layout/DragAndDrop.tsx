@@ -29,6 +29,9 @@ const DragAndDrop: FC<Props> = ({ inputRef, handleDrop }) => {
           <Icon name="file image outline" />
           画像をドラッグ＆ドロップしてください。
         </Header>
+        <p style={{ fontSize: "16px" }}>
+          最大<span style={{ color: "red" }}>5枚</span>まで追加可能です
+        </p>
         <div className="module-spacer--sm" />
         <Button primary type="button" onClick={() => inputRef.current?.click() as any}>
           画像を追加

@@ -10,7 +10,6 @@ const SearchSideBar: FC = () => {
     open2: false,
     open3: false,
   });
-  console.log(isTabOpen);
 
   const toggleTabs = (name: "open1" | "open2" | "open3") => {
     setIsTabOpen((prev) => ({ ...prev, [name]: !prev[name] }));
@@ -58,11 +57,9 @@ const SearchSideBar: FC = () => {
               <span className={`fas fa-angle-up ${style.allow}`} />
             )}
             <ul className={style.childUL}>
-              <li className={style.childLI}>1円 ~ 999円</li>
-              <li className={style.childLI}>1000円 ~ 3999円</li>
+              <li className={style.childLI}>0円 ~ 2999円</li>
               <li className={style.childLI}>3000円 ~ 5999円</li>
-              <li className={style.childLI}>5000円 ~ 7999円</li>
-              <li className={style.childLI}>7000円 ~ 9999円</li>
+              <li className={style.childLI}>6000円 ~ 9999円</li>
               <li className={style.childLI}>10000円 以上</li>
             </ul>
           </li>

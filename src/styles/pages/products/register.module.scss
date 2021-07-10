@@ -1,0 +1,31 @@
+@import "config";
+
+.preview {
+  display: flex;
+  justify-content: center;
+}
+
+.picWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.delete {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  top: 10px;
+  right: 5%;
+  font-size: 20px;
+  color: red;
+  background-color: blue;
+  cursor: pointer;
+  line-height: 20px;
+  transition: all 0.3s;
+  &:hover {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+}

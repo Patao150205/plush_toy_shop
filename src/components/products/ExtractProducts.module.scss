@@ -1,9 +1,13 @@
 .root {
   align-items: center;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-evenly;
 
   p {
-    margin: 0;
+    margin: 10px;
+  }
+  .searchStatus {
+    color: red;
   }
 }

@@ -1,0 +1,54 @@
+@import "config";
+.root {
+  width: 136px;
+  height: 100%;
+  border: 1px solid $Ssecondary;
+  padding: 10px;
+  border-radius: 8px;
+  img {
+    width: 116px;
+    height: 116px;
+    object-fit: cover;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+  p {
+    margin: 5px 0;
+  }
+  .link {
+    text-align: left;
+  }
+  .name {
+    margin: 5px;
+    font-size: 0.9rem;
+    &:hover {
+      opacity: 0.8rem;
+    }
+  }
+  .price {
+    text-align: right;
+    font-size: 0.8rem;
+  }
+  .heart {
+    text-align: center;
+    cursor: pointer;
+  }
+}
+
+@include mq(sm) {
+  .root {
+    width: 160px;
+    height: 100%;
+    border: 1px solid $Ssecondary;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    img {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+    }
+  }
+}

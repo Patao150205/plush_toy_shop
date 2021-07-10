@@ -1,19 +1,19 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const noImg = "https://res.cloudinary.com/dqzhjmrwo/image/upload/v1625704122/blush_toy_shop/kqrzogaik3zgmlm1laio.jpg";
+
 const ProductsSchema = new Schema(
   {
     category: { type: String, required: true },
     description: { type: String, required: true },
     name: { type: String, required: true, unique: true },
-    productsPic: {
+    productPic: {
       type: [String],
-      required: true,
       max: 5,
-      default: [
-        "https://res.cloudinary.com/dqzhjmrwo/image/upload/v1625704122/blush_toy_shop/kqrzogaik3zgmlm1laio.jpg",
-      ],
+      default: [noImg],
     },
+    primaryPic: { type: String, default: noImg },
     price: { type: Number, required: true },
     width: { type: Number, required: true },
     height: { type: Number, required: true },
