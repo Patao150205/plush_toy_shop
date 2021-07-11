@@ -28,7 +28,6 @@ export const signUp = async (userInfo: SignUpState) => {
     const res = await axios.post(`${BaseUrl}/api/auth/register`, {
       ...userInfo,
     });
-    console.log(res);
     return res.data;
   } catch (err) {
     return { err: true, errMsg: err.response.data };

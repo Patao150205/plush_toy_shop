@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Menu, Image, Header, Icon, Container, Search, Label } from "semantic-ui-react";
+import { Menu, Image, Header, Icon, Container, Search } from "semantic-ui-react";
 import style from "./TopHeader.module.scss";
 import { Color } from "styles/style";
 import { useAppDispatch } from "stores/store";
@@ -26,36 +26,18 @@ const TopHeader: FC = () => {
             <Search className={style.search} />
           </Menu.Item>
           <Menu.Item fitted="horizontally">
-            <Icon
-              style={{ marginLeft: "30px" }}
-              name="user"
-              size="big"
-              link={true}
-              onClick={() => dispatch(SideToggle())}></Icon>
+            <i className={`fas fa-user ${style.icon} ${style.userIcon}`}></i>
           </Menu.Item>
           <Menu.Item fitted="horizontally">
-            <Icon
-              style={{ position: "relavant" }}
-              name="heart"
-              size="big"
-              link={true}
-              onClick={() => dispatch(SideToggle())}
-            />
+            <i className={`fas fa-heart ${style.icon}`}></i>
             <span className={style.numberBatch}>1</span>
           </Menu.Item>
           <Menu.Item fitted="horizontally">
-            <Icon name="cart" size="big" link={true} onClick={() => dispatch(SideToggle())}>
-              <span className={style.numberBatch}>5</span>
-            </Icon>
+            <i className={`fas fa-shopping-cart ${style.icon}`}></i>
+            <span className={style.numberBatch}>5</span>
           </Menu.Item>
           <Menu.Item fitted="horizontally">
-            <Icon
-              style={{ marginLeft: "15px" }}
-              name="bars"
-              size="big"
-              link={true}
-              onClick={() => dispatch(SideToggle())}
-            />
+            <i className={`fas fa-bars ${style.icon} ${style.barsIcon}`}></i>
           </Menu.Item>
         </Container>
       </Menu>

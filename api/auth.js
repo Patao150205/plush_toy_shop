@@ -14,8 +14,6 @@ router.post("/register", async (req, res) => {
     if (isExistUser) {
       return res.status(400).send("ユーザーが既に存在しています");
     }
-    console.log("取得した");
-
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new UserModel({
       nickname,

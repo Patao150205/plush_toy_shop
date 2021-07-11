@@ -1,26 +1,30 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState, useRef } from "react";
 import style from "styles/pages/products/products.module.scss";
 import SearchSideBar from "components/products/SearchSideBar";
-import { Segment, Grid } from "semantic-ui-react";
+import { Segment } from "semantic-ui-react";
 import ExtractProducts from "../../src/components/products/ExtractProducts";
 import ProductCard from "../../src/components/products/ProductCard";
 import { GetServerSideProps } from "next";
 import { getProducts } from "utils/products";
 import { useRouter } from "next/router";
 import Pagination from "./Pagenation";
+import NoProduct from "./NoProduct";
 
 type Props = {
   datas: {
-    products: [
-      {
-        _id: string;
-        name: string;
-        Hot: boolean;
-        New: boolean;
-        price: number;
-        primaryPic: string;
-      }
-    ];
+    products:
+      | [
+          {
+            _id: string;
+            name: string;
+            Hot: boolean;
+            New: boolean;
+            price: number;
+            primaryPic: string;
+            height: number;
+          }
+        ]
+      | [];
     count: number;
   };
 };
@@ -28,38 +32,62 @@ type Props = {
 const Products: FC<Props> = ({ datas }) => {
   const router = useRouter();
   const [productsData, setProductsData] = useState(datas);
+  const [sort, setSort] = useState(1);
+  const query = router.query;
 
-  useEffect(() => {}, [router.query]);
+  console.log(sort);
+
+  const isFirstRender = useRef(false);
+
+  // サーバサイドレンダリングするため初回のuseEffect発火を防止する。
+  useEffect(() => {
+    document.title = "Yuruhuwa 【商品一覧】";
+    if (isFirstRender.current) {
+      const fetchProducts = async () => {
+        const res = await getProducts(router.asPath);
+        setProductsData(res);
+      };
+      fetchProducts();
+      console.log("ファーストレンダー");
+    }
+  }, [query]);
+
+  useEffect(() => {
+    isFirstRender.current = true;
+  }, []);
 
   return (
     <div className={style.root}>
-      <Grid>
-        <Grid.Row>
-          <Grid.Column width={5}>
-            <SearchSideBar />
-          </Grid.Column>
-          <Grid.Column width={11}>
-            <ExtractProducts totalNumber={productsData.count} />
-            <div className="module-spacer--xs" />
-            <Segment>
-              <div className={style.productsList}>
-                {productsData.products.map((product) => (
-                  <ProductCard
-                    key={product._id}
-                    productId={product._id}
-                    name={product.name}
-                    price={product.price}
-                    productPic={product.primaryPic}
-                  />
-                ))}
-              </div>
-            </Segment>
-            <div className={style.pagenation}>
-              <Pagination totalNumber={productsData.count} />
-            </div>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+      <div className={style.sideBar}>
+        <SearchSideBar />
+      </div>
+
+      <div>
+        <ExtractProducts sort={sort} setSort={setSort} totalNumber={productsData.count} />
+        <div className="module-spacer--xs" />
+        <Segment>
+          {productsData.products.length === 0 && <NoProduct />}
+          <div className={style.productsList}>
+            {productsData.products.map((product) => (
+              <ProductCard
+                key={product._id}
+                productId={product._id}
+                name={product.name}
+                price={product.price}
+                productPic={product.primaryPic}
+                isNew={product.New}
+                isHot={product.Hot}
+                height={product.height}
+              />
+            ))}
+          </div>
+        </Segment>
+        {productsData.products.length > 0 && (
+          <div className={style.pagenation}>
+            <Pagination totalNumber={productsData.count} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -67,6 +95,7 @@ const Products: FC<Props> = ({ datas }) => {
 export default Products;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const datas = await getProducts();
+  console.log(ctx);
+  const datas = await getProducts(ctx.resolvedUrl);
   return { props: { datas } };
 };

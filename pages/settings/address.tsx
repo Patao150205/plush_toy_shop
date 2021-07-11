@@ -17,7 +17,6 @@ const login = () => {
   const sendInfo = (data: SignInState) => {
     dispatch(LoadingON());
     setTimeout(() => {
-      console.log("いえす", data);
       dispatch(LoadingOFF());
     }, 5000);
   };

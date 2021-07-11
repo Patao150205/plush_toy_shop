@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import style from "./PrimaryButton.module.scss";
-console.log(style);
 
 type Props = {
   content: string;

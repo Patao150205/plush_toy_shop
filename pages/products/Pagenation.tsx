@@ -11,15 +11,14 @@ const Pagination: FC<Props> = ({ totalNumber }) => {
   const query = router.query;
   const pageLength = Math.ceil(totalNumber / 20);
   const currentPage = parseInt(query.p as string) || 1;
-  console.log(pageLength);
-  console.log(totalNumber);
+
   return (
     <ChangePage
       onPageChange={(_, data) => {
         const query = router.query;
 
         let url = `/products/?p=${data.activePage}`;
-
+        
         if (query.kind) url = url + `&kind=${query.kind}`;
         if (query.price) url = url + `&price=${query.price}`;
         if (query.size) url = url + `&size=${query.size}`;

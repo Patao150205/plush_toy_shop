@@ -24,7 +24,6 @@ const Register: FC = () => {
     setProductsImg((prev) => [...prev, files[0]]);
     setPreviewImg((prev) => [...prev, url]);
   };
-  console.log(previewImg);
 
   // プレビュー 送信用の配列作成
   const handleImgs = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +44,6 @@ const Register: FC = () => {
 
   const sendData = async (data: ProductData) => {
     setLoading(true);
-    console.log(data);
     // cloudinaryにアップロード
     if (productsImg.length > 0) {
       const urls = await uploadImg(productsImg);
@@ -61,7 +59,6 @@ const Register: FC = () => {
       delete data.selectPic;
     }
 
-    console.log(data);
     const res = await registProduct(data);
     if (!res.err) {
       dispatch(ModalOpen({ status: "success", title: "登録成功", message: res }));

@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import axios from "axios";
 import BaseUrl from "./BaseUrl";
+import Router from "next/router";
+import { GetServerSidePropsContext } from "next";
+import { ParsedUrlQuery } from "querystring";
 
 export type ProductData = {
   name: string;
@@ -17,9 +20,9 @@ export type ProductData = {
   primaryPic: string;
 };
 
-export const getProducts = async () => {
+export const getProducts = async (path: string) => {
   try {
-    const res = await axios.get(`${BaseUrl}/api/products`);
+    const res = await axios.get(`${BaseUrl}/api${path}`);
     return res.data;
   } catch (error) {
     return { err: true, errMsg: error.response.data };

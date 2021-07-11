@@ -5,13 +5,42 @@
   border: 1px solid $Ssecondary;
   padding: 10px;
   border-radius: 8px;
-  img {
-    width: 116px;
-    height: 116px;
-    object-fit: cover;
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
+  .imgWrapper {
+    position: relative;
+    text-align: center;
+    img {
+      width: 116px;
+      height: 116px;
+      object-fit: cover;
+      cursor: pointer;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+    .label {
+      position: absolute;
+      border-radius: 50%;
+      display: inline-block;
+      color: white;
+      line-height: 2rem;
+      width: 2rem;
+      height: 2rem;
+      font-size: 0.8rem;
+      user-select: none;
+    }
+    .left {
+      top: -0.5rem;
+      right: 1.5rem;
+    }
+    .right {
+      top: -0.5rem;
+      right: -10%;
+    }
+    .new {
+      background: orange;
+    }
+    .hot {
+      background: red;
     }
   }
   p {

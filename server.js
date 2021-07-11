@@ -7,8 +7,6 @@ const PORT = process.env.PORT || 3000;
 require("dotenv").config();
 require("./config/db")();
 
-console.log(process.env.MONGO_CONNECTION);
-
 app.prepare().then(() => {
   const server = express();
 
