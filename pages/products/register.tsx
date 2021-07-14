@@ -2,7 +2,7 @@ import React, { FC, useState, useRef } from "react";
 import { Form, Header, Segment, Image } from "semantic-ui-react";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "stores/store";
-import { ModalOpen } from "stores/settingSlice";
+import { LoadingON, LoadingOFF, ModalOpen } from "stores/settingSlice";
 import { uploadImg } from "utils/uploadImg";
 import { ProductData, registProduct } from "utils/products";
 import DragAndDrop from "components/layout/DragAndDrop";
@@ -44,6 +44,7 @@ const Register: FC = () => {
 
   const sendData = async (data: ProductData) => {
     setLoading(true);
+    dispatch(LoadingON());
     // cloudinaryにアップロード
     if (productsImg.length > 0) {
       const urls = await uploadImg(productsImg);
@@ -66,6 +67,7 @@ const Register: FC = () => {
       dispatch(ModalOpen({ status: "error", title: "エラー", message: res.errMsg }));
     }
     setLoading(false);
+    dispatch(LoadingOFF());
   };
 
   return (

@@ -6,13 +6,7 @@ import { useAppSelector } from "../../stores/store";
 import { ModalClose, modalSelector } from "stores/settingSlice";
 import { useAppDispatch } from "stores/store";
 
-type Props = {
-  title: string;
-  status: "error" | "success";
-  message: string;
-};
-
-const Modal: FC<Props> = ({ children }) => {
+const Modal: FC = ({ children }) => {
   const dispatch = useAppDispatch();
   const { isOpen, status, title, message } = useAppSelector(modalSelector);
   const statuses = {
@@ -23,7 +17,7 @@ const Modal: FC<Props> = ({ children }) => {
   return (
     <>
       {isOpen ? (
-        <>
+        <div className={style.container}>
           <div className={style.blind}>
             <div
               className={classNames(
@@ -41,7 +35,7 @@ const Modal: FC<Props> = ({ children }) => {
             </div>
           </div>
           {children}
-        </>
+        </div>
       ) : (
         <>{children}</>
       )}

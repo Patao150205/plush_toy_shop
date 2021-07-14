@@ -1,10 +1,21 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import Link from "next/link";
 import style from "./ProductCard.module.scss";
 import { useRouter } from "next/router";
 import classNames from "classnames";
+import { useAppDispatch } from "stores/store";
+import { deleteFavorite, registFavorite } from "stores/userSlice";
+import { Loader } from "semantic-ui-react";
 
 type Props = {
+  favorites:
+    | [
+        {
+          _id?: string;
+          product: string;
+        }
+      ]
+    | [];
   name: string;
   productPic: string;
   price: number;
@@ -14,8 +25,22 @@ type Props = {
   height: number;
 };
 
-const ProductCard: FC<Props> = ({ name, productPic, price, productId, isNew, isHot, height }) => {
+const ProductCard: FC<Props> = ({ favorites, name, productPic, price, productId, isNew, isHot, height }) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const isFavorite = favorites.find((ele) => ele.product === productId);
+
+  const [loading, setLoading] = useState(false);
+
+  const handleLike = async (productId: string) => {
+    setLoading(true);
+    if (!isFavorite) {
+      dispatch(registFavorite(productId));
+    } else {
+      dispatch(deleteFavorite(productId));
+    }
+    setLoading(false);
+  };
 
   // スタイル
   const position = {
@@ -31,18 +56,10 @@ const ProductCard: FC<Props> = ({ name, productPic, price, productId, isNew, isH
     position.hot.right = true;
   }
 
-  console.log(position);
-
   return (
     <div className={style.root}>
       <div className={style.imgWrapper}>
-        <img
-          onClick={() => router.push(`/product/${productId}`)}
-          src={
-            productPic ||
-            "https://res.cloudinary.com/dqzhjmrwo/image/upload/v1625704122/blush_toy_shop/kqrzogaik3zgmlm1laio.jpg"
-          }
-        />
+        <img onClick={() => router.push(`/product/${productId}`)} src={productPic || "/noimg.jpg"} />
         {isNew && (
           <span
             className={classNames(
@@ -72,9 +89,9 @@ const ProductCard: FC<Props> = ({ name, productPic, price, productId, isNew, isH
         </Link>
       </p>
       <p className={style.price}>{price}円(税込)</p>
-      <p className={style.price}>{height}cm (縦)</p>
-      <p className={style.heart}>
-        <span className={`fas fa-heart`} />
+      <p className={style.height}>{height}cm (高さ)</p>
+      <p className={classNames(style.heart, { [style.like]: isFavorite })}>
+        {loading ? <Loader active inline /> : <span onClick={() => handleLike(productId)} className={`fas fa-heart`} />}
       </p>
     </div>
   );

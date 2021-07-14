@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import "styles/utils/reset.css";
 import "semantic-ui-css/semantic.min.css";
 import "styles/utils/global.scss";
+import "swiper/swiper.scss";
+import "swiper/components/effect-coverflow/effect-coverflow.scss";
+import "swiper/components/navigation/navigation.scss";
+import "swiper/components/pagination/pagination.scss";
+import "swiper/components/controller/controller.scss";
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import { store } from "../src/stores/store";
@@ -9,10 +14,6 @@ import Head from "next/head";
 import Layout from "components/layout/Layout";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-  useEffect(() => {
-    console.log("patao");
-  }, []);
-
   return (
     <>
       <Head>

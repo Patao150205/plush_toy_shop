@@ -10,13 +10,15 @@ const MainLoading: FC = ({ children }) => {
     <>
       {isLoading ? (
         <>
-          <div className={style.root}>
-            <div className={style.wrapper}>
-              <img src="MainLoading.gif" />
-              <h1>よみこむちゅう...</h1>
+          <div className={style.container}>
+            <div className={style.root}>
+              <div className={style.wrapper}>
+                <img src="/MainLoading.gif" />
+                <h1>よみこむちゅう...</h1>
+              </div>
             </div>
+            {children}
           </div>
-          {children}
         </>
       ) : (
         <>{children}</>

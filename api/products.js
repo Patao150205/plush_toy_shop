@@ -4,15 +4,13 @@ const extractSerachQuery = require("../serverUtils/searchQueryCondition");
 const extractSortQuery = require("../serverUtils/sortQueryCondition");
 
 // @route GET api/products
-// @desc 商品情報の取得
+// @desc 商品一覧の取得
 // @access Public
 router.get("/", async (req, res) => {
   const q = req.query;
-  console.log("クエリ", q);
   const skipCount = q.p ? 20 * (q.p - 1) : 0;
   const search = extractSerachQuery(q);
   const sort = extractSortQuery(q);
-  console.log("こっこです。", search, sort);
   try {
     const data = await ProductsModel.find(search)
       .skip(skipCount)

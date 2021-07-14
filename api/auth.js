@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const UserModel = require("../models/UserModel");
+const FavoritesModel = require("../models/FavoritesModel");
+const CartModel = require("../models/CartModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -21,8 +23,18 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
       isShorthandEmail,
     });
+    const newFavorites = new FavoritesModel({
+      user: newUser._id,
+      products: [],
+    });
+    const newCart = new CartModel({
+      user: newUser._id,
+      products: [],
+    });
 
     await newUser.save();
+    await newFavorites.save();
+    await newCart.save();
 
     const token = jwt.sign({ userId: newUser._id.toString() }, process.env.jwtSecret, {
       expiresIn: "2d",

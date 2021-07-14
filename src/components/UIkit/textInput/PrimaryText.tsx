@@ -30,7 +30,6 @@ const PrimaryText: FC<Props> = ({
   const require = required ? `${name}を入力してください。` : false;
 
   const value = getValues(name);
-  console.log(value);
   return (
     <div className={style.wrapper} onFocus={() => setIsActive(true)} onBlur={() => setIsActive(false)}>
       <label

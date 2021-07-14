@@ -9,6 +9,8 @@ import { getProducts } from "utils/products";
 import { useRouter } from "next/router";
 import Pagination from "./Pagenation";
 import NoProduct from "./NoProduct";
+import { useAppSelector } from "stores/store";
+import { favoritesSelector, cartSelector } from "stores/userSlice";
 
 type Props = {
   datas: {
@@ -31,11 +33,10 @@ type Props = {
 
 const Products: FC<Props> = ({ datas }) => {
   const router = useRouter();
+  const favorites = useAppSelector((state) => state.user.favorites);
   const [productsData, setProductsData] = useState(datas);
   const [sort, setSort] = useState(1);
   const query = router.query;
-
-  console.log(sort);
 
   const isFirstRender = useRef(false);
 
@@ -48,7 +49,6 @@ const Products: FC<Props> = ({ datas }) => {
         setProductsData(res);
       };
       fetchProducts();
-      console.log("ファーストレンダー");
     }
   }, [query]);
 
@@ -70,6 +70,7 @@ const Products: FC<Props> = ({ datas }) => {
           <div className={style.productsList}>
             {productsData.products.map((product) => (
               <ProductCard
+                favorites={favorites}
                 key={product._id}
                 productId={product._id}
                 name={product.name}
@@ -95,7 +96,6 @@ const Products: FC<Props> = ({ datas }) => {
 export default Products;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  console.log(ctx);
   const datas = await getProducts(ctx.resolvedUrl);
   return { props: { datas } };
 };

@@ -20,12 +20,23 @@ export type ProductData = {
   primaryPic: string;
 };
 
+// 個別の商品情報取得
+export const getProduct = async (productId: string) => {
+  try {
+    const res = await axios.get(`${BaseUrl}/api/product/${productId}`);
+    return res.data;
+  } catch (error) {
+    return { err: true, errMsg: error.response.data };
+  }
+};
+
+// 商品一覧の取得
 export const getProducts = async (path: string) => {
   try {
     const res = await axios.get(`${BaseUrl}/api${path}`);
     return res.data;
   } catch (error) {
-    return { err: true, errMsg: error.response.data };
+    // return { err: true, errMsg: error.response.data };
   }
 };
 

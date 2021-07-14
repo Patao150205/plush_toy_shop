@@ -1,0 +1,15 @@
+@import "config";
+
+.root {
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+  line-height: 50px;
+  border-radius: 30px;
+  transition: all 0.3s;
+  cursor: pointer;
+  user-select: none;
+  &:hover {
+    opacity: 0.8;
+  }
+}

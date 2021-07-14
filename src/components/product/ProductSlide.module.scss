@@ -1,0 +1,26 @@
+.slidePic {
+  display: inline-block;
+  margin: 0 auto;
+  max-width: 300px;
+  max-height: 300px;
+  object-fit: cover;
+  width: 100%;
+}
+.thumbsWrapper {
+  background-color: white;
+  max-width: fit-content;
+  max-width: 450px;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.thumb {
+  border: 2px solid black;
+  margin: 0 10px;
+  max-width: 60px;
+  width: 100%;
+  max-height: 60px;
+  object-fit: cover;
+}

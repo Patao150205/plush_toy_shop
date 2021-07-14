@@ -23,12 +23,14 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.2",
     "next": "11.0.1",
+    "nookies": "^2.5.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "^7.10.0",
     "react-redux": "^7.2.4",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^2.0.3"
+    "semantic-ui-react": "^2.0.3",
+    "swiper": "^6.7.5"
   },
   "devDependencies": {
     "@types/classnames": "^2.3.1",

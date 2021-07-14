@@ -1,14 +1,18 @@
 import React, { FC } from "react";
-import { Menu, Image, Header, Icon, Container, Search } from "semantic-ui-react";
+import { Menu, Image, Header, Container, Search } from "semantic-ui-react";
 import style from "./TopHeader.module.scss";
 import { Color } from "styles/style";
-import { useAppDispatch } from "stores/store";
+import { useAppDispatch, useAppSelector } from "stores/store";
 import { SideToggle } from "stores/settingSlice";
 import { useRouter } from "next/router";
+import { cartSelector, favoritesSelector } from "stores/userSlice";
 
 const TopHeader: FC = () => {
   const dispatch = useAppDispatch();
+  const favorites = useAppSelector(favoritesSelector);
+  const cart = useAppSelector(cartSelector);
   const router = useRouter();
+  console.log(favorites.length);
 
   return (
     <div className={style.root}>
@@ -26,18 +30,18 @@ const TopHeader: FC = () => {
             <Search className={style.search} />
           </Menu.Item>
           <Menu.Item fitted="horizontally">
-            <i className={`fas fa-user ${style.icon} ${style.userIcon}`}></i>
+            <i onClick={() => router.push("/user")} className={`fas fa-user ${style.icon} ${style.userIcon}`}></i>
           </Menu.Item>
           <Menu.Item fitted="horizontally">
-            <i className={`fas fa-heart ${style.icon}`}></i>
-            <span className={style.numberBatch}>1</span>
+            <i onClick={() => router.push("/favorites")} className={`fas fa-heart ${style.icon}`}></i>
+            {favorites.length > 0 && <span className={style.numberBatch}>{favorites.length}</span>}
           </Menu.Item>
           <Menu.Item fitted="horizontally">
-            <i className={`fas fa-shopping-cart ${style.icon}`}></i>
-            <span className={style.numberBatch}>5</span>
+            <i onClick={() => router.push("/cart")} className={`fas fa-shopping-cart ${style.icon}`}></i>
+            {cart.length > 0 && <span className={style.numberBatch}>{cart.length}</span>}
           </Menu.Item>
           <Menu.Item fitted="horizontally">
-            <i className={`fas fa-bars ${style.icon} ${style.barsIcon}`}></i>
+            <i onClick={() => dispatch(SideToggle())} className={`fas fa-bars ${style.icon} ${style.barsIcon}`}></i>
           </Menu.Item>
         </Container>
       </Menu>

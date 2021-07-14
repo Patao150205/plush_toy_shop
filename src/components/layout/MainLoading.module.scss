@@ -1,7 +1,12 @@
 @import "config";
 
+.container {
+  height: 100%;
+  position: relative;
+}
+
 .root {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   user-select: none;
@@ -18,6 +23,7 @@
     padding: 1rem;
     z-index: $Zloading;
     & > img {
+      margin-top: 20%;
       width: 100%;
     }
     & > h1 {

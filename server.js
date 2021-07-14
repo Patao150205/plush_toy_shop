@@ -12,7 +12,10 @@ app.prepare().then(() => {
 
   server.use(express.json());
   server.use("/api/auth", require("./api/auth"));
+  server.use("/api/user", require("./api/user"));
   server.use("/api/products", require("./api/products"));
+  server.use("/api/product", require("./api/product"));
+  server.use("/api/favorites", require("./api/favorites"));
 
   server.all("*", (req, res) => handle(req, res));
 

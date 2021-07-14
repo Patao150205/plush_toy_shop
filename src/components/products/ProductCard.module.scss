@@ -57,12 +57,20 @@
     }
   }
   .price {
+    color: red;
+    text-align: right;
+    font-size: 0.8rem;
+  }
+  .height {
     text-align: right;
     font-size: 0.8rem;
   }
   .heart {
     text-align: center;
     cursor: pointer;
+  }
+  .like {
+    color: red;
   }
 }
 
