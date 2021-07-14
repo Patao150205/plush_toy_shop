@@ -15,3 +15,16 @@ export const getFavoritesProduct = async (token?: string) => {
     return { err: true, errMsg: error.response.data };
   }
 };
+
+export const getCartProduct = async (token?: string) => {
+  try {
+    const res = await axios.get(`${BaseUrl}/api/cart?detailed=true`, {
+      headers: {
+        authorization: token,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    return { err: true, errMsg: error.response.data };
+  }
+};

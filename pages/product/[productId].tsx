@@ -7,6 +7,15 @@ import NoProduct from "../products/NoProduct";
 import { Segment } from "semantic-ui-react";
 import Head from "next/head";
 import ThirdryButton from "../../src/components/UIkit/button/ThirdryButton";
+import { useAppDispatch, useAppSelector } from "stores/store";
+import {
+  favoritesSelector,
+  cartSelector,
+  registFavorite,
+  deleteFavorite,
+  registCart,
+  deleteCart,
+} from "stores/userSlice";
 
 type Props = {
   product: {
@@ -29,17 +38,42 @@ type Props = {
 };
 
 const ProductId: FC<Props> = ({ product }) => {
-  // console.log(product);
+  const dispatch = useAppDispatch();
+  const favorites = useAppSelector(favoritesSelector);
+  const cart = useAppSelector(cartSelector);
+
+  const isFavorite = favorites.find((ele: { _id: string; product: string }) => ele.product === product._id);
+  const hasCart = cart.find((ele: { _id: string; product: string; amount: number }) => ele.product === product._id);
+  console.log(hasCart, cart);
+
   const [amount, setAmount] = useState("1");
 
   const title = `Yuruhuwa 【${product?.name}】` ?? "商品情報";
 
+  // 個数指定
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     if (parseInt(value) > product.stock) {
       return setAmount(String(product.stock));
     }
     setAmount(value);
+  };
+  // お気に入り機能
+  const handleLike = async (productId: string) => {
+    if (!isFavorite) {
+      dispatch(registFavorite(productId));
+    } else {
+      dispatch(deleteFavorite(productId));
+    }
+  };
+
+  //カート機能
+  const handleCart = async (productId: string) => {
+    if (!hasCart) {
+      dispatch(registCart({ productId, amount: parseInt(amount) || 0 }));
+    } else {
+      dispatch(deleteCart(productId));
+    }
   };
 
   if (!product) {
@@ -64,7 +98,6 @@ const ProductId: FC<Props> = ({ product }) => {
             <p className={style.desc}>{product.description}</p>
             <div className={`module-spacer--xs ${style.divider}`} />
             <div className={`module-spacer--sm`} />
-            <label></label>
             <div className={style.statusWrapper}>
               <h3>商品詳細</h3>
               <div className={style.status}>
@@ -88,7 +121,6 @@ const ProductId: FC<Props> = ({ product }) => {
                       onChange={handleChange}
                       value={amount}
                       type="number"
-                      defaultValue={1}
                       min={1}
                       max={product.stock}
                       required
@@ -107,9 +139,44 @@ const ProductId: FC<Props> = ({ product }) => {
             )}
 
             <div className={"module-spacer--sm"} />
-            <ThirdryButton width="100%" onClick={() => {}} content="お気に入り登録" />
+            {!isFavorite ? (
+              <ThirdryButton
+                width="100%"
+                onClick={() => {
+                  handleLike(product._id);
+                }}
+                content="お気に入り登録"
+              />
+            ) : (
+              <ThirdryButton
+                width="100%"
+                background="gray"
+                onClick={() => {
+                  handleLike(product._id);
+                }}
+                content="お気に入り解除"
+              />
+            )}
             <div className={"module-spacer--sm"} />
-            <ThirdryButton width="100%" background="red" onClick={() => {}} content="カートに入れる" />
+            {!hasCart ? (
+              <ThirdryButton
+                width="100%"
+                background="red"
+                onClick={() => {
+                  handleCart(product._id);
+                }}
+                content="カートに入れる"
+              />
+            ) : (
+              <ThirdryButton
+                width="100%"
+                background="gray"
+                onClick={() => {
+                  handleCart(product._id);
+                }}
+                content="カートから出す"
+              />
+            )}
           </Segment>
         </div>
       </div>

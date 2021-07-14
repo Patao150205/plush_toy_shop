@@ -21,8 +21,6 @@ router.get("/", auth, async (req, res) => {
     favorites: favorites.products,
     cart: cart.products,
   };
-
-  console.log(data);
   res.json(data);
 });
 

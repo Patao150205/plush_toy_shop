@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const CartModel = require("../models/CartModel");
+const mongoose = require("mongoose");
+const auth = require("../middleware/verificationAuth");
 
 // @route GET api/cart
 // @desc カートの情報取得
@@ -31,14 +33,13 @@ router.post("/:productId", auth, async (req, res) => {
   const { productId } = req.params;
   const { amount } = req.body;
   const { userId } = req;
-  console.log(amount);
   try {
-    const data = await CartModel.findOneAndUpdate(
+    const _id = mongoose.Types.ObjectId().toString();
+    await CartModel.findOneAndUpdate(
       { user: userId },
-      { $push: { products: [{ product: productId, amount: parseInt(amount) }] } }
+      { $push: { products: [{ _id, product: productId, amount: parseInt(amount) }] } }
     );
-    const target = data.products.find((product) => product._id === productId);
-    res.json(target._id);
+    res.json(_id);
   } catch (error) {
     console.error(error);
     res.status(500).send("サーバーエラー");
@@ -53,7 +54,7 @@ router.delete("/:productId", auth, async (req, res) => {
   const { userId } = req;
   console.log(productId);
   try {
-    const data = await FavoritesModel.updateOne({ user: userId }, { $pull: { products: { product: productId } } });
+    const data = await CartModel.updateOne({ user: userId }, { $pull: { products: { product: productId } } });
     console.log("ここよおお", data);
     res.send("カートから削除しました。");
   } catch (error) {

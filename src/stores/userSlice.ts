@@ -39,16 +39,20 @@ export const deleteFavorite = createAsyncThunk("user/deleteFavorite", async (pro
 });
 
 // カート機能
-export const registCart = createAsyncThunk("user/registCart", async (productId, ammount) => {
-  if (!token) throw Error("認証情報が無効です。");
-  const res = await axios.post(`${BaseUrl}/api/cart/${productId}`, { ammount });
-  //登録したときの_id ↓
-  const data = {
-    _id: res.data as string,
-    product: productId,
-  };
-  return data;
-});
+export const registCart = createAsyncThunk(
+  "user/registCart",
+  async (product: { productId: string; amount: number }) => {
+    if (!token) throw Error("認証情報が無効です。");
+    const res = await axios.post(`${BaseUrl}/api/cart/${product.productId}`, { amount: product.amount });
+    //登録したときの_id ↓
+    const data = {
+      _id: res.data as string,
+      product: product.productId,
+      amount: product.amount,
+    };
+    return data;
+  }
+);
 
 export const deleteCart = createAsyncThunk("user/deleteCart", async (productId: string) => {
   if (!token) throw Error("認証情報が無効です。");
@@ -75,6 +79,7 @@ type UserState =
         {
           _id: string;
           product: string;
+          amount: number;
         }
       ];
     }
@@ -91,6 +96,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    // ユーザー
     builder.addCase(fetchUserInfo.fulfilled, (state: UserState, { payload }) => {
       console.log(payload);
       return (state = payload);
@@ -98,6 +104,7 @@ const userSlice = createSlice({
     builder.addCase(fetchUserInfo.rejected, (state: UserState) => {
       return (state = { userInfo: null, favorites: [], cart: [] });
     });
+    // お気に入り機能
     builder.addCase(registFavorite.fulfilled, (state: any, { payload }) => {
       state.favorites = [...state.favorites, payload];
     });
@@ -108,6 +115,21 @@ const userSlice = createSlice({
       state.favorites = state.favorites.filter((ele: { _id: string; product: string }) => ele.product !== payload);
     });
     builder.addCase(deleteFavorite.rejected, (state: UserState) => {
+      return (state = { userInfo: null, favorites: [], cart: [] });
+    });
+    // カート機能
+    builder.addCase(registCart.fulfilled, (state: any, { payload }) => {
+      state.cart = [...state.cart, payload];
+    });
+    builder.addCase(registCart.rejected, (state: UserState) => {
+      return (state = { userInfo: null, favorites: [], cart: [] });
+    });
+    builder.addCase(deleteCart.fulfilled, (state: any, { payload }) => {
+      state.cart = state.cart.filter(
+        (ele: { _id: string; product: string; amount: number }) => ele.product !== payload
+      );
+    });
+    builder.addCase(deleteCart.rejected, (state: UserState) => {
       return (state = { userInfo: null, favorites: [], cart: [] });
     });
   },

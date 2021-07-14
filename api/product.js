@@ -11,13 +11,11 @@ router.get("/:productId", async (req, res) => {
     if (!product) {
       return res.status(404).send("商品情報が見つかりませんでした。");
     }
-    console.log("ここです。", product);
     res.json(product);
   } catch (error) {
     console.error(error);
     res.status(500).send("サーバーエラー");
   }
-  res.json(product);
 });
 
 module.exports = router;

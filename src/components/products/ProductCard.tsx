@@ -30,16 +30,12 @@ const ProductCard: FC<Props> = ({ favorites, name, productPic, price, productId,
   const dispatch = useAppDispatch();
   const isFavorite = favorites.find((ele) => ele.product === productId);
 
-  const [loading, setLoading] = useState(false);
-
   const handleLike = async (productId: string) => {
-    setLoading(true);
     if (!isFavorite) {
       dispatch(registFavorite(productId));
     } else {
       dispatch(deleteFavorite(productId));
     }
-    setLoading(false);
   };
 
   // スタイル
@@ -91,7 +87,7 @@ const ProductCard: FC<Props> = ({ favorites, name, productPic, price, productId,
       <p className={style.price}>{price}円(税込)</p>
       <p className={style.height}>{height}cm (高さ)</p>
       <p className={classNames(style.heart, { [style.like]: isFavorite })}>
-        {loading ? <Loader active inline /> : <span onClick={() => handleLike(productId)} className={`fas fa-heart`} />}
+        <span onClick={() => handleLike(productId)} className={`fas fa-heart`} />
       </p>
     </div>
   );
