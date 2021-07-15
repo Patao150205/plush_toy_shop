@@ -1,0 +1,40 @@
+@import "config";
+
+.root {
+  display: flex;
+  max-width: 600px;
+  width: 100%;
+  min-width: 300px;
+  border: 1px solid $Ssecondary;
+  border-radius: 8px;
+  margin: 0.5rem 0rem;
+  padding: 1rem 1rem;
+  position: relative;
+  .productName {
+    font-size: 1.2rem;
+  }
+  img {
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-right: 3rem;
+  }
+  .productPrice {
+    color: red;
+    .countLabel {
+      margin-right: 2rem;
+    }
+  }
+  .trash {
+    position: absolute;
+    font-size: 20px;
+    top: 1rem;
+    right: 1rem;
+    color: red;
+    cursor: pointer;
+  }
+  input {
+    width: 50px;
+  }
+}

@@ -12,7 +12,6 @@ const TopHeader: FC = () => {
   const favorites = useAppSelector(favoritesSelector);
   const cart = useAppSelector(cartSelector);
   const router = useRouter();
-  console.log(favorites.length);
 
   return (
     <div className={style.root}>
@@ -34,11 +33,19 @@ const TopHeader: FC = () => {
           </Menu.Item>
           <Menu.Item fitted="horizontally">
             <i onClick={() => router.push("/favorites")} className={`fas fa-heart ${style.icon}`}></i>
-            {favorites.length > 0 && <span className={style.numberBatch}>{favorites.length}</span>}
+            {favorites.length > 0 && (
+              <span onClick={() => router.push("/favorites")} className={style.numberBatch}>
+                {favorites.length}
+              </span>
+            )}
           </Menu.Item>
           <Menu.Item fitted="horizontally">
             <i onClick={() => router.push("/cart")} className={`fas fa-shopping-cart ${style.icon}`}></i>
-            {cart.length > 0 && <span className={style.numberBatch}>{cart.length}</span>}
+            {cart.length > 0 && (
+              <span onClick={() => router.push("/cart")} className={style.numberBatch}>
+                {cart.length}
+              </span>
+            )}
           </Menu.Item>
           <Menu.Item fitted="horizontally">
             <i onClick={() => dispatch(SideToggle())} className={`fas fa-bars ${style.icon} ${style.barsIcon}`}></i>

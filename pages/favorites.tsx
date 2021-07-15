@@ -39,7 +39,8 @@ const Favorites: FC<Props> = ({ favorites }) => {
       </Head>
       <Segment>
         <h1 className={style.title}>お気に入り一覧</h1>
-        <div className="module-spacer--md" />
+        <div className={`module-spacer--sm ${style.border}`} />
+        <div className={`module-spacer--sm`} />
         {favorites.length === 0 && <NoProduct />}
         <div className={style.wrapper}>
           {favorites.map((ele) => (

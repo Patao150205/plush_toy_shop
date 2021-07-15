@@ -1,0 +1,9 @@
+@import "config";
+
+.root {
+  text-align: center;
+  margin: 0 auto;
+  .border {
+    border-bottom: 1px solid $Fprimary;
+  }
+}

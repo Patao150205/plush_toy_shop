@@ -5,6 +5,10 @@
   color: $Fprimary;
 }
 
+.border {
+  border-bottom: 1px solid #444;
+}
+
 .wrapper {
   display: grid;
   gap: 10px 10px;

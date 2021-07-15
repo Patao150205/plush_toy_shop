@@ -4,16 +4,40 @@
   text-align: center;
   color: $Fprimary;
 }
+.border {
+  border-bottom: 1px solid #444;
+}
+
+.shippingInfo {
+  text-align: center;
+  span {
+    color: red;
+  }
+}
 
 .wrapper {
   display: flex;
-}
-
-.totalPrice {
-}
-
-@include mq(sm) {
-  .wrapper {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  justify-content: center;
+  flex-direction: column;
+  @include mq(sm) {
+    flex-direction: row;
+    justify-content: space-between;
   }
+  .totalPriceWrapper {
+    align-self: center;
+  }
+}
+.products {
+  max-width: 500px;
+  margin-right: 0;
+  @include mq(sm) {
+    margin-right: 2rem;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  width: 100%;
+  margin: 0 auto;
 }
