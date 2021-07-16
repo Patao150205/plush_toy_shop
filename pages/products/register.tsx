@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef } from "react";
+import React, { FC, useState, useRef, useEffect } from "react";
 import { Form, Header, Segment, Image } from "semantic-ui-react";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "stores/store";
@@ -69,6 +69,10 @@ const Register: FC = () => {
     setLoading(false);
     dispatch(LoadingOFF());
   };
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
 
   return (
     <>

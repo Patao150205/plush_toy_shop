@@ -2,7 +2,8 @@ module.exports = (q) => {
   switch (q.kind) {
     case undefined:
       return undefined;
-
+    case "keyword":
+      return { name: new RegExp(`.*${q.keyword}.*`) };
     case "hot":
       return { Hot: true };
 

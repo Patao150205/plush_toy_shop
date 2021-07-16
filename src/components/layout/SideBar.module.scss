@@ -1,19 +1,20 @@
 @import "config";
 
 .root {
+  display: none;
   width: 100vw;
   height: 100%;
   top: 5rem;
   left: 0;
   position: fixed;
-  display: none;
+  transition: display 3s;
   .left {
     background-color: rgba(0, 0, 0, 0.3);
     width: 100%;
     height: 100%;
   }
 }
-.active {
+.active.root {
   display: flex;
 }
 
@@ -39,6 +40,7 @@
     .menuText {
       display: inline-block;
       font-size: 20px;
+      font-weight: 900;
     }
     & > i {
       position: absolute;

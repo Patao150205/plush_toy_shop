@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import axios from "axios";
 import BaseUrl from "./BaseUrl";
-import Router from "next/router";
-import { GetServerSidePropsContext } from "next";
-import { ParsedUrlQuery } from "querystring";
 
 export type ProductData = {
   name: string;
@@ -36,7 +33,16 @@ export const getProducts = async (path: string) => {
     const res = await axios.get(`${BaseUrl}/api${path}`);
     return res.data;
   } catch (error) {
-    // return { err: true, errMsg: error.response.data };
+    return { err: true, errMsg: error.response.data };
+  }
+};
+
+export const SearchProducts = async (keyword: string) => {
+  try {
+    const res = await axios.get(`${BaseUrl}/api/search?keyword=${keyword}`);
+    return res.data;
+  } catch (error) {
+    return { err: true, errMsg: error.response.data };
   }
 };
 

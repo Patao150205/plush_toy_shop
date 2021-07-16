@@ -58,12 +58,13 @@ router.delete("/", async (req, res) => {
   }
 });
 
-// @route GET api/products
-// @desc 商品情報の取得
+// @route GET api/products/search
+// @desc 商品情報の検索
 // @access Public
-router.get("/", async (req, res) => {
+router.get("/search", async (req, res) => {
   try {
-    const products = await ProductsModel.sort({ createdAt: -1 }).find();
+    const keyword = new RegExp(`.*${req.query.keyword}.*`);
+    const products = await ProductsModel.find({ name: keyword }).limit(20).select("name primaryPic");
     res.json(products);
   } catch (error) {
     console.error(error);

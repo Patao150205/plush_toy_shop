@@ -7,11 +7,9 @@ import SelectSort from "./SelectSort";
 
 type Props = {
   totalNumber: number;
-  sort: number;
-  setSort: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const ExtractProducts: FC<Props> = ({ totalNumber, sort, setSort }) => {
+const ExtractProducts: FC<Props> = ({ totalNumber }) => {
   const router = useRouter();
   const query = router.query;
 

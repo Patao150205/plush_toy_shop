@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "stores/store";
 import { SideToggle } from "stores/settingSlice";
 import { useRouter } from "next/router";
 import { cartSelector, favoritesSelector } from "stores/userSlice";
+import SearchProductInput from "../products/SearchProductInput";
 
 const TopHeader: FC = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +27,7 @@ const TopHeader: FC = () => {
             </Header>
           </Menu.Item>
           <Menu.Item position="right">
-            <Search className={style.search} />
+            <SearchProductInput />
           </Menu.Item>
           <Menu.Item fitted="horizontally">
             <i onClick={() => router.push("/user")} className={`fas fa-user ${style.icon} ${style.userIcon}`}></i>
@@ -52,7 +53,7 @@ const TopHeader: FC = () => {
           </Menu.Item>
         </Container>
       </Menu>
-      <Menu className={`${style.ui} ${style.menu}`} compact pointing size="huge" widths="4" inverted>
+      <Menu className={`${style.ui} ${style.menu}`} compact pointing size="huge" widths="3" inverted>
         <Container>
           <Menu.Item name="TOP" link active={router.pathname === "/"} onClick={() => router.push("/")} />
           <Menu.Item
@@ -61,7 +62,6 @@ const TopHeader: FC = () => {
             active={router.pathname === "/products"}
             onClick={() => router.push("/products")}
           />
-          <Menu.Item name="INFO" link active={router.pathname === "/info"} onClick={() => router.push("/info")} />
           <Menu.Item
             name="CONTACT"
             link

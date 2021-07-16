@@ -21,6 +21,7 @@ const SelectSort: FC = () => {
     if (query.price) url = url + `&price=${query.price}`;
     if (query.size) url = url + `&size=${query.size}`;
     if (query.genre) url = url + `&genre=${query.genre}`;
+    if (query.keyword) url = url + `&keyword=${query.keyword}`;
 
     router.push(url);
   };

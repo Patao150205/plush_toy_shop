@@ -1,8 +1,9 @@
 import React, { FC, useState } from "react";
 import style from "./SearchSideBar.module.scss";
-import { Search, Segment, Divider } from "semantic-ui-react";
+import { Segment, Divider } from "semantic-ui-react";
 import classNames from "classnames";
 import { useRouter } from "next/router";
+import SearchProductInput from "./SearchProductInput";
 
 const SearchSideBar: FC = () => {
   const router = useRouter();
@@ -23,7 +24,7 @@ const SearchSideBar: FC = () => {
       <Segment textAlign="center" className={style.root}>
         <div className="module-spacer--sm" />
         <label className="u-text--left">商品検索</label>
-        <Search loading={isLoading} style={{ marginTop: "1rem" }} />
+        <SearchProductInput />
         <div className="module-spacer--md" />
         <ul className={style.parentUL}>
           <li className={style.parentLI} onClick={() => router.push("/products")}>

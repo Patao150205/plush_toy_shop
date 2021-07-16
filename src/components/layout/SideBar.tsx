@@ -21,10 +21,26 @@ const SideBar: FC = ({ children }) => {
             <ul>
               <li className={style.menuItem} onClick={() => router.push("/")}>
                 <i className="fas fa-home"></i>
-                <p className={style.menuText}>HOME</p>
+                <p className={style.menuText}>TOP</p>
               </li>
-              <li className={style.menuItem} onClick={() => router.push("/login")}>
-                <p className={style.menuText}>LOGIN</p>
+              <li className={style.menuItem} onClick={() => router.push("/")}>
+                <i className="fas fa-home"></i>
+                <p className={style.menuText}>TOP</p>
+              </li>
+              <li className={style.menuItem} onClick={() => router.push("/products")}>
+                <p className={style.menuText}>PRODUCTS</p>
+              </li>
+              <li className={style.menuItem} onClick={() => router.push("/contact")}>
+                <p className={style.menuText}>CONTACT</p>
+              </li>
+              <li className={style.menuItem} onClick={() => router.push("/products/register")}>
+                <p className={style.menuText}>在庫の追加</p>
+              </li>
+              <li className={style.menuItem} onClick={() => router.push("/")}>
+                <p className={style.menuText}>発注の確認</p>
+              </li>
+              <li className={style.menuItem} onClick={() => router.push("/")}>
+                <p className={style.menuText}>LOGOUT</p>
               </li>
             </ul>
           </div>

@@ -17,10 +17,10 @@ const User: FC = () => {
           <h1>ユーザー</h1>
           <div className={`module-spacer--xs ${style.border}`} />
           <div className="module-spacer--xs" />
-          <h2>住所登録</h2>
+          <h2>住所確認・登録・変更</h2>
           <Button onClick={() => router.push("/setting/address")}>
             <Icon name="address card outline" />
-            住所登録
+            住所確認・登録・変更
           </Button>
           <h2>ログアウト</h2>
           <Button>

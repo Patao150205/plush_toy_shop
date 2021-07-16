@@ -73,7 +73,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
   const data = await getFavoritesProduct(token);
-  if (data.errMsg === "認証情報が無効です。") {
+  if (data.errMsg) {
     return {
       redirect: {
         statusCode: 302,

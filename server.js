@@ -17,6 +17,7 @@ app.prepare().then(() => {
   server.use("/api/product", require("./api/product"));
   server.use("/api/favorites", require("./api/favorites"));
   server.use("/api/cart", require("./api/cart"));
+  server.use("/api/address", require("./api/address"))
 
   server.all("*", (req, res) => handle(req, res));
 
