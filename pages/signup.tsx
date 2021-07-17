@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch } from "stores/store";
 import { LoadingOFF, LoadingON, ModalOpen } from "stores/settingSlice";
 import { ErrorMessage } from "@hookform/error-message";
-import { SignUpState, signUp } from "utils/auth";
+import { SignUpState, temporaryRegist } from "utils/auth";
 import { useRouter } from "next/router";
 
 const Signup: FC = () => {
@@ -18,14 +18,19 @@ const Signup: FC = () => {
     formState: { errors },
   } = useForm<FormData>();
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   const sendInfo = async (data: SignUpState) => {
     dispatch(LoadingON());
-    const res = await signUp(data);
+    const res = await temporaryRegist(data);
     dispatch(LoadingOFF());
     if (!res.err) {
-      router.push("/");
+      dispatch(
+        ModalOpen({
+          status: "success",
+          title: "メール送信成功",
+          message: "万が一メールが届かない場合は、もう一度お試しください。",
+        })
+      );
     } else {
       dispatch(ModalOpen({ status: "error", title: "エラー", message: res.errMsg }));
     }

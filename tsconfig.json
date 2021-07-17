@@ -15,6 +15,15 @@
     "jsx": "preserve",
     "baseUrl": "./src"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "api/auth.js", "server.js", "pages/setting/address", "serverUtils/searchKindCondition.js", "serverUtils/auth.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "api/auth.js",
+    "server.js",
+    "pages/setting/address",
+    "serverUtils/searchKindCondition.js",
+    "serverUtils/auth.js"
+  ],
   "exclude": ["node_modules"]
 }

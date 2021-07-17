@@ -23,14 +23,23 @@ export type SignUpState = {
   // phoneNumber: number;
 };
 
-export const signUp = async (userInfo: SignUpState) => {
+export const temporaryRegist = async (userInfo: SignUpState) => {
   try {
-    const res = await axios.post(`${BaseUrl}/api/auth/register`, {
+    const res = await axios.post(`${BaseUrl}/api/auth/temporary/register`, {
       ...userInfo,
     });
     return res.data;
   } catch (err) {
     return { err: true, errMsg: err.response.data };
+  }
+};
+
+export const confirmCurrectHash = async (hash: string) => {
+  try {
+    const res = await axios.post(`${BaseUrl}/api/auth/register/${hash}`);
+    return res.data;
+  } catch (error) {
+    return { error: true, errMsg: error.response.data };
   }
 };
 
