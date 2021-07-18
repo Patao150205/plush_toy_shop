@@ -5,6 +5,7 @@ import BaseUrl from "utils/BaseUrl";
 import cookie from "js-cookie";
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "./store";
+import Router from "next/router";
 
 const token = cookie.get("token");
 const axios = axiosBase.create({
@@ -65,7 +66,7 @@ type UserState =
       userInfo: {
         nickname: string;
         email: string;
-        role: string;
+        role: "user" | "root";
         isShorthandEmail: boolean;
         _id: string;
       };
@@ -83,10 +84,20 @@ type UserState =
         }
       ];
     }
-  | { userInfo: null; favorites: []; cart: [] };
+  | {
+      userInfo: { nickname: string; email: string; role: "user" | "root"; isShorthandEmail: boolean; _id: string };
+      favorites: [];
+      cart: [];
+    };
 
 const initialState: UserState = {
-  userInfo: null,
+  userInfo: {
+    nickname: "",
+    email: "",
+    role: "user",
+    isShorthandEmail: false,
+    _id: "",
+  },
   favorites: [],
   cart: [],
 };
@@ -115,14 +126,15 @@ const userSlice = createSlice({
       state.favorites = state.favorites.filter((ele: { _id: string; product: string }) => ele.product !== payload);
     });
     builder.addCase(deleteFavorite.rejected, (state: UserState) => {
-      return (state = { userInfo: null, favorites: [], cart: [] });
+      return (state = initialState);
     });
     // カート機能
     builder.addCase(registCart.fulfilled, (state: any, { payload }) => {
       state.cart = [...state.cart, payload];
     });
     builder.addCase(registCart.rejected, (state: UserState) => {
-      return (state = { userInfo: null, favorites: [], cart: [] });
+      Router.push("/login");
+      return (state = initialState);
     });
     builder.addCase(deleteCart.fulfilled, (state: any, { payload }) => {
       state.cart = state.cart.filter(
@@ -130,7 +142,7 @@ const userSlice = createSlice({
       );
     });
     builder.addCase(deleteCart.rejected, (state: UserState) => {
-      return (state = { userInfo: null, favorites: [], cart: [] });
+      return (state = initialState);
     });
   },
 });

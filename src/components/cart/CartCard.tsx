@@ -27,13 +27,12 @@ const CartCard: FC<Props> = ({ product, amount, counts, setCounts }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const handleDelete = () => {};
-
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     console.log(name);
     setCounts((prev: { name: number }) => ({ ...prev, [name]: parseInt(value) }));
   };
+
 
   return (
     <div className={style.root}>

@@ -1,11 +1,12 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect } from "react";
 import Link from "next/link";
 import style from "./ProductCard.module.scss";
 import { useRouter } from "next/router";
 import classNames from "classnames";
 import { useAppDispatch } from "stores/store";
-import { deleteFavorite, registFavorite } from "stores/userSlice";
-import { Loader } from "semantic-ui-react";
+import { deleteFavorite, registFavorite, userInfoSelector } from "stores/userSlice";
+import { useAppSelector } from "../../stores/store";
+import { deleteProduct } from "utils/products";
 
 type Props = {
   favorites:
@@ -16,25 +17,57 @@ type Props = {
         }
       ]
     | [];
-  name: string;
-  productPic: string;
-  price: number;
-  productId: string;
-  isNew: boolean;
-  isHot: boolean;
-  height: number;
+  product: {
+    _id: string;
+    name: string;
+    primaryPic: string;
+    price: number;
+    New: boolean;
+    Hot: boolean;
+    height: number;
+  };
+  setProductsData?: React.Dispatch<React.SetStateAction<any>>;
 };
 
-const ProductCard: FC<Props> = ({ favorites, name, productPic, price, productId, isNew, isHot, height }) => {
+const ProductCard: FC<Props> = ({ favorites, product, setProductsData }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const isFavorite = favorites.find((ele) => ele.product === productId);
+
+  // 商品が削除された場合
+  if (!product) {
+    return (
+      <div className={style.root}>
+        <p>この商品は削除されてしまった商品です。</p>
+        <p className={classNames(style.icon, { [style.like]: true })}>
+          <span onClick={() => handleLike(productId)} className={`fas fa-heart`} />
+        </p>
+      </div>
+    );
+  }
+
+  const { name, primaryPic, price, _id: productId, New: isNew, Hot: isHot, height } = product;
+
+  const isFavorite = favorites.some((ele) => ele.product === productId);
+  const userInfo = useAppSelector(userInfoSelector);
 
   const handleLike = async (productId: string) => {
     if (!isFavorite) {
       dispatch(registFavorite(productId));
     } else {
       dispatch(deleteFavorite(productId));
+    }
+  };
+
+  const handleDelete = async (productId: string) => {
+    const confirm = window.confirm("商品を本当に削除しますか？");
+    if (confirm) {
+      const res = await deleteProduct(productId);
+      if (!res.err && setProductsData) {
+        setProductsData((prev: any) => ({
+          ...prev,
+          products: prev?.products?.filter((prod: any) => prod._id !== productId),
+        }));
+      }
     }
   };
 
@@ -55,7 +88,7 @@ const ProductCard: FC<Props> = ({ favorites, name, productPic, price, productId,
   return (
     <div className={style.root}>
       <div className={style.imgWrapper}>
-        <img onClick={() => router.push(`/product/${productId}`)} src={productPic || "/noimg.jpg"} />
+        <img onClick={() => router.push(`/product/${productId}`)} src={primaryPic || "/noimg.jpg"} />
         {isNew && (
           <span
             className={classNames(
@@ -86,9 +119,19 @@ const ProductCard: FC<Props> = ({ favorites, name, productPic, price, productId,
       </p>
       <p className={style.price}>{price}円(税込)</p>
       <p className={style.height}>{height}cm (高さ)</p>
-      <p className={classNames(style.heart, { [style.like]: isFavorite })}>
+      <p className={classNames(style.icon, { [style.like]: isFavorite })}>
         <span onClick={() => handleLike(productId)} className={`fas fa-heart`} />
       </p>
+      <>
+        {userInfo.role === "root" && (
+          <>
+            <div className="module-spacer--sm" />
+            <p className={classNames(style.icon)}>
+              <span onClick={() => handleDelete(productId)} className={`fas fa-trash-alt`} />
+            </p>
+          </>
+        )}
+      </>
     </div>
   );
 };

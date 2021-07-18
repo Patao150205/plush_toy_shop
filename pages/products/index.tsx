@@ -10,7 +10,6 @@ import { useRouter } from "next/router";
 import Pagination from "./Pagenation";
 import NoProduct from "./NoProduct";
 import { useAppSelector } from "stores/store";
-import { favoritesSelector, cartSelector } from "stores/userSlice";
 
 type Props = {
   datas: {
@@ -72,13 +71,7 @@ const Products: FC<Props> = ({ datas }) => {
               <ProductCard
                 favorites={favorites}
                 key={product._id}
-                productId={product._id}
-                name={product.name}
-                price={product.price}
-                productPic={product.primaryPic}
-                isNew={product.New}
-                isHot={product.Hot}
-                height={product.height}
+                product={product}
               />
             ))}
           </div>

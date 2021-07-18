@@ -35,7 +35,12 @@ const Cart: FC<Props> = ({ cart }) => {
   // cartはサーバサイドレンダリング FavoritesListはReduxから
   const CartList = useAppSelector(cartSelector);
   const [subTotal, setSubTotal] = useState(0);
-  const [counts, setCounts] = useState<any>(null);
+  let initialValue: { [_id: string]: number } = {};
+  for (const ele of cart) {
+    initialValue = { ...initialValue, [ele.product._id]: ele.amount };
+  }
+
+  const [counts, setCounts] = useState<{ [_id: string]: number }>(initialValue);
   const renderedFirst = useRef(false);
 
   // 削除されていない存在する商品たち
@@ -53,7 +58,6 @@ const Cart: FC<Props> = ({ cart }) => {
       const v = { [ele.product._id]: ele.amount };
       initialValue = { ...initialValue, ...v };
     });
-    console.log("数量");
     console.log(initialValue);
     setCounts(initialValue);
   }, [CartList]);
@@ -89,30 +93,33 @@ const Cart: FC<Props> = ({ cart }) => {
         <p className={style.shippingInfo}>
           3000円以上お買い上げで<span>送料無料！</span>
         </p>
-        <div className={style.wrapper}>
-          {cart.length === 0 && <NoProduct />}
-          <div className={style.products}>
-            {cart.map((ele) => {
-              // 削除した場合にReduxと差異がなくなるように判定を挟む、
-              const isExist = CartList.some(
-                (prod: { _id: string; product: string }) => prod.product === ele.product._id
-              );
-              if (isExist)
-                return (
-                  <CartCard
-                    key={ele.product._id}
-                    counts={counts}
-                    setCounts={setCounts}
-                    product={ele.product}
-                    amount={ele.amount}
-                  />
+        {CartList.length === 0 ? (
+          <NoProduct />
+        ) : (
+          <div className={style.wrapper}>
+            <div className={style.products}>
+              {cart.map((ele) => {
+                // 削除した場合にReduxと差異がなくなるように判定を挟む、
+                const isExist = CartList.some(
+                  (prod: { _id: string; product: string }) => prod.product === ele.product._id
                 );
-            })}
+                if (isExist)
+                  return (
+                    <CartCard
+                      key={ele.product._id}
+                      counts={counts}
+                      setCounts={setCounts}
+                      product={ele.product}
+                      amount={ele.amount}
+                    />
+                  );
+              })}
+            </div>
+            <div className={style.totalPriceWrapper}>
+              <TotalPrice subTotal={subTotal} />
+            </div>
           </div>
-          <div className={style.totalPriceWrapper}>
-            <TotalPrice subTotal={subTotal} />
-          </div>
-        </div>
+        )}
       </Segment>
     </>
   );

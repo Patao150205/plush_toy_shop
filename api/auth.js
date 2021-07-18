@@ -40,7 +40,7 @@ router.post("/temporary/register", async (req, res) => {
 
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-    const href = `${BaseUrl}/auth/${hash}`;
+    const href = `${BaseUrl}/auth/register/${hash}`;
     const html = await ejs.renderFile(path.resolve(__dirname, "../email/regist.ejs"), { nickname, href });
     // const html = await fs.readFile(path.resolve(__dirname, "../email/regist.html"), "utf-8");
     console.log(html);

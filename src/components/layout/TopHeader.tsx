@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Menu, Image, Header, Container, Search } from "semantic-ui-react";
+import { Menu, Image, Header, Container } from "semantic-ui-react";
 import style from "./TopHeader.module.scss";
 import { Color } from "styles/style";
 import { useAppDispatch, useAppSelector } from "stores/store";
@@ -27,7 +27,9 @@ const TopHeader: FC = () => {
             </Header>
           </Menu.Item>
           <Menu.Item position="right">
-            <SearchProductInput />
+            <div className={style.search}>
+              <SearchProductInput />
+            </div>
           </Menu.Item>
           <Menu.Item fitted="horizontally">
             <i onClick={() => router.push("/user")} className={`fas fa-user ${style.icon} ${style.userIcon}`}></i>

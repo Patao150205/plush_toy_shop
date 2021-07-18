@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import axios from "axios";
+import axiosBase from "axios";
 import BaseUrl from "./BaseUrl";
+import cookies from "js-cookie";
 
 export type ProductData = {
   name: string;
@@ -17,10 +18,12 @@ export type ProductData = {
   primaryPic: string;
 };
 
+const axios = axiosBase.create({ headers: { authorization: cookies.get("token") } });
+
 // 個別の商品情報取得
 export const getProduct = async (productId: string) => {
   try {
-    const res = await axios.get(`${BaseUrl}/api/product/${productId}`);
+    const res = await axiosBase.get(`${BaseUrl}/api/product/${productId}`);
     return res.data;
   } catch (error) {
     return { err: true, errMsg: error.response.data };
@@ -30,22 +33,24 @@ export const getProduct = async (productId: string) => {
 // 商品一覧の取得
 export const getProducts = async (path: string) => {
   try {
-    const res = await axios.get(`${BaseUrl}/api${path}`);
+    const res = await axiosBase.get(`${BaseUrl}/api${path}`);
     return res.data;
   } catch (error) {
     return { err: true, errMsg: error.response.data };
   }
 };
 
+// 商品検索
 export const SearchProducts = async (keyword: string) => {
   try {
-    const res = await axios.get(`${BaseUrl}/api/search?keyword=${keyword}`);
+    const res = await axiosBase.get(`${BaseUrl}/api/search?keyword=${keyword}`);
     return res.data;
   } catch (error) {
     return { err: true, errMsg: error.response.data };
   }
 };
 
+// 商品登録
 export const registProduct = async (data: ProductData) => {
   data.price = parseInt(data.price as string);
   data.width = parseInt(data.width as string);
@@ -61,14 +66,15 @@ export const registProduct = async (data: ProductData) => {
   }
 };
 
-// export const deleteProduct = async (data: ProductData) => {
-//   try {
-//     const res = await axios.post(`${BaseUrl}/api/products`, { ...data });
-//     return res.data;
-//   } catch (error) {
-//     return { err: true, message: error.response.data };
-//   }
-// };
+// 商品の削除
+export const deleteProduct = async (productId: string) => {
+  try {
+    const res = await axios.delete(`${BaseUrl}/api/products/${productId}`);
+    return res.data;
+  } catch (error) {
+    return { err: true, message: error.response.data };
+  }
+};
 
 // export const editProduct = async (data: ProductData) => {
 //   try {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "styles/utils/reset.css";
+import "styles/reset.css";
 import "semantic-ui-css/semantic.min.css";
-import "styles/utils/global.scss";
+import "styles/global.scss";
 import "swiper/swiper.scss";
 import "swiper/components/effect-coverflow/effect-coverflow.scss";
 import "swiper/components/navigation/navigation.scss";

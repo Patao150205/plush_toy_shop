@@ -44,18 +44,14 @@ const ProductId: FC<Props> = ({ product }) => {
 
   const isFavorite = favorites.find((ele: { _id: string; product: string }) => ele.product === product._id);
   const hasCart = cart.find((ele: { _id: string; product: string; amount: number }) => ele.product === product._id);
-  console.log(hasCart, cart);
 
   const [amount, setAmount] = useState("1");
 
   const title = `Yuruhuwa 【${product?.name}】` ?? "商品情報";
 
   // 個数指定
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
-    if (parseInt(value) > product.stock) {
-      return setAmount(String(product.stock));
-    }
     setAmount(value);
   };
   // お気に入り機能
@@ -85,7 +81,6 @@ const ProductId: FC<Props> = ({ product }) => {
       <Head>
         <title>{title}</title>
       </Head>
-      <div className="module-spacer--md" />
       <div className={style.root}>
         <div className={style.swiperWrapper}>
           <ProductSlide productPic={product.productPic} primaryPic={product.primaryPic} />
@@ -93,8 +88,6 @@ const ProductId: FC<Props> = ({ product }) => {
         <div className={style.detail}>
           <Segment>
             <h1>{product.name}</h1>
-            <span></span>
-            <span></span>
             <p className={style.desc}>{product.description}</p>
             <div className={`module-spacer--xs ${style.divider}`} />
             <div className={`module-spacer--sm`} />
@@ -115,16 +108,15 @@ const ProductId: FC<Props> = ({ product }) => {
                   <p className={style.sum}>
                     合計 <span>{product.price * parseInt(amount) || 0}円(税込)</span>
                   </p>{" "}
-                  <p className={style.amount}>
-                    数量
-                    <input
-                      onChange={handleChange}
-                      value={amount}
-                      type="number"
-                      min={1}
-                      max={product.stock}
-                      required
-                    />{" "}
+                  <p className={style.countLabel}>
+                    数量 :&nbsp;&nbsp;
+                    <select value={amount} onChange={handleChange} required>
+                      {new Array(product.stock).fill(undefined).map((_, i) => (
+                        <option key={i + 1} value={i + 1}>
+                          {i + 1}
+                        </option>
+                      ))}
+                    </select>
                     体
                   </p>
                 </div>

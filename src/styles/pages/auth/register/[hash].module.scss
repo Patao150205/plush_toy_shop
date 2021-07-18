@@ -1,0 +1,88 @@
+@import "config";
+
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 95%;
+  justify-content: space-between;
+  margin: 0 auto;
+  @include mq(md) {
+    align-self: center;
+    flex-direction: row;
+  }
+}
+
+.shopLogo {
+  max-width: 350px;
+  width: 100%;
+  border: 2px solid $Sprimary;
+}
+.card {
+  position: relative;
+  border-radius: 30px;
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+  height: 300px;
+  background: $Sprimary;
+  color: $Fprimary;
+  margin-top: 100px;
+  &::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 18px;
+    top: -75px;
+    left: 45%;
+    border-radius: 50%;
+    background: $Sprimary;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 28px;
+    top: -40px;
+    left: 45%;
+    border-radius: 50%;
+    background: $Sprimary;
+  }
+  @include mq(md) {
+    margin-left: 60px;
+    &::before {
+      top: auto;
+      bottom: 150px;
+      left: -80px;
+    }
+    &::after {
+      top: auto;
+      left: -40px;
+      bottom: 140px;
+    }
+    margin-top: 0;
+  }
+  @include mq(lg) {
+    height: 350px;
+  }
+}
+
+.content {
+  padding: 2rem 1rem 1rem;
+  color: $Fprimary;
+  font-size: 1rem;
+  h2 {
+    font-size: 1.2rem;
+    text-align: center;
+    & > span {
+      color: $Ssecondary;
+    }
+  }
+  p {
+    text-align: center;
+    line-height: 1.1rem;
+  }
+  .btnWrapper {
+    text-align: center;
+  }
+}

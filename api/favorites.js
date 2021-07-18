@@ -42,13 +42,28 @@ router.post("/:productId", auth, async (req, res) => {
 });
 
 // @route DELETE api/favorites
-// @desc お気に入りの削除
+// @desc お気に入りの削除(商品ID)
 // @access Private
 router.delete("/:productId", auth, async (req, res) => {
   const { productId } = req.params;
   const { userId } = req;
   try {
-    const data = await FavoritesModel.updateOne({ user: userId }, { $pull: { products: { product: productId } } });
+    await FavoritesModel.updateOne({ user: userId }, { $pull: { products: { product: productId } } });
+    res.send("お気に入りから削除しました。");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("サーバーエラー");
+  }
+});
+
+// @route DELETE api/favorites
+// @desc お気に入りの削除(お気に入りID)
+// @access Private
+router.delete("/_id/:favoriteId", auth, async (req, res) => {
+  const { favoriteId } = req.params;
+  const { userId } = req;
+  try {
+    await FavoritesModel.updateOne({ user: userId }, { $pull: { products: { _id: favoriteId } } });
     res.send("お気に入りから削除しました。");
   } catch (error) {
     console.error(error);

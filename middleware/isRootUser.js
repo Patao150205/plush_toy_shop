@@ -1,6 +1,6 @@
 const UserModel = require("../models/UserModel");
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
   try {
     const role = await UserModel.findById(req.userId).select("role");
     if (!role === "root") {

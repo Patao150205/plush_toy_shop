@@ -2,6 +2,8 @@ const ProductsModel = require("../models/ProductsModel");
 const router = require("express").Router();
 const extractSerachQuery = require("../serverUtils/searchQueryCondition");
 const extractSortQuery = require("../serverUtils/sortQueryCondition");
+const auth = require("../middleware/verificationAuth");
+const root = require("../middleware/isRootUser");
 
 // @route GET api/products
 // @desc 商品一覧の取得
@@ -32,7 +34,7 @@ router.get("/", async (req, res) => {
 // @route POST api/products
 // @desc 商品情報の登録
 // @access Private
-router.post("/", async (req, res) => {
+router.post("/", auth, root, async (req, res) => {
   try {
     const product = new ProductsModel({
       ...req.body,
@@ -45,12 +47,13 @@ router.post("/", async (req, res) => {
   }
 });
 
-// @route POST api/products
-// @desc 商品情報の登録
+// @route DELETE api/products
+// @desc 商品情報の削除
 // @access Private
-router.delete("/", async (req, res) => {
+router.delete("/:productId", auth, async (req, res) => {
+  const productId = req.params.productId;
   try {
-    await ProductsModel.findOneAndDelete();
+    await ProductsModel.findByIdAndDelete(productId);
     res.send("商品情報を削除しました。");
   } catch (error) {
     console.error(error);

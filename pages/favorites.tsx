@@ -31,7 +31,6 @@ type Props = {
 
 const Favorites: FC<Props> = ({ favorites }) => {
   const FavoritesList = useAppSelector(favoritesSelector);
-
   return (
     <>
       <Head>
@@ -44,17 +43,7 @@ const Favorites: FC<Props> = ({ favorites }) => {
         {favorites.length === 0 && <NoProduct />}
         <div className={style.wrapper}>
           {favorites.map((ele) => (
-            <ProductCard
-              favorites={FavoritesList}
-              key={ele.product._id}
-              name={ele.product.name}
-              price={ele.product.price}
-              productId={ele.product._id}
-              productPic={ele.product.primaryPic}
-              isNew={ele.product.New}
-              isHot={ele.product.Hot}
-              height={ele.product.height}
-            />
+            <ProductCard key={ele._id} favorites={FavoritesList} product={ele.product} />
           ))}
         </div>
       </Segment>
@@ -73,6 +62,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
   const data = await getFavoritesProduct(token);
+  console.log(data);
   if (data.errMsg) {
     return {
       redirect: {
