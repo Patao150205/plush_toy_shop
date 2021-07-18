@@ -2,7 +2,7 @@
 import axios from "axios";
 import BaseUrl from "./BaseUrl";
 
-type Favorite = {
+type Product = {
   _id: string;
   product: {
     _id: string;
@@ -26,7 +26,7 @@ export const getFavoritesProduct = async (token?: string) => {
       },
     });
     // もしお気に入りの商品が削除されていた場合削除
-    const newData = res.data.filter((favorite: Favorite) => {
+    const newData = res.data.filter((favorite: Product) => {
       if (favorite.product === null) {
         axios.delete(`${BaseUrl}/api/favorites/_id/${favorite._id}`, {
           headers: {
@@ -51,7 +51,19 @@ export const getCartProduct = async (token?: string) => {
         authorization: token,
       },
     });
-    return res.data;
+
+    const newData = res.data.filter((cart: Product) => {
+      if (cart.product === null) {
+        axios.delete(`${BaseUrl}/api/cart/_id/${cart._id}`, {
+          headers: {
+            authorization: token,
+          },
+        });
+        return false;
+      }
+      return true;
+    });
+    return newData;
   } catch (error) {
     return { err: true, errMsg: error.response.data };
   }

@@ -62,7 +62,7 @@ const Products: FC<Props> = ({ datas }) => {
       </div>
 
       <div>
-        <ExtractProducts sort={sort} setSort={setSort} totalNumber={productsData.count} />
+        <ExtractProducts totalNumber={productsData.count} />
         <div className="module-spacer--xs" />
         <Segment>
           {productsData.products.length === 0 && <NoProduct />}
@@ -72,6 +72,7 @@ const Products: FC<Props> = ({ datas }) => {
                 favorites={favorites}
                 key={product._id}
                 product={product}
+                setProductsData={setProductsData}
               />
             ))}
           </div>

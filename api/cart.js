@@ -46,8 +46,8 @@ router.post("/:productId", auth, async (req, res) => {
   }
 });
 
-// @route DELETE api/:productId
-// @desc カートの商品削除
+// @route DELETE api/cart/:productId
+// @desc カートの商品削除(商品ID)
 // @access Private
 router.delete("/:productId", auth, async (req, res) => {
   const { productId } = req.params;
@@ -57,6 +57,21 @@ router.delete("/:productId", auth, async (req, res) => {
     const data = await CartModel.updateOne({ user: userId }, { $pull: { products: { product: productId } } });
     console.log("ここよおお", data);
     res.send("カートから削除しました。");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("サーバーエラー");
+  }
+});
+
+// @route DELETE api/cart/_id/cartId
+// @desc カートの商品削除(カートID)
+// @access Private
+router.delete("/_id/:cartId", auth, async (req, res) => {
+  const { cartId } = req.params;
+  const { userId } = req;
+  try {
+    await CartModel.updateOne({ user: userId }, { $pull: { products: { _id: cartId } } });
+    res.send("お気に入りから削除しました。");
   } catch (error) {
     console.error(error);
     res.status(500).send("サーバーエラー");
