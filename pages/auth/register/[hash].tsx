@@ -57,8 +57,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
 
   const hash = ctx.params.hash as string;
-  const res = await confirmCurrectHash(hash);
-  if (res.error) {
+  const data = await confirmCurrectHash(hash);
+  if (data.errMsg === "JsonWebTokenError") {
     return {
       redirect: {
         statusCode: 302,
@@ -66,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   } else {
-    return { props: { token: res.token } };
+    return { props: { token: data.token } };
   }
 };
 

@@ -202,7 +202,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let data;
   if (productId) {
     data = await getProduct(productId);
-    if (data.errMsg === "認証情報が無効です。") {
+    if (data.errMsg === "JsonWebTokenError") {
       return {
         redirect: {
           statusCode: 302,

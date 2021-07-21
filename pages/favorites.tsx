@@ -63,7 +63,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
   const data = await getFavoritesProduct(token);
   console.log(data);
-  if (data.errMsg) {
+  if (data.errMsg === "JsonWebTokenError") {
     return {
       redirect: {
         statusCode: 302,

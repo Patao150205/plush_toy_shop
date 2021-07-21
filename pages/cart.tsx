@@ -139,7 +139,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
   const data = await getCartProduct(token);
-  if (data.errMsg) {
+  if (data.errMsg === "JsonWebTokenError") {
     return {
       redirect: {
         statusCode: 302,

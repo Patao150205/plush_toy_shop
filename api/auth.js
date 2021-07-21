@@ -2,15 +2,21 @@ const router = require("express").Router();
 const UserModel = require("../models/UserModel");
 const FavoritesModel = require("../models/FavoritesModel");
 const TemporaryRegistModel = require("../models/TemporaryRegistModel");
-const CartModel = require("../models/CartModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sgMail = require("@sendgrid/mail");
 const BaseUrl = require("../src/utils/BaseUrl");
-const fs = require("fs/promises");
 const ejs = require("ejs");
 const path = require("path");
+const auth = require("../middleware/verificationAuth");
+
+// @route GET api/auth/token
+// @desc トークンの確認
+// @access Private
+router.post("/token", auth, (req, res) => {
+  res.send("認証成功！");
+});
 
 // @route POST api/auth/temporary/register
 // @desc ユーザーの仮登録と確認メール送信 (メールアドレス確認前)
@@ -43,10 +49,9 @@ router.post("/temporary/register", async (req, res) => {
     const href = `${BaseUrl}/auth/register/${hash}`;
     const html = await ejs.renderFile(path.resolve(__dirname, "../email/regist.ejs"), { nickname, href });
     // const html = await fs.readFile(path.resolve(__dirname, "../email/regist.html"), "utf-8");
-    console.log(html);
     const msg = {
       to: email,
-      from: "patao150205@yahoo.co.jp",
+      from: process.env.FROM_EMAIL,
       subject: "Yuruhuwa 登録のご案内",
       html,
     };

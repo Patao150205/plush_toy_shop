@@ -23,6 +23,15 @@ export type SignUpState = {
   // phoneNumber: number;
 };
 
+export const authToken = async (token: string) => {
+  try {
+    const res = await axios.post(`${BaseUrl}/api/auth/token`, {}, { headers: { authorization: token } });
+    return res.data;
+  } catch (error) {
+    return { err: true, errMsg: error.response.data };
+  }
+};
+
 export const temporaryRegist = async (userInfo: SignUpState) => {
   try {
     const res = await axios.post(`${BaseUrl}/api/auth/temporary/register`, {
@@ -30,6 +39,7 @@ export const temporaryRegist = async (userInfo: SignUpState) => {
     });
     return res.data;
   } catch (err) {
+    console.log(err);
     return { err: true, errMsg: err.response.data };
   }
 };

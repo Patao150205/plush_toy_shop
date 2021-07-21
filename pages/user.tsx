@@ -1,9 +1,11 @@
-import ThirdryButton from "components/UIkit/button/ThirdryButton";
 import { useRouter } from "next/router";
 import React, { FC } from "react";
 import { Segment, Button, Icon } from "semantic-ui-react";
 import style from "styles/pages/user.module.scss";
 import Head from "next/head";
+import { GetServerSideProps } from "next";
+import nookies from "nookies";
+import { authToken } from "utils/auth";
 
 const User: FC = () => {
   const router = useRouter();
@@ -31,6 +33,23 @@ const User: FC = () => {
       </div>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const token = nookies.get(ctx).token;
+  const data = await authToken(token);
+  if (data.errMsg === "JsonWebTokenError") {
+    return {
+      redirect: {
+        statusCode: 302,
+        destination: "/login",
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default User;
