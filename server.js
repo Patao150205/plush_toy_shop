@@ -9,6 +9,7 @@ require("./config/db")();
 
 app.prepare().then(() => {
   const server = express();
+  server.disable("x-powered-by");
 
   server.use(express.json());
   server.use("/api/auth", require("./api/auth"));
@@ -17,7 +18,8 @@ app.prepare().then(() => {
   server.use("/api/product", require("./api/product"));
   server.use("/api/favorites", require("./api/favorites"));
   server.use("/api/cart", require("./api/cart"));
-  server.use("/api/address", require("./api/address"))
+  server.use("/api/address", require("./api/address"));
+  server.use("/api/contact", require("./api/contact"));
 
   server.all("*", (req, res) => handle(req, res));
 

@@ -1,13 +1,19 @@
 const router = require("express").Router();
 const sgMail = require("@sendgrid/mail");
 const ejs = require("ejs");
+const path = require("path");
 
 router.post("/", async (req, res) => {
-  const { email, message } = req.body;
+  const { name, email, message, userId } = req.body.data;
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   try {
-    const html = await ejs.renderFile(path.resolve(__dirname, "../email/regist.ejs"));
+    const html = await ejs.renderFile(path.resolve(__dirname, "../email/contact.ejs"), {
+      name,
+      email,
+      message,
+      userId,
+    });
     const msg = {
       to: process.env.FROM_EMAIL,
       from: process.env.FROM_EMAIL,

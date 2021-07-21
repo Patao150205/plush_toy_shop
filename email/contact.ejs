@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>お問い合わせ内容</title>
+    <style>
+      * {
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .spaceSm {
+        height: 10px;
+      }
+      .spaceMd {
+        height: 20px;
+      }
+      .logo {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+      .logo-title {
+        font-size: 30px;
+        vertical-align: text-bottom;
+      }
+      .btn {
+        background-color: blue;
+        color: white;
+        display: inline-block;
+        width: 200px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 8px;
+        cursor: pointer;
+        user-select: none;
+        text-decoration: none;
+      }
+      .btn:hover {
+        color: black;
+        background: aqua;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include("./header.ejs") %>
+    <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; text-align: center">
+      <tr>
+        <br />
+      </tr>
+      <tr>
+        <td>
+          <h1>お問い合わせ内容</h1>
+          <p>名前: <%= name %></p>
+          <p>メールアドレス: <%= email %></p>
+          <p>ユーザーID: <%= userId %></p>
+          <p>メッセージ: <%= message %></p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
