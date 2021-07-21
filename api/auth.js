@@ -91,14 +91,9 @@ router.post("/register/:hash", async (req, res) => {
       user: newUser._id,
       products: [],
     });
-    const newCart = new CartModel({
-      user: newUser._id,
-      products: [],
-    });
 
     await newUser.save();
     await newFavorites.save();
-    await newCart.save();
 
     console.log(newUser._id.toString(), "id");
     const token = jwt.sign({ userId: newUser._id.toString() }, process.env.jwtSecret, {

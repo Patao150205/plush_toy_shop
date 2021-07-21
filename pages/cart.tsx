@@ -90,11 +90,14 @@ const Cart: FC<Props> = ({ cart }) => {
         <h1 className={style.title}>カート</h1>
         <div className={`module-spacer--sm ${style.border}`} />
         <div className={`module-spacer--sm`} />
-        <p className={style.shippingInfo}>
+        <p className={style.info}>
           3000円以上お買い上げで<span>送料無料！</span>
         </p>
+        <p className={style.info}>
+          ショッピングカートの有効期限お客様が商品を入れてから<span>60分</span>となります。
+        </p>
         {CartList.length === 0 ? (
-          <NoProduct />
+          <NoProduct header="カートの中に商品がありません。" />
         ) : (
           <div className={style.wrapper}>
             <div className={style.products}>

@@ -8,7 +8,7 @@ import { useAppDispatch } from "stores/store";
 import { LoadingOFF, LoadingON, ModalOpen } from "stores/settingSlice";
 import { ErrorMessage } from "@hookform/error-message";
 import { SignUpState, temporaryRegist } from "utils/auth";
-import { useRouter } from "next/router";
+import Head from "next/head";
 
 const Signup: FC = () => {
   const {
@@ -39,6 +39,9 @@ const Signup: FC = () => {
 
   return (
     <>
+      <Head>
+        <title>Yuruhuwa 会員登録</title>
+      </Head>
       <Grid centered>
         <Grid.Column width="10" textAlign="center">
           <div className="module-spacer--xl" />

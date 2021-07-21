@@ -1,7 +1,9 @@
 const router = require("express").Router();
 const CartModel = require("../models/CartModel");
+const ProductsModel = require("../models/ProductsModel");
 const mongoose = require("mongoose");
 const auth = require("../middleware/verificationAuth");
+const { getStockList } = require("../serverUtils/getStockList");
 
 // @route GET api/cart
 // @desc カートの情報取得
@@ -15,10 +17,16 @@ router.get("/", auth, async (req, res) => {
     let data;
     if (isDetailed) {
       data = await CartModel.findOne({ user: userId }).populate("products.product");
-      console.log(data);
+      if (!data) {
+        return res.json([]);
+      }
     } else {
       data = await CartModel.findOne({ user: userId });
+      if (!data) {
+        return res.json([]);
+      }
     }
+    console.log(data);
     res.json(data.products);
   } catch (error) {
     console.error(error);
@@ -34,12 +42,68 @@ router.post("/:productId", auth, async (req, res) => {
   const { amount } = req.body;
   const { userId } = req;
   try {
+    const { totalStock } = await getStockList(productId);
+
+    if (amount > totalStock) {
+      return res.status(400).send("在庫情報が更新されました。");
+    }
+    const hasCart = await CartModel.exists({ user: userId });
+
     const _id = mongoose.Types.ObjectId().toString();
-    await CartModel.findOneAndUpdate(
-      { user: userId },
-      { $push: { products: [{ _id, product: productId, amount: parseInt(amount) }] } }
-    );
+    if (!hasCart) {
+      const newCart = new CartModel({
+        user: userId,
+        products: [{ _id, product: productId, amount: parseInt(amount) }],
+      });
+      await newCart.save();
+    } else {
+      await CartModel.findOneAndUpdate(
+        { user: userId },
+        { $push: { products: [{ _id, product: productId, amount: parseInt(amount) }] } }
+      );
+    }
     res.json(_id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("サーバーエラー");
+  }
+});
+
+// @route POST api/cart/count/:productId
+// @desc カートの個別商品の数量を変更
+// @access Private
+router.post("/count/:productId", auth, async (req, res) => {
+  const productId = req.params.productId;
+  const userId = req.userId;
+  const { newAmmount } = req.body;
+
+  try {
+    const { totalStock, cartStock, productStock } = await getStockList(productId);
+
+    const myCartProduct = await CartModel.findOne({
+      user: userId,
+    }).select("products");
+
+    // 今現在カートにある、ある商品の在庫数
+    console.log(myCartProduct);
+    const target = myCartProduct.products.find((prod) => prod.product.toString() === productId);
+
+    console.log(target);
+    // すべての在庫数を超えないかをチェックする。(マイナスになってしまわないかチェック)
+    const result = cartStock - target.amount + newAmmount;
+
+    // 現在取りうる事のできる在庫数
+    const stock = totalStock + target.amount;
+    if (result > productStock) {
+      return res.status(400).send("在庫が更新されました");
+    }
+
+    await CartModel.findOne({ user: userId }).updateOne(
+      { products: { $elemMatch: { product: productId } } },
+      { $set: { "products.$.amount": newAmmount } }
+    );
+
+    res.json(stock);
   } catch (error) {
     console.error(error);
     res.status(500).send("サーバーエラー");
@@ -52,10 +116,8 @@ router.post("/:productId", auth, async (req, res) => {
 router.delete("/:productId", auth, async (req, res) => {
   const { productId } = req.params;
   const { userId } = req;
-  console.log(productId);
   try {
-    const data = await CartModel.updateOne({ user: userId }, { $pull: { products: { product: productId } } });
-    console.log("ここよおお", data);
+    await CartModel.updateOne({ user: userId }, { $pull: { products: { product: productId } } });
     res.send("カートから削除しました。");
   } catch (error) {
     console.error(error);

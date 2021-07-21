@@ -7,6 +7,7 @@ import { uploadImg } from "utils/uploadImg";
 import { ProductData, registProduct } from "utils/products";
 import DragAndDrop from "components/layout/DragAndDrop";
 import style from "styles/pages/products/register.module.scss";
+import Head from "next/head";
 
 const Register: FC = () => {
   const { register, handleSubmit } = useForm();
@@ -76,6 +77,9 @@ const Register: FC = () => {
 
   return (
     <>
+      <Head>
+        <title>Yuruhuwa 在庫登録</title>
+      </Head>
       <Segment textAlign="center">
         <div className="module-spacer--xl" />
         <Header textAlign="center">商品の登録</Header>

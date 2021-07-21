@@ -40,7 +40,7 @@ const Favorites: FC<Props> = ({ favorites }) => {
         <h1 className={style.title}>お気に入り一覧</h1>
         <div className={`module-spacer--sm ${style.border}`} />
         <div className={`module-spacer--sm`} />
-        {favorites.length === 0 && <NoProduct />}
+        {favorites.length === 0 && <NoProduct header="お気に入りに登録している商品がありません。" />}
         <div className={style.wrapper}>
           {favorites.map((ele) => (
             <ProductCard key={ele._id} favorites={FavoritesList} product={ele.product} />

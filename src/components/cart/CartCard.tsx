@@ -1,9 +1,12 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import style from "./CartCard.module.scss";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "stores/store";
 import { deleteCart } from "stores/userSlice";
+import { getStockList } from "utils/products";
+import { changeCartStock } from "utils/favoritesAndCart";
+import { ModalOpen } from "stores/settingSlice";
 
 type Props = {
   counts: any;
@@ -23,16 +26,32 @@ type Props = {
   amount: number;
 };
 
-const CartCard: FC<Props> = ({ product, amount, counts, setCounts }) => {
+const CartCard: FC<Props> = ({ amount, product, counts, setCounts }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    console.log(name);
-    setCounts((prev: { name: number }) => ({ ...prev, [name]: parseInt(value) }));
-  };
+  const [stockCount, setStockCount] = useState(0);
 
+  useEffect(() => {
+    const getStockCount = async () => {
+      const stockList = await getStockList(product._id);
+      const stock = stockList.totalStock + amount;
+      setStockCount(stock);
+    };
+    getStockCount();
+  }, []);
+
+  const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    const result = await changeCartStock(product._id, parseInt(value));
+
+    if (result.err) {
+      router.reload();
+    } else {
+      setStockCount(result);
+      setCounts((prev: { name: number }) => ({ ...prev, [name]: parseInt(value) }));
+    }
+  };
 
   return (
     <div className={style.root}>
@@ -48,7 +67,7 @@ const CartCard: FC<Props> = ({ product, amount, counts, setCounts }) => {
             <p className={style.countLabel}>
               数量 :&nbsp;&nbsp;
               <select value={counts?.[product._id]} onChange={handleChange} name={product._id} required>
-                {new Array(product.stock).fill(undefined).map((_, i) => (
+                {new Array(stockCount).fill(undefined).map((_, i) => (
                   <option key={i + 1} value={i + 1}>
                     {i + 1}
                   </option>

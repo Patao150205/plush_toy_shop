@@ -11,6 +11,7 @@ import style from "styles/pages/login.module.scss";
 import { signIn, SignInState } from "utils/auth";
 import { useRouter } from "next/router";
 import { ErrorMessage } from "@hookform/error-message";
+import Head from "next/head";
 
 const login: FC = () => {
   const {
@@ -35,6 +36,9 @@ const login: FC = () => {
 
   return (
     <>
+      <Head>
+        <title>Yuruhuwa ログイン</title>
+      </Head>
       <div className="module-spacer--xl" />
       <Grid stackable padding="horizontal">
         <Grid.Column width="8" style={{ textAlign: "center", padding: "2rem" }}>

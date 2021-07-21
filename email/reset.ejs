@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>パスワード リセット</title>
+  </head>
+  <body>
+    <%- include("./header.ejs") %>
+    <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; text-align: center">
+      <tr>
+        <br />
+      </tr>
+      <tr>
+        <td>
+          <h1>パスワードリセットのご案内</h1>
+          <h2>こんにちは <%= nickname %> さん！</h2>
+          <p style="margin: auto">
+            このメールは<span style="color: red">三十分以内</span
+            >に確認してください。時間内に確認を行わない場合無効となります。ご注意ください！
+          </p>
+        </td>
+      </tr>
+    </table>
+    <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; text-align: center">
+      <tr>
+        <br />
+      </tr>
+      <tr>
+        <td>
+          <a href="<%= href %>" class="btn">パスワードをリセットする</a>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

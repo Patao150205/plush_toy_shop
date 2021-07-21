@@ -9,6 +9,7 @@ const CartSchema = new Schema({
       amount: { type: Number, required: true },
     },
   ],
+  updatedAt: { type: Date, select: false, default: Date.now, index: { expires: 3600 } },
 });
 
 module.exports = mongoose.model("Cart", CartSchema);

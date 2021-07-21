@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import React, { FC, useState } from "react";
-import { getProduct } from "utils/products";
+import { getProduct, getStockList } from "utils/products";
 import style from "styles/pages/product/[product].module.scss";
 import ProductSlide from "components/product/ProductSlide";
 import NoProduct from "../products/NoProduct";
@@ -18,36 +18,47 @@ import {
 } from "stores/userSlice";
 
 type Props = {
-  product: {
-    _id: string;
-    category: string;
-    description: string;
-    width: number;
-    height: number;
-    deepth: number;
-    name: string;
-    Hot: boolean;
-    New: boolean;
-    price: number;
-    primaryPic: string;
-    productPic: string[];
-    stock: number;
-    updatedAt: string;
-    createdAt: string;
+  data: {
+    product: {
+      _id: string;
+      category: string;
+      description: string;
+      width: number;
+      height: number;
+      deepth: number;
+      name: string;
+      Hot: boolean;
+      New: boolean;
+      price: number;
+      primaryPic: string;
+      productPic: string[];
+      stock: number;
+      updatedAt: string;
+      createdAt: string;
+    };
+    totalStock: number;
   };
 };
 
-const ProductId: FC<Props> = ({ product }) => {
+const ProductId: FC<Props> = ({ data }) => {
+  console.log(data);
   const dispatch = useAppDispatch();
   const favorites = useAppSelector(favoritesSelector);
   const cart = useAppSelector(cartSelector);
 
-  const isFavorite = favorites.find((ele: { _id: string; product: string }) => ele.product === product._id);
-  const hasCart = cart.find((ele: { _id: string; product: string; amount: number }) => ele.product === product._id);
+  const isFavorite = favorites.find((ele: { _id: string; product: string }) => ele.product === data.product._id);
+  const hasCart = cart.find(
+    (ele: { _id: string; product: string; amount: number }) => ele.product === data.product._id
+  );
 
+  // セレクトボックスの値
   const [amount, setAmount] = useState("1");
 
-  const title = `Yuruhuwa 【${product?.name}】` ?? "商品情報";
+  // 現在の在庫数
+  const [totalStock, setTotalStock] = useState<number>(data.totalStock);
+  console.log(totalStock);
+
+  const title = `Yuruhuwa 【${data.product?.name}】` ?? "商品情報";
 
   // 個数指定
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -66,13 +77,17 @@ const ProductId: FC<Props> = ({ product }) => {
   //カート機能
   const handleCart = async (productId: string) => {
     if (!hasCart) {
-      dispatch(registCart({ productId, amount: parseInt(amount) || 0 }));
+      await dispatch(registCart({ productId, amount: parseInt(amount) || 0 }));
+      const stockList = await getStockList(productId);
+      setTotalStock(stockList.totalStock);
     } else {
-      dispatch(deleteCart(productId));
+      await dispatch(deleteCart(productId));
+      const stockList = await getStockList(productId);
+      setTotalStock(stockList.totalStock);
     }
   };
 
-  if (!product) {
+  if (!data.product) {
     return <NoProduct />;
   }
 
@@ -83,35 +98,35 @@ const ProductId: FC<Props> = ({ product }) => {
       </Head>
       <div className={style.root}>
         <div className={style.swiperWrapper}>
-          <ProductSlide productPic={product.productPic} primaryPic={product.primaryPic} />
+          <ProductSlide productPic={data.product.productPic} primaryPic={data.product.primaryPic} />
         </div>
         <div className={style.detail}>
           <Segment>
-            <h1>{product.name}</h1>
-            <p className={style.desc}>{product.description}</p>
+            <h1>{data.product.name}</h1>
+            <p className={style.desc}>{data.product.description}</p>
             <div className={`module-spacer--xs ${style.divider}`} />
             <div className={`module-spacer--sm`} />
             <div className={style.statusWrapper}>
               <h3>商品詳細</h3>
               <div className={style.status}>
-                <p>カテゴリー: {product.category}</p>
-                <p>高さ &nbsp; : {product.height}cm</p>
-                <p>横幅 &nbsp; : {product.height}cm</p>
-                <p>奥行き: {product.height}cm</p>
+                <p>カテゴリー: {data.product.category}</p>
+                <p>高さ &nbsp; : {data.product.height}cm</p>
+                <p>横幅 &nbsp; : {data.product.height}cm</p>
+                <p>奥行き: {data.product.height}cm</p>
               </div>
             </div>
             <div className={"module-spacer--sm"} />
-            <p className={style.price}>{product.price}円(税込)</p>
-            {product.stock > 0 ? (
+            <p className={style.price}>{data.product.price}円(税込)</p>
+            {totalStock > 0 ? (
               <>
                 <div className={style.amountWrapper}>
                   <p className={style.sum}>
-                    合計 <span>{product.price * parseInt(amount) || 0}円(税込)</span>
+                    合計 <span>{data.product.price * parseInt(amount) || 0}円(税込)</span>
                   </p>{" "}
                   <p className={style.countLabel}>
                     数量 :&nbsp;&nbsp;
                     <select value={amount} onChange={handleChange} required>
-                      {new Array(product.stock).fill(undefined).map((_, i) => (
+                      {new Array(totalStock).fill(undefined).map((_, i) => (
                         <option key={i + 1} value={i + 1}>
                           {i + 1}
                         </option>
@@ -121,7 +136,7 @@ const ProductId: FC<Props> = ({ product }) => {
                   </p>
                 </div>
                 <p className={style.stock}>
-                  <span>{product.stock}</span>体在庫がございます。
+                  <span>{totalStock}</span>体在庫がございます。
                 </p>
               </>
             ) : (
@@ -135,7 +150,7 @@ const ProductId: FC<Props> = ({ product }) => {
               <ThirdryButton
                 width="100%"
                 onClick={() => {
-                  handleLike(product._id);
+                  handleLike(data.product._id);
                 }}
                 content="お気に入り登録"
               />
@@ -144,27 +159,31 @@ const ProductId: FC<Props> = ({ product }) => {
                 width="100%"
                 background="gray"
                 onClick={() => {
-                  handleLike(product._id);
+                  handleLike(data.product._id);
                 }}
                 content="お気に入り解除"
               />
             )}
             <div className={"module-spacer--sm"} />
             {!hasCart ? (
-              <ThirdryButton
-                width="100%"
-                background="red"
-                onClick={() => {
-                  handleCart(product._id);
-                }}
-                content="カートに入れる"
-              />
+              totalStock !== 0 ? (
+                <ThirdryButton
+                  width="100%"
+                  background="red"
+                  onClick={() => {
+                    handleCart(data.product._id);
+                  }}
+                  content="カートに入れる"
+                />
+              ) : (
+                <></>
+              )
             ) : (
               <ThirdryButton
                 width="100%"
                 background="gray"
                 onClick={() => {
-                  handleCart(product._id);
+                  handleCart(data.product._id);
                 }}
                 content="カートから出す"
               />
@@ -192,5 +211,5 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       };
     }
   }
-  return { props: { product: data } };
+  return { props: { data } };
 };

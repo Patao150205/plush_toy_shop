@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosBase from "axios";
@@ -6,6 +7,8 @@ import cookie from "js-cookie";
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import Router from "next/router";
+import { store } from "stores/store";
+import { ModalOpen } from "./settingSlice";
 
 const token = cookie.get("token");
 const axios = axiosBase.create({
@@ -113,14 +116,14 @@ const userSlice = createSlice({
       return (state = payload);
     });
     builder.addCase(fetchUserInfo.rejected, (state: UserState) => {
-      return (state = { userInfo: null, favorites: [], cart: [] });
+      return (state = initialState);
     });
     // お気に入り機能
     builder.addCase(registFavorite.fulfilled, (state: any, { payload }) => {
       state.favorites = [...state.favorites, payload];
     });
     builder.addCase(registFavorite.rejected, (state: UserState) => {
-      return (state = { userInfo: null, favorites: [], cart: [] });
+      return (state = initialState);
     });
     builder.addCase(deleteFavorite.fulfilled, (state: any, { payload }) => {
       state.favorites = state.favorites.filter((ele: { _id: string; product: string }) => ele.product !== payload);
@@ -132,8 +135,7 @@ const userSlice = createSlice({
     builder.addCase(registCart.fulfilled, (state: any, { payload }) => {
       state.cart = [...state.cart, payload];
     });
-    builder.addCase(registCart.rejected, (state: UserState) => {
-      Router.push("/login");
+    builder.addCase(registCart.rejected, (state: UserState, action) => {
       return (state = initialState);
     });
     builder.addCase(deleteCart.fulfilled, (state: any, { payload }) => {
@@ -162,5 +164,5 @@ export const userInfoSelector = createSelector(
   (user) => user.userInfo
 );
 
-export const {} = userSlice.actions;
+// export const {} = userSlice.actions;
 export default userSlice.reducer;

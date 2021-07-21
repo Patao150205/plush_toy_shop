@@ -30,6 +30,16 @@ export const getProduct = async (productId: string) => {
   }
 };
 
+// 商品の在庫数確認
+export const getStockList = async (productId: string) => {
+  try {
+    const res = await axiosBase.get(`${BaseUrl}/api/product/stock/${productId}`);
+    return res.data;
+  } catch (error) {
+    return { err: true, errMsg: error.response.data };
+  }
+};
+
 // 商品一覧の取得
 export const getProducts = async (path: string) => {
   try {

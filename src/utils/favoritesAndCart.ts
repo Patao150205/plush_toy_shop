@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import axios from "axios";
+import axiosBase from "axios";
 import BaseUrl from "./BaseUrl";
+
+import cookies from "js-cookie";
+
+const axios = axiosBase.create({ headers: { authorization: cookies.get("token") } });
 
 type Product = {
   _id: string;
@@ -20,7 +24,7 @@ type Product = {
 // お気に入りの情報(詳細)取得
 export const getFavoritesProduct = async (token?: string) => {
   try {
-    const res = await axios.get(`${BaseUrl}/api/favorites?detailed=true`, {
+    const res = await axiosBase.get(`${BaseUrl}/api/favorites?detailed=true`, {
       headers: {
         authorization: token,
       },
@@ -46,7 +50,7 @@ export const getFavoritesProduct = async (token?: string) => {
 
 export const getCartProduct = async (token?: string) => {
   try {
-    const res = await axios.get(`${BaseUrl}/api/cart?detailed=true`, {
+    const res = await axiosBase.get(`${BaseUrl}/api/cart?detailed=true`, {
       headers: {
         authorization: token,
       },
@@ -54,16 +58,22 @@ export const getCartProduct = async (token?: string) => {
 
     const newData = res.data.filter((cart: Product) => {
       if (cart.product === null) {
-        axios.delete(`${BaseUrl}/api/cart/_id/${cart._id}`, {
-          headers: {
-            authorization: token,
-          },
-        });
+        axios.delete(`${BaseUrl}/api/cart/_id/${cart._id}`);
         return false;
       }
       return true;
     });
+    console.log(newData);
     return newData;
+  } catch (error) {
+    return { err: true, errMsg: error.response.data };
+  }
+};
+
+export const changeCartStock = async (productId: string, newAmmount: number) => {
+  try {
+    const res = await axios.post(`/api/cart/count/${productId}`, { newAmmount });
+    return res.data;
   } catch (error) {
     return { err: true, errMsg: error.response.data };
   }

@@ -21,7 +21,7 @@ const TotalPrice: FC<Props> = ({ subTotal }) => {
         <div className={style.title}>送料</div> <div className={style.value}>{shipping}円</div>
       </div>
       <div className={style.priceWrapper}>
-        <div className={style.title}>合計</div> <div className={style.value}>{subTotal + shipping}(税込)</div>{" "}
+        <div className={style.title}>合計</div> <div className={style.value}>{subTotal + shipping}円(税込)</div>{" "}
       </div>
       <ThirdryButton background="red" content="ご購入手続き" onClick={handleSettlement} />
     </div>

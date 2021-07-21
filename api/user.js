@@ -15,11 +15,13 @@ router.get("/", auth, async (req, res) => {
     return res.status(404).send("ユーザが存在しません。");
   }
   const favorites = await FavoritesModel.findOne({ user: user._id }).select("products");
+
   const cart = await CartModel.findOne({ user: user._id }).select("products");
+  const cartProducts = cart ? cart.products : [];
   const data = {
     userInfo: user,
     favorites: favorites.products,
-    cart: cart.products,
+    cart: cartProducts,
   };
   res.json(data);
 });
