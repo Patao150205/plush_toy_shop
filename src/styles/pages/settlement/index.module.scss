@@ -1,0 +1,16 @@
+@import "config";
+
+.title {
+  text-align: center;
+  color: $Fprimary;
+}
+
+.border {
+  border-bottom: 1px solid $Fprimary;
+}
+
+.totalWrapper {
+  margin: 0 auto;
+  max-width: 800px;
+  width: 100%;
+}

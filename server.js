@@ -20,6 +20,7 @@ app.prepare().then(() => {
   server.use("/api/cart", require("./api/cart"));
   server.use("/api/address", require("./api/address"));
   server.use("/api/contact", require("./api/contact"));
+  server.use("/api/settlement", require("./api/settlement"));
 
   server.all("*", (req, res) => handle(req, res));
 

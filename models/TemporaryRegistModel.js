@@ -11,7 +11,7 @@ const TemporaryRegistSchema = new Schema(
     hash: { type: String },
     createdAt: { type: Date, default: Date.now, index: { expires: 1800 } },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("TemporaryRegist", TemporaryRegistSchema);

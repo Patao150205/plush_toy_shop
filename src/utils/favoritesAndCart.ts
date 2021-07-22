@@ -55,16 +55,15 @@ export const getCartProduct = async (token?: string) => {
         authorization: token,
       },
     });
-
-    const newData = res.data.filter((cart: Product) => {
+    const newData = res.data.cart.filter((cart: Product) => {
       if (cart.product === null) {
         axios.delete(`${BaseUrl}/api/cart/_id/${cart._id}`);
         return false;
       }
       return true;
     });
-    console.log(newData);
-    return newData;
+
+    return { cart: newData, updatedAt: res.data.updatedAt };
   } catch (error) {
     return { err: true, errMsg: error.response.data };
   }

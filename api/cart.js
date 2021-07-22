@@ -4,6 +4,7 @@ const ProductsModel = require("../models/ProductsModel");
 const mongoose = require("mongoose");
 const auth = require("../middleware/verificationAuth");
 const { getStockList } = require("../serverUtils/getStockList");
+const bcrypt = require("bcrypt");
 
 // @route GET api/cart
 // @desc カートの情報取得
@@ -18,16 +19,20 @@ router.get("/", auth, async (req, res) => {
     if (isDetailed) {
       data = await CartModel.findOne({ user: userId }).populate("products.product");
       if (!data) {
-        return res.json([]);
+        return res.json({ cart: [], updatedAt: null });
       }
     } else {
       data = await CartModel.findOne({ user: userId });
       if (!data) {
-        return res.json([]);
+        return res.json({ cart: [], updatedAt: null });
       }
     }
-    console.log(data);
-    res.json(data.products);
+    console.log(data.updatedAt, "アップデート");
+
+    // ハッシュ化したカートの最終更新日を返す。
+    const updatedAtHash = await bcrypt.hash(data.updatedAt.toString(), 10);
+    console.log(data.products, updatedAtHash);
+    res.json({ cart: data.products, updatedAt: updatedAtHash });
   } catch (error) {
     console.error(error);
     res.status(500).send("サーバーエラー");

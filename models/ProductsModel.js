@@ -22,7 +22,7 @@ const ProductsSchema = new Schema(
     Hot: { type: Boolean, default: false },
     stock: { type: Number, required: true },
   },
-  { timestamps: true }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("Products", ProductsSchema);

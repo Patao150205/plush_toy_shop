@@ -4,12 +4,12 @@ module.exports = (req, res, next) => {
   if (!req.headers.authorization) {
     return res.status(401).send("JsonWebTokenError");
   }
-  jwt.verify(req.headers.authorization, process.env.jwtSecret, (err, { userId }) => {
-    if (err) {
-      return res.status(401).send(err.name);
+  jwt.verify(req.headers.authorization, process.env.jwtSecret, (err, decoded) => {
+    if (err || !decoded) {
+      console.log(err, decoded)
+      return res.status(401).send("JsonWebTokenError");
     }
-    console.log(userId);
-    req.userId = userId;
+    req.userId = decoded.userId;
     next();
   });
 };

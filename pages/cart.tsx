@@ -51,14 +51,11 @@ const Cart: FC<Props> = ({ cart }) => {
 
   useEffect(() => {
     // 数量指定用(初回)
-    // if (renderedFirst.current) {
-    // }
     let initialValue = {};
     ExistProducts.forEach((ele) => {
       const v = { [ele.product._id]: ele.amount };
       initialValue = { ...initialValue, ...v };
     });
-    console.log(initialValue);
     setCounts(initialValue);
   }, [CartList]);
 
@@ -71,7 +68,6 @@ const Cart: FC<Props> = ({ cart }) => {
         });
         // // 小計
         const sum = eachPrice.reduce((accummulator, currentValue) => accummulator + currentValue, 0);
-        console.log("小計");
         setSubTotal(sum);
       }
     }
@@ -119,7 +115,7 @@ const Cart: FC<Props> = ({ cart }) => {
               })}
             </div>
             <div className={style.totalPriceWrapper}>
-              <TotalPrice subTotal={subTotal} />
+              <TotalPrice subTotal={subTotal} btnContent="ご購入手続きをする" route="/settlement/confirmation" />
             </div>
           </div>
         )}
@@ -147,7 +143,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-  return { props: { cart: data } };
+
+  console.log(data);
+
+  return { props: { cart: data.cart } };
 };
 
 export default Cart;

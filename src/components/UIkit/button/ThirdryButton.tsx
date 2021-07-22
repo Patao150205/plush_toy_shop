@@ -8,7 +8,8 @@ type Props = {
   color?: string;
   content: string;
   width?: string;
-  onClick: () => void;
+  onClick: (arg?: any) => void;
+  disabled?: boolean;
 };
 
 const ThirdryButton: FC<Props> = ({

@@ -9,7 +9,7 @@ const UserShema = new Schema(
     password: { type: "String", required: true, select: false },
     isShorthandEmail: { type: Boolean, default: false },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 module.exports = mongoose.model("User", UserShema);
