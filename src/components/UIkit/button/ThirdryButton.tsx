@@ -19,10 +19,17 @@ const ThirdryButton: FC<Props> = ({
   width = "200px",
   color = "white",
   content,
+  disabled = false,
 }) => {
   return (
-    <div style={{ background, borderColor, color, width }} onClick={onClick} className={style.root}>
-      {content}
+    <div className={style.btnWrapper}>
+      <button
+        disabled={disabled}
+        style={{ background, borderColor, color, width }}
+        onClick={onClick}
+        className={style.root}>
+        {content}
+      </button>
     </div>
   );
 };

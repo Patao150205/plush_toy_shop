@@ -6,8 +6,13 @@ const PurchaseHistory = new Schema(
     user: { type: Schema.Types.ObjectId, ref: "User" },
     order: [
       {
-        product: { type: Schema.Types.ObjectId, ref: "Products" },
-        amount: { type: Number, required: true },
+        products: [
+          {
+            product: { type: Schema.Types.ObjectId, ref: "Products" },
+            amount: { type: Number, required: true },
+          },
+        ],
+        createdAt: { type: Date, default: Date.now() },
       },
     ],
   },

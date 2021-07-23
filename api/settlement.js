@@ -32,10 +32,9 @@ router.post("/", auth, async (req, res) => {
       const { products } = cart;
       session = await mongoose.startSession();
       session.startTransaction();
-      eachAmount.forEach(async (prod) => {
+      await eachAmount.forEach(async (prod) => {
         const stock = parseInt(-prod.amount);
         await ProductsModel.findByIdAndUpdate(prod._id, { $inc: { stock: stock } }, { session });
-        console.log(prod);
       });
       console.log("1", "スタート");
       await CartModel.findOneAndDelete({ user: userId }, { session });
@@ -44,7 +43,7 @@ router.post("/", auth, async (req, res) => {
       console.log("3");
       await PurchaseHistoryModel.updateOne(
         { user: userId },
-        { $push: { order: { $each: products } } },
+        { $push: { order: { products } } },
         { session, upsert: true }
       );
       console.log("4");
@@ -61,7 +60,7 @@ router.post("/", auth, async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send("サーバーエラー");
+    res.status(500).send("サーバーエラー。もう一度お試しください。もしくはしばらくしてからお試しください。");
   }
 });
 

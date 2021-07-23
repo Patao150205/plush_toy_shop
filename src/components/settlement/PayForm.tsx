@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import style from "./PayForm.module.scss";
 import ThirdryButton from "components/UIkit/button/ThirdryButton";
@@ -22,13 +22,14 @@ const PayForm: FC<Props> = ({ subTotal, token, eachAmount }) => {
   const elements = useElements();
   const dispatch = useAppDispatch();
 
+  const [disabled, toggleDisabled] = useState(false);
+  console.log(disabled);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    toggleDisabled(true);
     e.preventDefault();
     try {
       if (!elements || !stripe) throw Error("決済エラー1");
-      dispatch(LoadingON());
-
-      console.log("before", elements);
 
       const res = await axios.post(
         `${BaseUrl}/api/settlement`,
@@ -36,7 +37,6 @@ const PayForm: FC<Props> = ({ subTotal, token, eachAmount }) => {
         { headers: { authorization: cookie.get("token") } }
       );
       const card = elements.getElement(CardElement);
-      console.log("After", elements);
       const secret = res.data.client_secret;
       console.log(card);
       if (!card) throw Error("決済エラー2");
@@ -47,12 +47,11 @@ const PayForm: FC<Props> = ({ subTotal, token, eachAmount }) => {
       });
       if (result.error) {
         await axios.post(`${BaseUrl}/api/settlement/rollback`);
-        dispatch(LoadingOFF());
         dispatch(ModalOpen({ status: "error", title: "決済エラー3", message: result.error.message }));
+        toggleDisabled(false);
       } else {
         if (result.paymentIntent.status === "succeeded") {
           await axios.post(`${BaseUrl}/api/settlement/commit`);
-          dispatch(LoadingOFF());
           alert("お支払いが成功しました。");
           window.location.href = "/settlement/completed";
         }
@@ -60,7 +59,6 @@ const PayForm: FC<Props> = ({ subTotal, token, eachAmount }) => {
     } catch (error) {
       console.log(error?.response?.data || error.message || "決済エラー");
       await axios.post(`${BaseUrl}/api/settlement/rollback`);
-      dispatch(LoadingOFF());
       dispatch(
         ModalOpen({
           status: "error",
@@ -68,6 +66,7 @@ const PayForm: FC<Props> = ({ subTotal, token, eachAmount }) => {
           message: error?.response?.data || error.message || "決済エラー",
         })
       );
+      toggleDisabled(false);
     }
   };
 
@@ -77,7 +76,12 @@ const PayForm: FC<Props> = ({ subTotal, token, eachAmount }) => {
       <div className="module-spacer--sm" />
       <CardElement options={{ hidePostalCode: true }} />
       <div className="module-spacer--xl" />
-      <ThirdryButton background="red" content="支払う" onClick={(e) => handleSubmit(e)} />
+      <ThirdryButton
+        disabled={disabled}
+        background={disabled ? "gray" : "red"}
+        content="支払う"
+        onClick={(e) => handleSubmit(e)}
+      />
       <div className="module-spacer--sm" />
     </form>
   );
