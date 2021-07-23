@@ -43,9 +43,14 @@ const Confirmation: FC<Props> = ({ error, cart, token }) => {
     );
   }
 
-  const stripePromise = loadStripe(process.env.STRIPE_API_KEY as string);
+  const stripePromise = loadStripe(
+    "pk_test_51JEPBlA9FPUMUIH7P1nWrhUuhgQbjdKeVtDcdLg5pCQ2pv0oB8sA3JnkEzqMiR8Ht7HhJ2RphkIluasrjla0M8k800NQFul2ro"
+  );
   const eachPrice = cart.map((ele) => ele.product.price * ele.amount);
   const subTotal = eachPrice.reduce((prevSumPrice, currentPrice) => prevSumPrice + currentPrice, 0);
+  const eachAmount = cart.map((ele) => {
+    return { _id: ele.product._id, amount: ele.amount };
+  });
 
   return (
     <>
@@ -78,11 +83,11 @@ const Confirmation: FC<Props> = ({ error, cart, token }) => {
         </div>
         <div className="module-spacer--xl" />
         <div className={style.totalWrapper}>
-          <TotalPrice subTotal={subTotal} btnContent="商品一覧に戻る" route="/" />
+          <TotalPrice subTotal={subTotal} btnContent="商品一覧に戻る" route="/products" />
         </div>
         <div className="module-spacer--xl" />
         <Elements stripe={stripePromise}>
-          <PayForm token={token} subTotal={subTotal} />
+          <PayForm eachAmount={eachAmount} token={token} subTotal={subTotal} />
         </Elements>
         <div className="module-spacer--xl" />
       </Segment>

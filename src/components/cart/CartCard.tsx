@@ -6,7 +6,6 @@ import { useAppDispatch } from "stores/store";
 import { deleteCart } from "stores/userSlice";
 import { getStockList } from "utils/products";
 import { changeCartStock } from "utils/favoritesAndCart";
-import { ModalOpen } from "stores/settingSlice";
 
 type Props = {
   counts: any;

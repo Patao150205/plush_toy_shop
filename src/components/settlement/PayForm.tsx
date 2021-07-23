@@ -6,14 +6,15 @@ import axios from "axios";
 import BaseUrl from "utils/BaseUrl";
 import cookie from "js-cookie";
 import { useAppDispatch } from "stores/store";
-import { ModalOpen } from "stores/settingSlice";
+import { LoadingOFF, LoadingON, ModalOpen } from "stores/settingSlice";
 
 type Props = {
   subTotal: number;
   token: string;
+  eachAmount: { _id: string; amount: number }[];
 };
 
-const PayForm: FC<Props> = ({ subTotal, token }) => {
+const PayForm: FC<Props> = ({ subTotal, token, eachAmount }) => {
   const shipping = subTotal > 0 && subTotal <= 3000 ? 780 : 0;
   const sumPrice = subTotal + shipping;
 
@@ -23,29 +24,50 @@ const PayForm: FC<Props> = ({ subTotal, token }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (stripe) {
+    try {
+      if (!elements || !stripe) throw Error("決済エラー1");
+      dispatch(LoadingON());
+
+      console.log("before", elements);
+
       const res = await axios.post(
         `${BaseUrl}/api/settlement`,
-        { token, sumPrice },
+        { token, sumPrice, eachAmount },
         { headers: { authorization: cookie.get("token") } }
       );
+      const card = elements.getElement(CardElement);
+      console.log("After", elements);
       const secret = res.data.client_secret;
-      console.log(secret);
-      const card = elements?.getElement(CardElement);
-      if (!elements || !card) return;
+      console.log(card);
+      if (!card) throw Error("決済エラー2");
       const result = await stripe.confirmCardPayment(secret, {
         payment_method: {
           card,
         },
       });
-
       if (result.error) {
-        dispatch(ModalOpen({ status: "error", title: "決済エラー", message: result.error.message }));
+        await axios.post(`${BaseUrl}/api/settlement/rollback`);
+        dispatch(LoadingOFF());
+        dispatch(ModalOpen({ status: "error", title: "決済エラー3", message: result.error.message }));
       } else {
         if (result.paymentIntent.status === "succeeded") {
-          alert("Payment Success");
+          await axios.post(`${BaseUrl}/api/settlement/commit`);
+          dispatch(LoadingOFF());
+          alert("お支払いが成功しました。");
+          window.location.href = "/settlement/completed";
         }
       }
+    } catch (error) {
+      console.log(error?.response?.data || error.message || "決済エラー");
+      await axios.post(`${BaseUrl}/api/settlement/rollback`);
+      dispatch(LoadingOFF());
+      dispatch(
+        ModalOpen({
+          status: "error",
+          title: "エラー",
+          message: error?.response?.data || error.message || "決済エラー",
+        })
+      );
     }
   };
 
