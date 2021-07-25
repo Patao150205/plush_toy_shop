@@ -8,6 +8,9 @@ import { ProductData, registProduct } from "utils/products";
 import DragAndDrop from "components/layout/DragAndDrop";
 import style from "styles/pages/products/register.module.scss";
 import Head from "next/head";
+import { GetServerSideProps } from "next";
+import nookies from "nookies";
+import { authTokenAndRoot } from "utils/auth";
 
 const Register: FC = () => {
   const { register, handleSubmit } = useForm();
@@ -170,6 +173,29 @@ const Register: FC = () => {
       </Segment>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const token = nookies.get(ctx).token;
+  const res = await authTokenAndRoot(token);
+  switch (res.errMsg) {
+    case "rootUserOnly":
+      return {
+        redirect: {
+          statusCode: 302,
+          destination: "/",
+        },
+      };
+    case "JsonWebTokenError":
+      return {
+        redirect: {
+          statusCode: 302,
+          destination: "/login",
+        },
+      };
+  }
+
+  return { props: {} };
 };
 
 export default Register;

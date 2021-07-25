@@ -9,7 +9,6 @@ import { LoadingOFF, LoadingON, ModalOpen } from "stores/settingSlice";
 import Link from "next/link";
 import style from "styles/pages/login.module.scss";
 import { signIn, SignInState } from "utils/auth";
-import { useRouter } from "next/router";
 import { ErrorMessage } from "@hookform/error-message";
 import Head from "next/head";
 
@@ -21,14 +20,13 @@ const login: FC = () => {
     formState: { errors },
   } = useForm<FormData>();
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   const sendInfo = async (data: SignInState) => {
     dispatch(LoadingON());
     const res = await signIn(data);
     dispatch(LoadingOFF());
     if (!res.err) {
-      router.push("/");
+      window.location.href = "/";
     } else {
       dispatch(ModalOpen({ status: "error", title: "エラー", message: res.errMsg }));
     }

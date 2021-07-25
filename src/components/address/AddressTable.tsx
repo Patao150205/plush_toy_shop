@@ -3,7 +3,7 @@ import { AddressData } from "utils/address";
 import { Table } from "semantic-ui-react";
 
 const AddressTable: FC<{ address: AddressData }> = ({ address }) => {
-  const { building, city, firstname, lastname, phoneNumber, postcord, prefecture, streetAddress } = address;
+  const { city, firstname, lastname, phoneNumber, postcord, prefecture, streetAddress } = address;
 
   return (
     <Table>

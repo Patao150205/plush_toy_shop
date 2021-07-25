@@ -6,9 +6,6 @@ import BaseUrl from "utils/BaseUrl";
 import cookie from "js-cookie";
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import Router from "next/router";
-import { store } from "stores/store";
-import { ModalOpen } from "./settingSlice";
 
 const token = cookie.get("token");
 const axios = axiosBase.create({

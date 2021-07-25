@@ -5,9 +5,12 @@ import classNames from "classnames";
 import { useAppSelector } from "../../stores/store";
 import { useAppDispatch } from "stores/store";
 import { sideSelector, SideToggle } from "stores/settingSlice";
+import { logOut } from "utils/auth";
+import { userInfoSelector } from "stores/userSlice";
 
 const SideBar: FC = ({ children }) => {
   const hasSide = useAppSelector(sideSelector);
+  const userInfo = useAppSelector(userInfoSelector);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -20,11 +23,9 @@ const SideBar: FC = ({ children }) => {
           <div className={style.sidebar}>
             <ul>
               <li className={style.menuItem} onClick={() => router.push("/")}>
-                <i className="fas fa-home"></i>
                 <p className={style.menuText}>TOP</p>
               </li>
               <li className={style.menuItem} onClick={() => router.push("/")}>
-                <i className="fas fa-home"></i>
                 <p className={style.menuText}>TOP</p>
               </li>
               <li className={style.menuItem} onClick={() => router.push("/products")}>
@@ -33,13 +34,20 @@ const SideBar: FC = ({ children }) => {
               <li className={style.menuItem} onClick={() => router.push("/contact")}>
                 <p className={style.menuText}>CONTACT</p>
               </li>
-              <li className={style.menuItem} onClick={() => router.push("/products/register")}>
-                <p className={style.menuText}>在庫の追加</p>
+              <li className={style.menuItem} onClick={() => router.push("/products/history")}>
+                <p className={style.menuText}>購入履歴</p>
               </li>
-              <li className={style.menuItem} onClick={() => router.push("/")}>
-                <p className={style.menuText}>発注の確認</p>
-              </li>
-              <li className={style.menuItem} onClick={() => router.push("/")}>
+              {userInfo.role === "root" && (
+                <>
+                  <li className={style.menuItem} onClick={() => router.push("/products/register")}>
+                    <p className={style.menuText}>在庫の追加</p>
+                  </li>
+                  <li className={style.menuItem} onClick={() => router.push("/products/order")}>
+                    <p className={style.menuText}>発注の確認</p>
+                  </li>
+                </>
+              )}
+              <li className={style.menuItem} onClick={logOut}>
                 <p className={style.menuText}>LOGOUT</p>
               </li>
             </ul>

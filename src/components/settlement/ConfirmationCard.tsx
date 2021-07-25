@@ -7,14 +7,8 @@ type Props = {
   product: {
     _id: string;
     name: string;
-    productPic: string;
     primaryPic: string;
     price: number;
-    productId: string;
-    New: boolean;
-    Hot: boolean;
-    height: number;
-    stock: number;
   };
   amount: number;
 };

@@ -7,6 +7,7 @@ const CartModel = require("../models/CartModel");
 const OrderModel = require("../models/OrderModel");
 const ProductsModel = require("../models/ProductsModel");
 const PurchaseHistoryModel = require("../models/PurchaseHistoryModel");
+const AddressModel = require("../models/AddressModel");
 
 const stripe = new Stripe(process.env.STRIPE_SECRET);
 
@@ -19,17 +20,19 @@ router.post("/", auth, async (req, res) => {
     const userId = req.userId;
     // カートの日付token
     const { token, sumPrice, eachAmount } = req.body;
+    const address = await AddressModel.exists({ user: userId });
+    if (!address) return res.status(404).send("住所登録を行ってください。");
     // カートが新たに更新されていないかを確認する
     const data = await CartModel.findOne({ user: userId }).select("updatedAt");
-    if (!data) {
-      return res.status(404).send("カートの中身がありません");
-    }
+    if (!data) return res.status(404).send("カートの中身がありません");
+
     const isSameCart = await bcrypt.compare(data.updatedAt.toString(), token);
 
     if (isSameCart) {
       // カートが更新されていなかった
-      const cart = await CartModel.findOne({ user: userId });
+      const cart = await CartModel.findOne({ user: userId }).populate("products.product");
       const { products } = cart;
+
       session = await mongoose.startSession();
       session.startTransaction();
       await eachAmount.forEach(async (prod) => {
@@ -39,13 +42,18 @@ router.post("/", auth, async (req, res) => {
       console.log("1", "スタート");
       await CartModel.findOneAndDelete({ user: userId }, { session });
       console.log("2");
-      await OrderModel.create([{ user: userId, products }], { session });
+      const productsData = products.map((prod) => {
+        return {
+          _id: prod.product._id,
+          name: prod.product.name,
+          primaryPic: prod.product.primaryPic,
+          price: prod.product.price,
+          amount: prod.amount,
+        };
+      });
+      await OrderModel.create([{ user: userId, products: productsData }], { session });
       console.log("3");
-      await PurchaseHistoryModel.updateOne(
-        { user: userId },
-        { $push: { order: { products } } },
-        { session, upsert: true }
-      );
+      await PurchaseHistoryModel.create([{ user: userId, products: productsData }], { session });
       console.log("4");
       const paymentIntent = await stripe.paymentIntents.create({
         amount: sumPrice,

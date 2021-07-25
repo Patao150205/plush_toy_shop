@@ -32,6 +32,15 @@ export const authToken = async (token: string) => {
   }
 };
 
+export const authTokenAndRoot = async (token: string) => {
+  try {
+    const res = await axios.post(`${BaseUrl}/api/auth/token/root`, {}, { headers: { authorization: token } });
+    return res.data;
+  } catch (error) {
+    return { err: true, errMsg: error.response.data };
+  }
+};
+
 export const temporaryRegist = async (userInfo: SignUpState) => {
   try {
     const res = await axios.post(`${BaseUrl}/api/auth/temporary/register`, {
@@ -66,4 +75,5 @@ export const signIn = async (userInfo: SignInState) => {
 
 export const logOut = () => {
   cookie.remove("token");
+  window.location.href = "/";
 };

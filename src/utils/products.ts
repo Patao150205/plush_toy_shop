@@ -86,6 +86,26 @@ export const deleteProduct = async (productId: string) => {
   }
 };
 
+// 商品履歴の取得
+export const getPurchaseHistory = async (token: string, page: string | number) => {
+  try {
+    const res = await axios.get(`${BaseUrl}/api/products/history?p=${page}`, { headers: { authorization: token } });
+    return res.data;
+  } catch (error) {
+    return { err: true, message: error.response.data };
+  }
+};
+
+// 商品発注一覧取得
+export const getOrderList = async (token: string, page: string | number) => {
+  try {
+    const res = await axios.get(`${BaseUrl}/api/products/order?p=${page}`, { headers: { authorization: token } });
+    return res.data;
+  } catch (error) {
+    return { err: true, message: error.response.data };
+  }
+};
+
 // export const editProduct = async (data: ProductData) => {
 //   try {
 //     const res = await axios.post(`${BaseUrl}/api/products`, { ...data });

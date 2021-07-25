@@ -10,11 +10,19 @@ const BaseUrl = require("../src/utils/BaseUrl");
 const ejs = require("ejs");
 const path = require("path");
 const auth = require("../middleware/verificationAuth");
+const root = require("../middleware/isRootUser");
 
 // @route GET api/auth/token
 // @desc トークンの確認
 // @access Private
 router.post("/token", auth, (req, res) => {
+  res.send("認証成功！");
+});
+
+// @route GET api/auth/token
+// @desc トークンとルートユーザー確認
+// @access Private
+router.post("/token/root", auth, root, (req, res) => {
   res.send("認証成功！");
 });
 

@@ -6,6 +6,7 @@ import Head from "next/head";
 import { GetServerSideProps } from "next";
 import nookies from "nookies";
 import { authToken } from "utils/auth";
+import { logOut } from "utils/auth";
 
 const User: FC = () => {
   const router = useRouter();
@@ -19,13 +20,18 @@ const User: FC = () => {
           <h1>ユーザー</h1>
           <div className={`module-spacer--xs ${style.border}`} />
           <div className="module-spacer--xs" />
+          <h2>購入履歴</h2>
+          <Button onClick={() => router.push("/products/history")}>
+            <Icon name="sign-out" />
+            購入履歴
+          </Button>
           <h2>住所確認・登録・変更</h2>
           <Button onClick={() => router.push("/setting/address")}>
             <Icon name="address card outline" />
             住所確認・登録・変更
           </Button>
           <h2>ログアウト</h2>
-          <Button>
+          <Button onClick={logOut}>
             <Icon name="sign-out" />
             ログアウト
           </Button>

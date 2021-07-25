@@ -34,7 +34,6 @@ const Products: FC<Props> = ({ datas }) => {
   const router = useRouter();
   const favorites = useAppSelector((state) => state.user.favorites);
   const [productsData, setProductsData] = useState(datas);
-  const [sort, setSort] = useState(1);
   const query = router.query;
 
   const isFirstRender = useRef(false);
