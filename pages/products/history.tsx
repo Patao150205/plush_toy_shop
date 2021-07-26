@@ -92,6 +92,14 @@ const History: FC<Props> = ({ historyProp, page, orderCount }) => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const token = nookies.get(ctx).token;
   const page = ctx.query.p ? (ctx.query.p as string) : "1";
+  if (!token) {
+    return {
+      redirect: {
+        statusCode: 302,
+        destination: "/login",
+      },
+    };    
+  }
 
   const res = await getPurchaseHistory(token, page);
   if (res.message === "JsonWebTokenError") {

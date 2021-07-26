@@ -9,6 +9,7 @@ export type ProductData = {
   width: string | number;
   height: string | number;
   deepth: string | number;
+  description: string;
   Hot: boolean;
   New: boolean;
   price: string | number;
@@ -16,6 +17,7 @@ export type ProductData = {
   stock: string | number;
   selectPic?: string;
   primaryPic: string;
+  isRelease: boolean;
 };
 
 const axios = axiosBase.create({ headers: { authorization: cookies.get("token") } });
@@ -50,6 +52,16 @@ export const getProducts = async (path: string) => {
   }
 };
 
+// 商品一覧の取得(管理者用)
+export const getProductsRoot = async (path: string, token: string) => {
+  try {
+    const res = await axiosBase.get(`${BaseUrl}/api${path}`, { headers: { authorization: token } });
+    return res.data;
+  } catch (error) {
+    return { err: true, errMsg: error.response.data };
+  }
+};
+
 // 商品検索
 export const SearchProducts = async (keyword: string) => {
   try {
@@ -76,6 +88,22 @@ export const registProduct = async (data: ProductData) => {
   }
 };
 
+// 商品編集
+export const modifyProduct = async (data: ProductData) => {
+  data.price = parseInt(data.price as string);
+  data.width = parseInt(data.width as string);
+  data.height = parseInt(data.height as string);
+  data.deepth = parseInt(data.deepth as string);
+  data.stock = parseInt(data.stock as string);
+
+  try {
+    const res = await axios.post(`${BaseUrl}/api/products/modification`, { ...data });
+    return res.data;
+  } catch (error) {
+    return { err: true, errMsg: error.response.data };
+  }
+};
+
 // 商品の削除
 export const deleteProduct = async (productId: string) => {
   try {
@@ -89,9 +117,11 @@ export const deleteProduct = async (productId: string) => {
 // 商品履歴の取得
 export const getPurchaseHistory = async (token: string, page: string | number) => {
   try {
-    const res = await axios.get(`${BaseUrl}/api/products/history?p=${page}`, { headers: { authorization: token } });
+    console.log(token);
+    const res = await axiosBase.get(`${BaseUrl}/api/products/history?p=${page}`, { headers: { authorization: token } });
     return res.data;
   } catch (error) {
+    console.log(error);
     return { err: true, message: error.response.data };
   }
 };
@@ -99,7 +129,7 @@ export const getPurchaseHistory = async (token: string, page: string | number) =
 // 商品発注一覧取得
 export const getOrderList = async (token: string, page: string | number) => {
   try {
-    const res = await axios.get(`${BaseUrl}/api/products/order?p=${page}`, { headers: { authorization: token } });
+    const res = await axiosBase.get(`${BaseUrl}/api/products/order?p=${page}`, { headers: { authorization: token } });
     return res.data;
   } catch (error) {
     return { err: true, message: error.response.data };

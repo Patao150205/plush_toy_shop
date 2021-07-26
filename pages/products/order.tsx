@@ -126,6 +126,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const token = nookies.get(ctx).token;
   const page = ctx.query.p ? (ctx.query.p as string) : "1";
 
+  if (!token) {
+    return {
+      redirect: {
+        statusCode: 302,
+        destination: "/login",
+      },
+    };
+  }
   const res = await getOrderList(token, page);
   switch (res.message) {
     case "rootUserOnly":

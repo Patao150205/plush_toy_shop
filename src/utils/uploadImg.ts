@@ -6,6 +6,8 @@ export const uploadImg = async (imgs: any[]) => {
 
   return Promise.all(
     imgs.map(async (img) => {
+      if (!/^blob:/.test(img)) return img;
+
       const formData = new FormData();
       formData.append("file", img);
       formData.append("upload_preset", "blush_toy_shop");

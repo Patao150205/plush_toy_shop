@@ -18,9 +18,10 @@ const ProductsSchema = new Schema(
     width: { type: Number, required: true },
     height: { type: Number, required: true },
     deepth: { type: Number, required: true },
-    New: { type: Boolean, default: true },
-    Hot: { type: Boolean, default: false },
+    New: { type: Boolean },
+    Hot: { type: Boolean },
     stock: { type: Number, required: true },
+    isRelease: { type: Boolean },
   },
   { versionKey: false, timestamps: true }
 );

@@ -1,13 +1,13 @@
 import { GetServerSideProps } from "next";
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { getFavoritesProduct } from "utils/favoritesAndCart";
 import Head from "next/head";
 import nookies from "nookies";
 import { Segment } from "semantic-ui-react";
 import style from "styles/pages/favorites.module.scss";
-import ProductCard from "../src/components/products/ProductCard";
-import { useAppSelector } from "../src/stores/store";
-import { favoritesSelector } from "stores/userSlice";
+import ProductCard from "components/products/ProductCard";
+import { useAppDispatch, useAppSelector } from "stores/store";
+import { favoritesSelector, updateFavorites } from "stores/userSlice";
 import NoProduct from "./products/NoProduct";
 
 type Props = {
@@ -24,6 +24,7 @@ type Props = {
         New: boolean;
         Hot: boolean;
         height: number;
+        isRelease: boolean;
       };
     }
   ];
@@ -31,6 +32,17 @@ type Props = {
 
 const Favorites: FC<Props> = ({ favorites }) => {
   const FavoritesList = useAppSelector(favoritesSelector);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const Favorites = favorites.map((ele) => {
+      return {
+        _id: ele._id,
+        product: ele.product._id,
+      };
+    });
+    dispatch(updateFavorites(Favorites));
+  }, []);
   return (
     <>
       <Head>

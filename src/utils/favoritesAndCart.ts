@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import axiosBase from "axios";
 import BaseUrl from "./BaseUrl";
-
+import { store } from "stores/store";
 import cookies from "js-cookie";
+import { updateCart, updateFavorites } from "stores/userSlice";
 
 const axios = axiosBase.create({ headers: { authorization: cookies.get("token") } });
 
@@ -18,6 +19,7 @@ type Product = {
     New: boolean;
     Hot: boolean;
     height: number;
+    isRelease: boolean;
   };
 };
 
@@ -31,8 +33,8 @@ export const getFavoritesProduct = async (token?: string) => {
     });
     // もしお気に入りの商品が削除されていた場合削除
     const newData = res.data.filter((favorite: Product) => {
-      if (favorite.product === null) {
-        axios.delete(`${BaseUrl}/api/favorites/_id/${favorite._id}`, {
+      if (favorite.product === null || favorite.product.isRelease === false) {
+        axiosBase.delete(`${BaseUrl}/api/favorites/_id/${favorite._id}`, {
           headers: {
             authorization: token,
           },
@@ -48,7 +50,7 @@ export const getFavoritesProduct = async (token?: string) => {
   }
 };
 
-export const getCartProduct = async (token?: string) => {
+export const getCartProduct = async (token: string) => {
   try {
     const res = await axiosBase.get(`${BaseUrl}/api/cart?detailed=true`, {
       headers: {
@@ -56,8 +58,10 @@ export const getCartProduct = async (token?: string) => {
       },
     });
     const newData = res.data.cart.filter((cart: Product) => {
-      if (cart.product === null) {
-        axios.delete(`${BaseUrl}/api/cart/_id/${cart._id}`);
+      if (cart.product === null || cart.product.isRelease === false) {
+        axiosBase.delete(`${BaseUrl}/api/cart/_id/${cart._id}`, {
+          headers: { authorization: token },
+        });
         return false;
       }
       return true;

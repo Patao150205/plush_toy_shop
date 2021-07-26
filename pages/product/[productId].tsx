@@ -15,6 +15,7 @@ import {
   deleteFavorite,
   registCart,
   deleteCart,
+  userInfoSelector,
 } from "stores/userSlice";
 
 type Props = {
@@ -35,16 +36,19 @@ type Props = {
       stock: number;
       updatedAt: string;
       createdAt: string;
+      isRelease: boolean;
     };
     totalStock: number;
   };
 };
 
 const ProductId: FC<Props> = ({ data }) => {
-  console.log(data);
+  const { product } = data;
   const dispatch = useAppDispatch();
   const favorites = useAppSelector(favoritesSelector);
   const cart = useAppSelector(cartSelector);
+  const userInfo = useAppSelector(userInfoSelector);
+  const { role } = userInfo;
 
   const isFavorite = favorites.find((ele: { _id: string; product: string }) => ele.product === data.product._id);
   const hasCart = cart.find(
@@ -56,9 +60,7 @@ const ProductId: FC<Props> = ({ data }) => {
 
   // 現在の在庫数
   const [totalStock, setTotalStock] = useState<number>(data.totalStock);
-  console.log(totalStock);
-
-  const title = `Yuruhuwa 【${data.product?.name}】` ?? "商品情報";
+  const title = `Yuruhuwa 【${product.name}】` ?? "商品情報";
 
   // 個数指定
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -98,30 +100,38 @@ const ProductId: FC<Props> = ({ data }) => {
       </Head>
       <div className={style.root}>
         <div className={style.swiperWrapper}>
-          <ProductSlide productPic={data.product.productPic} primaryPic={data.product.primaryPic} />
+          <ProductSlide productPic={product.productPic} primaryPic={product.primaryPic} />
         </div>
         <div className={style.detail}>
           <Segment>
-            <h1>{data.product.name}</h1>
-            <p className={style.desc}>{data.product.description}</p>
+            <h1>
+              {role === "root" &&
+                (product.isRelease ? (
+                  <span className={`${style.release} ${style.mark}`}></span>
+                ) : (
+                  <span className={`${style.keep} ${style.mark}`}></span>
+                ))}
+              {product.name}
+            </h1>
+            <p className={style.desc}>{product.description}</p>
             <div className={`module-spacer--xs ${style.divider}`} />
             <div className={`module-spacer--sm`} />
             <div className={style.statusWrapper}>
               <h3>商品詳細</h3>
               <div className={style.status}>
-                <p>カテゴリー: {data.product.category}</p>
-                <p>高さ &nbsp; : {data.product.height}cm</p>
-                <p>横幅 &nbsp; : {data.product.height}cm</p>
-                <p>奥行き: {data.product.height}cm</p>
+                <p>カテゴリー: {product.category}</p>
+                <p>高さ &nbsp; : {product.height}cm</p>
+                <p>横幅 &nbsp; : {product.height}cm</p>
+                <p>奥行き: {product.height}cm</p>
               </div>
             </div>
             <div className={"module-spacer--sm"} />
-            <p className={style.price}>{data.product.price}円(税込)</p>
+            <p className={style.price}>{product.price}円(税込)</p>
             {totalStock > 0 ? (
               <>
                 <div className={style.amountWrapper}>
                   <p className={style.sum}>
-                    合計 <span>{data.product.price * parseInt(amount) || 0}円(税込)</span>
+                    合計 <span>{product.price * parseInt(amount) || 0}円(税込)</span>
                   </p>{" "}
                   <p className={style.countLabel}>
                     数量 :&nbsp;&nbsp;
@@ -146,48 +156,50 @@ const ProductId: FC<Props> = ({ data }) => {
             )}
 
             <div className={"module-spacer--sm"} />
-            {!isFavorite ? (
-              <ThirdryButton
-                width="100%"
-                onClick={() => {
-                  handleLike(data.product._id);
-                }}
-                content="お気に入り登録"
-              />
-            ) : (
-              <ThirdryButton
-                width="100%"
-                background="gray"
-                onClick={() => {
-                  handleLike(data.product._id);
-                }}
-                content="お気に入り解除"
-              />
-            )}
-            <div className={"module-spacer--sm"} />
-            {!hasCart ? (
-              totalStock !== 0 ? (
+            {product.isRelease &&
+              (!isFavorite ? (
                 <ThirdryButton
                   width="100%"
-                  background="red"
                   onClick={() => {
-                    handleCart(data.product._id);
+                    handleLike(product._id);
                   }}
-                  content="カートに入れる"
+                  content="お気に入り登録"
                 />
               ) : (
-                <></>
-              )
-            ) : (
-              <ThirdryButton
-                width="100%"
-                background="gray"
-                onClick={() => {
-                  handleCart(data.product._id);
-                }}
-                content="カートから出す"
-              />
-            )}
+                <ThirdryButton
+                  width="100%"
+                  background="gray"
+                  onClick={() => {
+                    handleLike(product._id);
+                  }}
+                  content="お気に入り解除"
+                />
+              ))}
+            <div className={"module-spacer--sm"} />
+            {product.isRelease &&
+              (!hasCart ? (
+                totalStock !== 0 ? (
+                  <ThirdryButton
+                    width="100%"
+                    background="red"
+                    onClick={() => {
+                      handleCart(product._id);
+                    }}
+                    content="カートに入れる"
+                  />
+                ) : (
+                  <></>
+                )
+              ) : (
+                <ThirdryButton
+                  width="100%"
+                  background="gray"
+                  onClick={() => {
+                    handleCart(product._id);
+                  }}
+                  content="カートから出す"
+                />
+              ))}
           </Segment>
         </div>
       </div>

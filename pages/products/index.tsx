@@ -5,29 +5,39 @@ import { Segment } from "semantic-ui-react";
 import ExtractProducts from "../../src/components/products/ExtractProducts";
 import ProductCard from "../../src/components/products/ProductCard";
 import { GetServerSideProps } from "next";
-import { getProducts } from "utils/products";
+import { getProducts, getProductsRoot } from "utils/products";
 import { useRouter } from "next/router";
 import Pagination from "./Pagenation";
 import NoProduct from "./NoProduct";
 import { useAppSelector } from "stores/store";
+import nookies from "nookies";
+import cookies from "js-cookie";
 
 type Props = {
-  datas: {
-    products:
-      | [
-          {
-            _id: string;
-            name: string;
-            Hot: boolean;
-            New: boolean;
-            price: number;
-            primaryPic: string;
-            height: number;
-          }
-        ]
-      | [];
-    count: number;
-  };
+  datas:
+    | {
+        products:
+          | [
+              {
+                _id: string;
+                name: string;
+                Hot: boolean;
+                New: boolean;
+                price: number;
+                primaryPic: string;
+                height: number;
+                isRelease: boolean;
+              }
+            ]
+          | [];
+        count: number;
+      }
+    | undefined;
+};
+
+const strIns = (str: string, idx: number, val: string) => {
+  const res = str.slice(0, idx) + val + str.slice(idx);
+  return res;
 };
 
 const Products: FC<Props> = ({ datas }) => {
@@ -43,7 +53,18 @@ const Products: FC<Props> = ({ datas }) => {
     document.title = "Yuruhuwa 【商品一覧】";
     if (isFirstRender.current) {
       const fetchProducts = async () => {
-        const res = await getProducts(router.asPath);
+        let res;
+        if (!query.root || query.root !== "root") {
+          res = await getProducts(router.asPath);
+        } else {
+          const token = cookies.get("token");
+          if (!token) return;
+          // 完成形 /products/root?root=root
+          const relativePath = strIns(router.asPath, 9, "/root");
+          console.log(relativePath);
+          res = await getProductsRoot(relativePath, token);
+        }
+
         setProductsData(res);
       };
       fetchProducts();
@@ -53,6 +74,10 @@ const Products: FC<Props> = ({ datas }) => {
   useEffect(() => {
     isFirstRender.current = true;
   }, []);
+
+  if (!productsData) {
+    return <NoProduct />;
+  }
 
   return (
     <div className={style.root}>
@@ -89,6 +114,16 @@ const Products: FC<Props> = ({ datas }) => {
 export default Products;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const datas = await getProducts(ctx.resolvedUrl);
+  let datas;
+  console.log(ctx.query.root);
+
+  if (!ctx.query.root || ctx.query.root !== "root") {
+    datas = await getProducts(ctx.resolvedUrl);
+  } else {
+    const token = nookies.get(ctx).token;
+    // 完成形 /products/root?root=root
+    const relativePath = strIns(ctx.resolvedUrl, 9, "/root");
+    datas = await getProductsRoot(relativePath, token);
+  }
   return { props: { datas } };
 };

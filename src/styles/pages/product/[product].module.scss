@@ -22,6 +22,19 @@
   margin-top: 5rem;
   h1 {
     font-size: 1.7rem;
+    .mark {
+      vertical-align: baseline;
+      display: inline-block;
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+    }
+    .release {
+      background: blue;
+    }
+    .keep {
+      background: red;
+    }
   }
   .desc {
     margin: 10px 0;

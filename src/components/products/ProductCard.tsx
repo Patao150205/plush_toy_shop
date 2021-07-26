@@ -25,6 +25,7 @@ type Props = {
     New: boolean;
     Hot: boolean;
     height: number;
+    isRelease: boolean;
   };
   setProductsData?: React.Dispatch<React.SetStateAction<any>>;
 };
@@ -45,8 +46,9 @@ const ProductCard: FC<Props> = ({ favorites, product, setProductsData }) => {
     );
   }
 
-  const { name, primaryPic, price, _id: productId, New: isNew, Hot: isHot, height } = product;
+  const { name, primaryPic, price, _id: productId, New: isNew, Hot: isHot, height, isRelease } = product;
 
+  console.log(isRelease);
   const isFavorite = favorites.some((ele) => ele.product === productId);
   const userInfo = useAppSelector(userInfoSelector);
 
@@ -119,16 +121,33 @@ const ProductCard: FC<Props> = ({ favorites, product, setProductsData }) => {
       </p>
       <p className={style.price}>{price}円(税込)</p>
       <p className={style.height}>{height}cm (高さ)</p>
-      <p className={classNames(style.icon, { [style.like]: isFavorite })}>
-        <span onClick={() => handleLike(productId)} className={`fas fa-heart`} />
+      <p className={style.icon}>
+        {isRelease ? (
+          <span
+            onClick={() => handleLike(productId)}
+            className={classNames(`fas fa-heart`, { [style.like]: isFavorite })}
+          />
+        ) : (
+          <div className={style.noHeart} />
+        )}
       </p>
       <>
         {userInfo.role === "root" && (
           <>
             <div className="module-spacer--sm" />
-            <p className={classNames(style.icon)}>
-              <span onClick={() => handleDelete(productId)} className={`fas fa-trash-alt`} />
+            <p className={style.icon}>
+              <span onClick={() => handleDelete(productId)} className={`fas fa-trash-alt ${style.trash}`} />
             </p>
+            <div className="module-spacer--sm" />
+            {isRelease ? (
+              <p className={`${style.mark} ${style.release}`}>
+                <span className={`fas fa-pen`} onClick={() => router.push(`/products/modification/${productId}`)} />
+              </p>
+            ) : (
+              <p className={`${style.mark} ${style.keep}`}>
+                <span onClick={() => router.push(`/products/modification/${productId}`)} className={`fas fa-pen`} />
+              </p>
+            )}
           </>
         )}
       </>

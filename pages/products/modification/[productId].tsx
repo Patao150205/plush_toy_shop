@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch } from "stores/store";
 import { LoadingON, LoadingOFF, ModalOpen } from "stores/settingSlice";
 import { uploadImg } from "utils/uploadImg";
-import { ProductData, registProduct } from "utils/products";
+import { getProduct, modifyProduct, ProductData, registProduct } from "utils/products";
 import DragAndDrop from "components/layout/DragAndDrop";
 import style from "styles/pages/products/register.module.scss";
 import Head from "next/head";
@@ -12,13 +12,20 @@ import { GetServerSideProps } from "next";
 import nookies from "nookies";
 import { authTokenAndRoot } from "utils/auth";
 
-const Register: FC = () => {
+type Props = {
+  product: ProductData;
+  totalStock: number;
+};
+
+const Modification: FC<Props> = ({ product, totalStock }) => {
   const { register, handleSubmit } = useForm();
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<any>(null);
   const dispatch = useAppDispatch();
-  const [productsImg, setProductsImg] = useState<File[]>([]);
-  const [previewImg, setPreviewImg] = useState<any[]>([]);
+  const [productsImg, setProductsImg] = useState<(File | string)[]>(product.productPic ?? []);
+  const [previewImg, setPreviewImg] = useState<any[]>(product.productPic ?? []);
+  const defaultPrimaryPicIndex = product.productPic?.indexOf(product.primaryPic);
+  console.log(defaultPrimaryPicIndex);
 
   // ドラッグ＆ドロップ
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -64,7 +71,7 @@ const Register: FC = () => {
       delete data.selectPic;
     }
 
-    const res = await registProduct(data);
+    const res = await modifyProduct(data);
     if (!res.err) {
       dispatch(ModalOpen({ status: "success", title: "登録成功", message: res }));
     } else {
@@ -81,17 +88,23 @@ const Register: FC = () => {
   return (
     <>
       <Head>
-        <title>Yuruhuwa 在庫登録</title>
+        <title>Yuruhuwa 在庫編集</title>
       </Head>
       <Segment textAlign="center">
         <div className="module-spacer--xl" />
-        <Header textAlign="center">商品の登録</Header>
+        <Header textAlign="center">商品の編集</Header>
         <div className="module-spacer--sm" />
         <Form size="large" loading={loading} onSubmit={handleSubmit(sendData)}>
           <Form.Group grouped>
             <Form.Field style={{ margin: "0 auto" }} required width="10">
               <label>商品名</label>
-              <input autoFocus type="text" {...register("name")} required placeholder="商品名" />
+              <input
+                autoFocus
+                type="text"
+                {...register("name", { value: product.name })}
+                required
+                placeholder="商品名"
+              />
             </Form.Field>
 
             <div className="module-spacer--sm" />
@@ -108,7 +121,14 @@ const Register: FC = () => {
                       <div className={style.picWrapper}>
                         <Image style={{ cursor: "pointer" }} size="small" bordered centered src={url} />
                         <i onClick={() => deletePic(i)} className={`fas fa-times ${style.delete}`}></i>
-                        <input {...register("selectPic")} required type="radio" value={i} name="selectPic" />
+                        <input
+                          {...register("selectPic")}
+                          defaultChecked={i === defaultPrimaryPicIndex && true}
+                          required
+                          type="radio"
+                          value={i}
+                          name="selectPic"
+                        />
                       </div>
                     </label>
                   ))}
@@ -118,16 +138,31 @@ const Register: FC = () => {
             <div className="module-spacer--sm" />
             <Form.Field style={{ margin: "0 auto" }} required width="3">
               <label>値段</label>
-              <input autoFocus type="number" min="0" {...register("price")} required placeholder="値段" />
+              <input
+                autoFocus
+                type="number"
+                min="0"
+                {...register("price", { value: product.price })}
+                required
+                placeholder="値段"
+              />
             </Form.Field>
+            <div className="module-spacer--sm" />
             <Form.Field style={{ margin: "0 auto" }} required width="3">
               <label>在庫数</label>
-              <input autoFocus type="number" min="0" {...register("stock")} required placeholder="在庫数" />
+              <input
+                autoFocus
+                type="number"
+                min="0"
+                {...register("stock", { value: product.stock })}
+                required
+                placeholder="在庫数"
+              />
             </Form.Field>
             <div className="module-spacer--sm" />
             <Form.Field required style={{ margin: "0 auto" }} width="10">
               <label>カテゴリー</label>
-              <select {...register("category")} required>
+              <select {...register("category", { value: product.category })} required>
                 <option style={{ color: "#CECECE", display: "none" }} value="">
                   カテゴリーを選択してください
                 </option>
@@ -139,39 +174,64 @@ const Register: FC = () => {
           <Form.Group style={{ justifyContent: "center" }}>
             <Form.Field required>
               <label>W (Width)</label>
-              <input min="1" type="number" {...register("width")} required placeholder="幅" />
+              <input min="1" type="number" {...register("width", { value: product.width })} required placeholder="幅" />
             </Form.Field>
             <Form.Field required>
               <label>H (Height)</label>
-              <input type="number" min="1" {...register("height")} required placeholder="幅" />
+              <input
+                type="number"
+                min="1"
+                {...register("height", { value: product.height })}
+                required
+                placeholder="幅"
+              />
             </Form.Field>
             <Form.Field required>
               <label>D (Deepth)</label>
-              <input type="number" min="1" {...register("deepth")} required placeholder="奥行き" />
+              <input
+                type="number"
+                min="1"
+                {...register("deepth", { value: product.deepth })}
+                required
+                placeholder="奥行き"
+              />
             </Form.Field>
           </Form.Group>
           <Form.Group style={{ justifyContent: "center" }}>
             <Form.Field>
               <label>新着商品(New)</label>
-              <input style={{ width: "30px", height: "30px" }} type="checkbox" {...register("New", { value: true })} />
+              <input
+                style={{ width: "30px", height: "30px" }}
+                type="checkbox"
+                {...register("New", { value: product.New })}
+              />
             </Form.Field>
             <Form.Field>
               <label>人気商品(Hot)</label>
-              <input style={{ width: "30px", height: "30px" }} type="checkbox" {...register("Hot")} />
+              <input
+                style={{ width: "30px", height: "30px" }}
+                type="checkbox"
+                {...register("Hot", { value: product.Hot })}
+              />
             </Form.Field>
             <Form.Field>
               <label>商品陳列</label>
               <input
                 style={{ width: "30px", height: "30px" }}
                 type="checkbox"
-                {...register("isRelease", { value: true })}
+                {...register("isRelease", { value: product.isRelease })}
               />
             </Form.Field>
           </Form.Group>
           <Form.Group>
             <Form.Field style={{ margin: "0 auto" }} width="10" required>
               <label>商品の説明</label>
-              <textarea {...register("description")} rows={5} required placeholder="商品の説明" />
+              <textarea
+                {...register("description", { value: product.description })}
+                rows={5}
+                required
+                placeholder="商品の説明"
+              />
             </Form.Field>
           </Form.Group>
           <div className="module-spacer--md" />
@@ -185,8 +245,8 @@ const Register: FC = () => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const token = nookies.get(ctx).token;
-  const res = await authTokenAndRoot(token);
-  switch (res.errMsg) {
+  const authentication = await authTokenAndRoot(token);
+  switch (authentication.errMsg) {
     case "rootUserOnly":
       return {
         redirect: {
@@ -202,8 +262,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       };
   }
-
-  return { props: {} };
+  const productId = (ctx.params?.productId as string) ?? "";
+  const res = await getProduct(productId);
+  console.log(res);
+  return { props: { product: res.product, totalStock: res.totalStock } };
 };
 
-export default Register;
+export default Modification;

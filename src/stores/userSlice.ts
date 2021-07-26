@@ -105,7 +105,14 @@ const initialState: UserState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    updateFavorites: (state, action) => {
+      state.favorites = action.payload;
+    },
+    updateCart: (state, action) => {
+      state.cart = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     // ユーザー
     builder.addCase(fetchUserInfo.fulfilled, (state: UserState, { payload }) => {
@@ -161,5 +168,5 @@ export const userInfoSelector = createSelector(
   (user) => user.userInfo
 );
 
-// export const {} = userSlice.actions;
+export const { updateFavorites, updateCart } = userSlice.actions;
 export default userSlice.reducer;

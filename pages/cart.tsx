@@ -5,8 +5,8 @@ import Head from "next/head";
 import nookies from "nookies";
 import { Segment } from "semantic-ui-react";
 import style from "styles/pages/cart.module.scss";
-import { useAppSelector } from "../src/stores/store";
-import { cartSelector } from "stores/userSlice";
+import { useAppDispatch, useAppSelector } from "../src/stores/store";
+import { cartSelector, updateCart } from "stores/userSlice";
 import NoProduct from "./products/NoProduct";
 import CartCard from "components/cart/CartCard";
 import TotalPrice from "components/cart/TotalPrice";
@@ -27,15 +27,19 @@ type Props = {
         stock: number;
       };
       amount: number;
+      _id: string;
     }
   ];
 };
 
 const Cart: FC<Props> = ({ cart }) => {
+  console.log("かーと", cart);
   // cartはサーバサイドレンダリング FavoritesListはReduxから
   const CartList = useAppSelector(cartSelector);
+  const dispatch = useAppDispatch();
   const [subTotal, setSubTotal] = useState(0);
   let initialValue: { [_id: string]: number } = {};
+
   for (const ele of cart) {
     initialValue = { ...initialValue, [ele.product._id]: ele.amount };
   }
@@ -47,7 +51,6 @@ const Cart: FC<Props> = ({ cart }) => {
   const ExistProducts = cart.filter((ele) =>
     CartList.some((prod: { _id: string; product: string }) => prod.product === ele.product._id)
   );
-  console.log("レンダー");
 
   useEffect(() => {
     // 数量指定用(初回)
@@ -74,6 +77,10 @@ const Cart: FC<Props> = ({ cart }) => {
   }, [counts]);
 
   useEffect(() => {
+    const Cart = cart.map((ele) => {
+      return { _id: ele._id, amount: ele.amount, product: ele.product._id };
+    });
+    dispatch(updateCart(Cart));
     renderedFirst.current = true;
   }, []);
 
@@ -143,8 +150,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   }
-
-  console.log(data);
 
   return { props: { cart: data.cart } };
 };

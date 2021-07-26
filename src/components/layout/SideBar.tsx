@@ -39,6 +39,9 @@ const SideBar: FC = ({ children }) => {
               </li>
               {userInfo.role === "root" && (
                 <>
+                  <li className={style.menuItem} onClick={() => router.push("/products?root=root")}>
+                    <p className={style.menuText}>PRODUCTS(管理者用)</p>
+                  </li>
                   <li className={style.menuItem} onClick={() => router.push("/products/register")}>
                     <p className={style.menuText}>在庫の追加</p>
                   </li>

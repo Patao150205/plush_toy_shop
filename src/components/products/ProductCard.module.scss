@@ -67,13 +67,37 @@
   }
   .icon {
     text-align: center;
-    cursor: pointer;
   }
   .like {
+    cursor: pointer;
     color: red;
   }
+  .noHeart {
+    height: 22px;
+  }
   .trash {
-    
+    cursor: pointer;
+    color: red;
+  }
+  .mark {
+    span {
+      color: $Ssecondary;
+      font-size: 25px;
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
+  }
+  .release {
+    span {
+      background-color: blue;
+    }
+  }
+  .keep {
+    span {
+      background-color: red;
+    }
   }
 }
 

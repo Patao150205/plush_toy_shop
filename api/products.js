@@ -7,6 +7,7 @@ const root = require("../middleware/isRootUser");
 const PurchaseHistoryModel = require("../models/PurchaseHistoryModel");
 const OrderModel = require("../models/OrderModel");
 const AddressModel = require("../models/AddressModel");
+const CartModel = require("../models/CartModel");
 
 // @route GET api/products
 // @desc 商品一覧の取得
@@ -14,14 +15,43 @@ const AddressModel = require("../models/AddressModel");
 router.get("/", async (req, res) => {
   const q = req.query;
   const skipCount = q.p ? 20 * (q.p - 1) : 0;
-  const search = extractSerachQuery(q);
+  let search = extractSerachQuery(q);
   const sort = extractSortQuery(q);
+
   try {
     const data = await ProductsModel.find(search)
       .skip(skipCount)
       .limit(20)
       .sort(sort)
-      .select("name primaryPic price New Hot height");
+      .select("name primaryPic price New Hot height isRelease");
+    const count = await ProductsModel.find(search).countDocuments();
+    const sendData = {
+      products: data,
+      count,
+    };
+    res.json(sendData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("サーバーエラー");
+  }
+});
+
+// @route GET api/products/root
+// @desc 商品一覧の取得(管理者用),リリースされていない商品も表示します。
+// @access Private
+router.get("/root", auth, root, async (req, res) => {
+  const q = req.query;
+  const skipCount = q.p ? 20 * (q.p - 1) : 0;
+  let search = extractSerachQuery(q);
+  const sort = extractSortQuery(q);
+  delete search.isRelease;
+
+  try {
+    const data = await ProductsModel.find(search)
+      .skip(skipCount)
+      .limit(20)
+      .sort(sort)
+      .select("name primaryPic price New Hot height isRelease");
     const count = await ProductsModel.find(search).countDocuments();
     const sendData = {
       products: data,
@@ -50,6 +80,18 @@ router.post("/", auth, root, async (req, res) => {
   }
 });
 
+// @route POST api/products/modification
+// @desc 商品情報の編集
+// @access Private
+router.post("/", auth, root, async (req, res) => {
+  try {
+    res.send("商品情報の編集に成功しました。");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("サーバーエラー");
+  }
+});
+
 // @route DELETE api/products
 // @desc 商品情報の削除
 // @access Private
@@ -57,6 +99,7 @@ router.delete("/:productId", auth, async (req, res) => {
   const productId = req.params.productId;
   try {
     await ProductsModel.findByIdAndDelete(productId);
+    await CartModel.updateMany({}, { $pull: { products: { product: productId } } }, { multi: true });
     res.send("商品情報を削除しました。");
   } catch (error) {
     console.error(error);
@@ -80,7 +123,7 @@ router.get("/search", async (req, res) => {
 
 // @route GET api/products/search
 // @desc 商品履歴の取得
-// @access Public
+// @access Private
 router.get("/history", auth, async (req, res) => {
   const { userId } = req;
   const { p } = req.query;
@@ -95,6 +138,9 @@ router.get("/history", auth, async (req, res) => {
   }
 });
 
+// @route GET api/products/search
+// @desc 発注リストの取得
+// @access Private root
 router.get("/order", auth, root, async (req, res) => {
   const { p } = req.query;
   const skip = p ? 2 * (p - 1) : 0;
