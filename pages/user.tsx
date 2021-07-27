@@ -43,6 +43,14 @@ const User: FC = () => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const token = nookies.get(ctx).token;
+  if (!token) {
+    return {
+      redirect: {
+        statusCode: 302,
+        destination: "/login",
+      },
+    };
+  }
   const data = await authToken(token);
   if (data.errMsg === "JsonWebTokenError") {
     return {

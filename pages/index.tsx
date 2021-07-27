@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Pagination, Navigation, Controller, EffectFade, Mousewheel, Autoplay } from "swiper";
 import PrimaryButton from "components/UIkit/button/PrimaryButton";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 SwiperCore.use([Pagination, Navigation, Controller, EffectFade, Mousewheel, Autoplay]);
 
@@ -36,7 +37,9 @@ const Top: FC = () => {
           centeredSlides={true}>
           {swiperPic.map((pic) => (
             <SwiperSlide key={pic}>
-              <img src={pic} className={style.slidePic} />
+              <div className={style.slidePic}>
+                <Image objectFit="cover" layout="fill" src={pic} alt="ぬいぐるみの写真" />
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>
@@ -52,6 +55,10 @@ const Top: FC = () => {
         </div>
         <div className="module-spacer--xl" />
       </div>
+      <p className="u-text--center">
+        <a href="https://twitter.com/Patao_program">製作者のTwitter</a>
+      </p>
+      <div className="module-spacer--xl" />
     </>
   );
 };
