@@ -56,7 +56,7 @@ const Top: FC = () => {
         <div className="module-spacer--xl" />
       </div>
       <p className="u-text--center">
-        <a href="https://twitter.com/Patao_program">製作者のTwitter</a>
+        <a href="https://twitter.com/Patao_program">製作者Twitter</a>
       </p>
       <div className="module-spacer--xl" />
     </>
