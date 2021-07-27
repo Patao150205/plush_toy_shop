@@ -32,7 +32,7 @@ const Top: FC<Props> = () => {
           navigation={swiperPic.length > 1 ? true : false}
           spaceBetween={0}
           slidesPerView={1.3}
-          autoplay={{ delay: 4000, disableOnInteraction: false }}
+          autoplay={{ delay: 3000, disableOnInteraction: false }}
           speed={500}
           loop={swiperPic.length > 1 ? true : false}
           centeredSlides={true}>
