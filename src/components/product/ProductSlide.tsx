@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Pagination, Navigation, Controller, EffectCoverflow, Mousewheel } from "swiper";
 import style from "./ProductSlide.module.scss";
@@ -16,7 +16,6 @@ const ProductSlide: FC<Props> = ({ productPic, primaryPic }) => {
 
   const slideTo = (index: number) => {
     const target = index + 2;
-    console.log(target);
     if (!swiper) return;
     swiper.slideTo(target);
   };

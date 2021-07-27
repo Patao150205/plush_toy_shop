@@ -34,7 +34,6 @@ module.exports = {
       }
       const productStock = product.stock;
       const totalStock = productStock - cartStock;
-      console.log(cartStock, productStock, totalStock);
       return { cartStock, productStock, totalStock };
     } catch (error) {
       console.error(error);

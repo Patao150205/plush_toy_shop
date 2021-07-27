@@ -85,7 +85,6 @@ router.post("/", auth, root, async (req, res) => {
 // @access Private
 router.post("/modification", auth, root, async (req, res) => {
   try {
-    console.log(req.body, "なあが");
     const { stock, isRelease, _id } = req.body;
     const product = await ProductsModel.findById(_id);
     const { stock: prevStock, isRelease: prevIsRelease } = product;
@@ -96,7 +95,6 @@ router.post("/modification", auth, root, async (req, res) => {
     const conditions = prevStock > stock || (prevIsRelease === true && isRelease === false);
     if (conditions) {
       await CartModel.updateMany({}, { $pull: { products: { product: _id } } }, { multi: true });
-      console.log("削除成功です。");
     }
 
     await ProductsModel.findByIdAndUpdate(_id, { ...req.body });
@@ -167,7 +165,6 @@ router.get("/order", auth, root, async (req, res) => {
     });
 
     const addresses = await AddressModel.find({ $or: userIds });
-    console.log(addresses);
     const orderCount = await OrderModel.countDocuments();
 
     const orderAndEmail = orders.map((order) => {

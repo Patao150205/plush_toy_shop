@@ -6,7 +6,6 @@ module.exports = (req, res, next) => {
   }
   jwt.verify(req.headers.authorization, process.env.jwtSecret, (err, decoded) => {
     if (err || !decoded) {
-      console.log(err, decoded)
       return res.status(401).send("JsonWebTokenError");
     }
     req.userId = decoded.userId;

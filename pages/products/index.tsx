@@ -61,7 +61,6 @@ const Products: FC<Props> = ({ datas }) => {
           if (!token) return;
           // 完成形 /products/root?root=root
           const relativePath = strIns(router.asPath, 9, "/root");
-          console.log(relativePath);
           res = await getProductsRoot(relativePath, token);
         }
 
@@ -115,7 +114,6 @@ export default Products;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let datas;
-  console.log(ctx.query.root);
 
   if (!ctx.query.root || ctx.query.root !== "root") {
     datas = await getProducts(ctx.resolvedUrl);

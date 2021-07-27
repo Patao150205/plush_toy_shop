@@ -35,7 +35,6 @@ type Props = {
 };
 
 const History: FC<Props> = ({ historyProp, page, orderCount }) => {
-  console.log(page, orderCount);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const totalPages = Math.ceil(orderCount / 2);

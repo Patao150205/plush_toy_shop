@@ -6,7 +6,7 @@ import axios from "axios";
 import BaseUrl from "utils/BaseUrl";
 import cookie from "js-cookie";
 import { useAppDispatch } from "stores/store";
-import { LoadingOFF, LoadingON, ModalOpen } from "stores/settingSlice";
+import { ModalOpen } from "stores/settingSlice";
 
 type Props = {
   subTotal: number;
@@ -23,7 +23,6 @@ const PayForm: FC<Props> = ({ subTotal, token, eachAmount }) => {
   const dispatch = useAppDispatch();
 
   const [disabled, toggleDisabled] = useState(false);
-  console.log(disabled);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     toggleDisabled(true);
@@ -38,7 +37,6 @@ const PayForm: FC<Props> = ({ subTotal, token, eachAmount }) => {
       );
       const card = elements.getElement(CardElement);
       const secret = res.data.client_secret;
-      console.log(card);
       if (!card) throw Error("決済エラー2");
       const result = await stripe.confirmCardPayment(secret, {
         payment_method: {
@@ -57,7 +55,6 @@ const PayForm: FC<Props> = ({ subTotal, token, eachAmount }) => {
         }
       }
     } catch (error) {
-      console.log(error?.response?.data || error.message || "決済エラー");
       await axios.post(`${BaseUrl}/api/settlement/rollback`);
       dispatch(
         ModalOpen({

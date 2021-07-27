@@ -37,11 +37,15 @@ const login: FC = () => {
       <Head>
         <title>Yuruhuwa ログイン</title>
       </Head>
-      <div className="module-spacer--xl" />
       <Grid stackable padding="horizontal">
         <Grid.Column width="8" style={{ textAlign: "center", padding: "2rem" }}>
           <div className="module-spacer--xl" />
           <h1 style={{ textShadow: "2px 2px 3px white", color: Color.secondary }}>ログイン</h1>
+          <div>
+            <p>テスト用管理者アカウント</p>
+            <p>メールアドレス: test@yahoo.co.jp</p>
+            <p>パスワード: 111111</p>
+          </div>
           <form onSubmit={handleSubmit(sendInfo)}>
             <PrimaryText
               getValues={getValues}
@@ -85,15 +89,15 @@ const login: FC = () => {
               <a>会員登録がまだの方はこちら</a>
             </Link>
             <div className="module-spacer--sm" />
-            <Link href="/reset">
+            {/* <Link href="/reset">
               <a>パスワードを忘れた方はこちら</a>
             </Link>
-            <div className="module-spacer--sm" />
+            <div className="module-spacer--sm" /> */}
           </div>
         </Grid.Column>
         <Grid.Column textAlign="center" width="8">
           <div className="module-spacer--xl" />
-          <div className="module-spacer--md" />
+          <div className="module-spacer--xl" />
           <img src="shopLogo.jpg" className={style.mainImg} />
         </Grid.Column>
       </Grid>

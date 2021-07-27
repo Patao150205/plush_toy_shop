@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import Link from "next/link";
 import style from "./ProductCard.module.scss";
 import { useRouter } from "next/router";
@@ -48,7 +48,6 @@ const ProductCard: FC<Props> = ({ favorites, product, setProductsData }) => {
 
   const { name, primaryPic, price, _id: productId, New: isNew, Hot: isHot, height, isRelease } = product;
 
-  console.log(isRelease);
   const isFavorite = favorites.some((ele) => ele.product === productId);
   const userInfo = useAppSelector(userInfoSelector);
 

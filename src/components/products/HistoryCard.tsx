@@ -1,5 +1,4 @@
 import React, { FC, useState } from "react";
-import style from "./HistoryCard.module.scss";
 import ConfirmationCard from "components/settlement/ConfirmationCard";
 import { Divider, Modal, Button } from "semantic-ui-react";
 

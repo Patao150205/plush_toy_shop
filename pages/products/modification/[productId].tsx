@@ -14,16 +14,14 @@ import { authTokenAndRoot } from "utils/auth";
 import { useRouter } from "next/router";
 
 type Props = {
-  productProps: ProductData & { _id: string };
-  totalStock: number;
+  product: ProductData & { _id: string };
 };
 
-const Modification: FC<Props> = ({ productProps, totalStock }) => {
+const Modification: FC<Props> = ({ product }) => {
   const fileInputRef = useRef<any>(null);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const [product, setProduct] = useState(productProps);
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
   const [productsImg, setProductsImg] = useState<(File | string)[]>(product.productPic ?? []);
   const [previewImg, setPreviewImg] = useState<any[]>(product.productPic ?? []);
   const router = useRouter();
@@ -65,7 +63,6 @@ const Modification: FC<Props> = ({ productProps, totalStock }) => {
       if (urls) {
         data.productPic = urls;
       }
-      console.log("アップロードイメージ", urls);
       // PrimaryPicの生成
       if (!data.selectPic || !data.productPic) return;
 
@@ -270,8 +267,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
   const productId = (ctx.params?.productId as string) ?? "";
   const res = await getProduct(productId);
-  console.log(res);
-  return { props: { productProps: res.product, totalStock: res.totalStock } };
+  return { props: { product: res.product } };
 };
 
 export default Modification;

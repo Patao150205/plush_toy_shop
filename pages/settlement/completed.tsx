@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import style from "styles/pages/settlement/completed.module.scss";
 import { Segment, Step } from "semantic-ui-react";
 import Head from "next/head";

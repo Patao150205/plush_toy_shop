@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "styles/reset.css";
 import "semantic-ui-css/semantic.min.css";
 import "styles/global.scss";
@@ -13,7 +13,7 @@ import { store } from "../src/stores/store";
 import Head from "next/head";
 import Layout from "components/layout/Layout";
 
-const MyApp = ({ Component, pageProps }: AppProps) => {
+const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (
     <>
       <Head>

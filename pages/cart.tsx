@@ -33,7 +33,6 @@ type Props = {
 };
 
 const Cart: FC<Props> = ({ cart }) => {
-  console.log("かーと", cart);
   // cartはサーバサイドレンダリング FavoritesListはReduxから
   const CartList = useAppSelector(cartSelector);
   const dispatch = useAppDispatch();

@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import ConfirmationCard from "components/settlement/ConfirmationCard";
-import { Divider, Modal, Header, Button } from "semantic-ui-react";
+import { Divider, Modal, Button } from "semantic-ui-react";
 import style from "./OrderCard.module.scss";
 import { Address } from "../../../pages/products/order";
 import AddressTable from "components/address/AddressTable";
@@ -34,7 +34,6 @@ type Props = {
 const OrderCard: FC<Props> = ({ orderProps }) => {
   const { order, address } = orderProps;
 
-  console.log("やおほほほほｈ", orderProps);
   const [isOpenDetail, setIsOpenDetail] = useState(false);
   const [isOpenAddress, setIsOpenAddress] = useState(false);
 

@@ -8,9 +8,7 @@ import { useRouter } from "next/router";
 
 SwiperCore.use([Pagination, Navigation, Controller, EffectFade, Mousewheel, Autoplay]);
 
-type Props = {};
-
-const Top: FC<Props> = () => {
+const Top: FC = () => {
   const router = useRouter();
 
   const swiperPic = [

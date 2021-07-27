@@ -39,9 +39,7 @@ router.post("/", auth, async (req, res) => {
         const stock = parseInt(-prod.amount);
         await ProductsModel.findByIdAndUpdate(prod._id, { $inc: { stock: stock } }, { session });
       });
-      console.log("1", "スタート");
       await CartModel.findOneAndDelete({ user: userId }, { session });
-      console.log("2");
       const productsData = products.map((prod) => {
         return {
           _id: prod.product._id,
@@ -52,14 +50,11 @@ router.post("/", auth, async (req, res) => {
         };
       });
       await OrderModel.create([{ user: userId, products: productsData }], { session });
-      console.log("3");
       await PurchaseHistoryModel.create([{ user: userId, products: productsData }], { session });
-      console.log("4");
       const paymentIntent = await stripe.paymentIntents.create({
         amount: sumPrice,
         currency: "jpy",
       });
-      console.log("5");
 
       res.json({ client_secret: paymentIntent.client_secret });
     } else {
@@ -77,7 +72,6 @@ router.post("/", auth, async (req, res) => {
 // @access Private
 router.post("/commit", async (req, res) => {
   try {
-    console.log(session, "セッション1");
     await session.commitTransaction();
     res.send("在庫処理をコミットしました。");
   } catch (error) {
@@ -91,7 +85,6 @@ router.post("/commit", async (req, res) => {
 // @access Private
 router.post("/rollback", async (req, res) => {
   try {
-    console.log("セッション2");
     if (session) await session.abortTransaction();
     session = undefined;
     res.send("在庫処理をロールバックしました。");

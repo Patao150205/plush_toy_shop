@@ -11,23 +11,25 @@ import { favoritesSelector, updateFavorites } from "stores/userSlice";
 import NoProduct from "./products/NoProduct";
 
 type Props = {
-  favorites: [
-    {
-      _id: string;
-      product: {
-        _id: string;
-        name: string;
-        productPic: string;
-        primaryPic: string;
-        price: number;
-        productId: string;
-        New: boolean;
-        Hot: boolean;
-        height: number;
-        isRelease: boolean;
-      };
-    }
-  ];
+  favorites:
+    | [
+        {
+          _id: string;
+          product: {
+            _id: string;
+            name: string;
+            productPic: string;
+            primaryPic: string;
+            price: number;
+            productId: string;
+            New: boolean;
+            Hot: boolean;
+            height: number;
+            isRelease: boolean;
+          };
+        }
+      ]
+    | [];
 };
 
 const Favorites: FC<Props> = ({ favorites }) => {
@@ -74,7 +76,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     };
   }
   const data = await getFavoritesProduct(token);
-  console.log(data);
   if (data.errMsg === "JsonWebTokenError") {
     return {
       redirect: {

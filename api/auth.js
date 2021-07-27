@@ -83,7 +83,6 @@ router.post("/register/:hash", async (req, res) => {
     if (!temporaryData) {
       return res.status(401).send("認証情報が無効です。");
     }
-    console.log(temporaryData);
     const isExistUser = await UserModel.findOne({ email: temporaryData.email });
     if (isExistUser) {
       return res.status(400).send("ユーザーが既に存在しています");
@@ -108,7 +107,6 @@ router.post("/register/:hash", async (req, res) => {
     await newUser.save();
     await newFavorites.save();
 
-    console.log(newUser._id.toString(), "id");
     const token = jwt.sign({ userId: newUser._id.toString() }, process.env.jwtSecret, {
       expiresIn: "2d",
     });

@@ -48,7 +48,6 @@ export const temporaryRegist = async (userInfo: SignUpState) => {
     });
     return res.data;
   } catch (err) {
-    console.log(err);
     return { err: true, errMsg: err.response.data };
   }
 };

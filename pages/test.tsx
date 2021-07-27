@@ -1,10 +1,10 @@
-import React from "react";
+import React, { FC } from "react";
 import style from "styles/pages/auth/register/[hash].module.scss";
 import { Segment } from "semantic-ui-react";
 import SecondaryButton from "../src/components/UIkit/button/SecondaryButton";
 import { useRouter } from "next/router";
 
-const test = () => {
+const Test: FC = () => {
   const router = useRouter();
   return (
     <Segment>
@@ -36,4 +36,4 @@ const test = () => {
   );
 };
 
-export default test;
+export default Test;

@@ -117,11 +117,9 @@ export const deleteProduct = async (productId: string) => {
 // 商品履歴の取得
 export const getPurchaseHistory = async (token: string, page: string | number) => {
   try {
-    console.log(token);
     const res = await axiosBase.get(`${BaseUrl}/api/products/history?p=${page}`, { headers: { authorization: token } });
     return res.data;
   } catch (error) {
-    console.log(error);
     return { err: true, message: error.response.data };
   }
 };

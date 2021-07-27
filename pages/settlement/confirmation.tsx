@@ -86,6 +86,12 @@ const Confirmation: FC<Props> = ({ error, cart, token }) => {
           <TotalPrice subTotal={subTotal} btnContent="商品一覧に戻る" route="/products" />
         </div>
         <div className="module-spacer--xl" />
+        <div className={style.test}>
+        <p>テスト用クレジット番号: 3566002020360505</p>
+        <p>月/年: 今よりあとの月/年</p>
+        <p>CVC: 3桁(任意)</p>
+        <div className="module-spacer--sm" />
+        </div>
         <Elements stripe={stripePromise}>
           <PayForm eachAmount={eachAmount} token={token} subTotal={subTotal} />
         </Elements>

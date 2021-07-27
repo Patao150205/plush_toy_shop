@@ -116,7 +116,6 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     // ユーザー
     builder.addCase(fetchUserInfo.fulfilled, (state: UserState, { payload }) => {
-      console.log(payload);
       return (state = payload);
     });
     builder.addCase(fetchUserInfo.rejected, (state: UserState) => {

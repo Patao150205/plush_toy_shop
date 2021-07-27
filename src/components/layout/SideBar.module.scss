@@ -42,6 +42,28 @@
       display: inline-block;
       font-size: 20px;
       font-weight: 900;
+      .noIcon {
+        display: none;
+      }
+      .icon {
+        vertical-align: middle;
+        text-align: center;
+        font-size: 1rem;
+        line-height: 1.3rem;
+        font-weight: bold;
+        width: 1.3rem;
+        height: 1.3rem;
+        background: red;
+        color: white;
+        position: absolute;
+        border-radius: 50%;
+        bottom: 15px;
+        right: 30px;
+        cursor: pointer;
+        @media screen and (min-width: 400px) {
+          display: inline-block;
+        }
+      }
     }
     & > i {
       position: absolute;

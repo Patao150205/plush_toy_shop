@@ -6,10 +6,12 @@ import { useAppSelector } from "../../stores/store";
 import { useAppDispatch } from "stores/store";
 import { sideSelector, SideToggle } from "stores/settingSlice";
 import { logOut } from "utils/auth";
-import { userInfoSelector } from "stores/userSlice";
+import { userInfoSelector, favoritesSelector, cartSelector } from "stores/userSlice";
 
 const SideBar: FC = ({ children }) => {
   const hasSide = useAppSelector(sideSelector);
+  const favoritesLen = useAppSelector(favoritesSelector).length;
+  const cartLen = useAppSelector(cartSelector).length;
   const userInfo = useAppSelector(userInfoSelector);
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -29,10 +31,14 @@ const SideBar: FC = ({ children }) => {
                 <p className={style.menuText}>USER</p>
               </li>
               <li className={style.menuItem} onClick={() => router.push("/favorites")}>
-                <p className={style.menuText}>FAVORITES</p>
+                <p className={style.menuText}>
+                  FAVORITES<span className={favoritesLen ? style.icon : style.noIcon}>{favoritesLen}</span>
+                </p>
               </li>
               <li className={style.menuItem} onClick={() => router.push("/cart")}>
-                <p className={style.menuText}>CART</p>
+                <p className={style.menuText}>
+                  CART<span className={cartLen ? style.icon : style.noIcon}>{cartLen}</span>
+                </p>
               </li>
               {userInfo.role === "root" && (
                 <>
