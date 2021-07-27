@@ -1,5 +1,51 @@
+@import "config";
+
 .root {
   position: relative;
   margin-top: 1rem;
   padding: 0;
+}
+
+.swipperWrapper {
+  width: 100%;
+  // max-width: 800px;
+  padding: 1rem;
+  .slidePic {
+    display: inline-block;
+    margin: 0 auto;
+    width: 100%;
+    object-fit: cover;
+    height: 200px;
+    @media screen and (min-width: 400px) {
+      height: 300px;
+    }
+    @include mq(sm) {
+      height: 400px;
+    }
+    @include mq(md) {
+      height: 500px;
+    }
+  }
+  :global {
+    .swiper-button-prev:after,
+    .swiper-button-next:after {
+      color: red;
+      font-size: 2rem;
+      font-weight: 700px;
+    }
+    .swiper-pagination-bullet-active {
+      background: red;
+    }
+  }
+}
+
+.shopTitle {
+  text-align: center;
+  color: $Fprimary;
+  span {
+    color: $Ssecondary;
+  }
+}
+.productsBtn {
+  text-align: center;
 }

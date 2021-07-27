@@ -80,12 +80,16 @@ const login: FC = () => {
             <PrimaryButton type="submit" content="ログイン" />
             <div className="module-spacer--xl" />
           </form>
-          <Link href="/signup">
-            <a>会員登録はこちら</a>
-          </Link>
-          <Link href="/reset">
-            <a>パスワードを忘れた方はこちら</a>
-          </Link>
+          <div className={style.linkWrapper}>
+            <Link href="/signup">
+              <a>会員登録がまだの方はこちら</a>
+            </Link>
+            <div className="module-spacer--sm" />
+            <Link href="/reset">
+              <a>パスワードを忘れた方はこちら</a>
+            </Link>
+            <div className="module-spacer--sm" />
+          </div>
         </Grid.Column>
         <Grid.Column textAlign="center" width="8">
           <div className="module-spacer--xl" />

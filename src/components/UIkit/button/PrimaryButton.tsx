@@ -3,19 +3,18 @@ import style from "./PrimaryButton.module.scss";
 
 type Props = {
   content: string;
-  type: "submit" | "button";
+  type?: "submit" | "button";
+  onClick?: (e?: any) => void;
 };
 
-const PrimaryButton: FC<Props> = ({ type, content }) => {
+const PrimaryButton: FC<Props> = ({ type = "button", content, onClick }) => {
   return (
-    <>
-      <button type={type} className={style.btn}>
+      <button onClick={onClick} type={type} className={style.btn}>
         <span className={style.btnContent}>
           {content}
           <i className="fas fa-angle-right fa-position-right"></i>
         </span>
       </button>
-    </>
   );
 };
 

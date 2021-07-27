@@ -8,6 +8,7 @@
   left: 0;
   position: fixed;
   transition: display 3s;
+  z-index: 10000;
   .left {
     background-color: rgba(0, 0, 0, 0.3);
     width: 100%;
