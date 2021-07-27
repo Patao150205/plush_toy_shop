@@ -37,9 +37,7 @@ const Top: FC = () => {
           centeredSlides={true}>
           {swiperPic.map((pic) => (
             <SwiperSlide key={pic}>
-              <div className={style.slidePic}>
-                <Image objectFit="cover" layout="fill" src={pic} alt="ぬいぐるみの写真" />
-              </div>
+              <img src={pic} alt="ぬいぐるみの写真" className={style.slidePic} />
             </SwiperSlide>
           ))}
         </Swiper>
