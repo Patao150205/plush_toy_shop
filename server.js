@@ -24,7 +24,8 @@ app.prepare().then(() => {
 
   server.all("*", (req, res) => handle(req, res));
 
-  server.listen(PORT, () => {
+  server.listen(PORT, (err) => {
+    if (err) throw err;
     console.log("Express Server Running");
   });
 });
