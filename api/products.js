@@ -83,8 +83,24 @@ router.post("/", auth, root, async (req, res) => {
 // @route POST api/products/modification
 // @desc 商品情報の編集
 // @access Private
-router.post("/", auth, root, async (req, res) => {
+router.post("/modification", auth, root, async (req, res) => {
   try {
+    console.log(req.body, "なあが");
+    const { stock, isRelease, _id } = req.body;
+    const product = await ProductsModel.findById(_id);
+    const { stock: prevStock, isRelease: prevIsRelease } = product;
+
+    // いずれかの場合、該当商品を顧客のカートから削除する。
+    // ①更新する在庫数が、現在の在庫数よりも小さくなる場合
+    // ②現在リリース中のものを、キープの状態にする場合
+    const conditions = prevStock > stock || (prevIsRelease === true && isRelease === false);
+    if (conditions) {
+      await CartModel.updateMany({}, { $pull: { products: { product: _id } } }, { multi: true });
+      console.log("削除成功です。");
+    }
+
+    await ProductsModel.findByIdAndUpdate(_id, { ...req.body });
+
     res.send("商品情報の編集に成功しました。");
   } catch (error) {
     console.error(error);
@@ -129,7 +145,7 @@ router.get("/history", auth, async (req, res) => {
   const { p } = req.query;
   const skip = p ? 2 * (p - 1) : 0;
   try {
-    const histories = await PurchaseHistoryModel.find({ user: userId }).limit(2).skip(skip);
+    const histories = await PurchaseHistoryModel.find({ user: userId }).limit(2).skip(skip).sort({ createdAt: -1 });
     const orderCount = await PurchaseHistoryModel.countDocuments();
     res.json({ histories, orderCount });
   } catch (error) {
@@ -145,7 +161,7 @@ router.get("/order", auth, root, async (req, res) => {
   const { p } = req.query;
   const skip = p ? 2 * (p - 1) : 0;
   try {
-    const orders = await OrderModel.find().limit(2).skip(skip).populate("user");
+    const orders = await OrderModel.find().limit(2).skip(skip).sort({ createdAt: -1 }).populate("user");
     const userIds = orders.map((order) => {
       return { user: order.user._id };
     });
@@ -153,7 +169,16 @@ router.get("/order", auth, root, async (req, res) => {
     const addresses = await AddressModel.find({ $or: userIds });
     console.log(addresses);
     const orderCount = await OrderModel.countDocuments();
-    res.json({ orders, orderCount, addresses });
+
+    const orderAndEmail = orders.map((order) => {
+      const address = addresses.find((address) => order.user._id.toString() === address.user.toString());
+      return {
+        address,
+        order,
+      };
+    });
+
+    res.json({ orders: orderAndEmail, orderCount });
   } catch (error) {
     console.error(error);
     res.status(500).send("サーバーエラー");

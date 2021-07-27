@@ -25,17 +25,14 @@ const SideBar: FC = ({ children }) => {
               <li className={style.menuItem} onClick={() => router.push("/")}>
                 <p className={style.menuText}>TOP</p>
               </li>
-              <li className={style.menuItem} onClick={() => router.push("/")}>
-                <p className={style.menuText}>TOP</p>
+              <li className={style.menuItem} onClick={() => router.push("/user")}>
+                <p className={style.menuText}>USER</p>
               </li>
-              <li className={style.menuItem} onClick={() => router.push("/products")}>
-                <p className={style.menuText}>PRODUCTS</p>
+              <li className={style.menuItem} onClick={() => router.push("/favorites")}>
+                <p className={style.menuText}>FAVORITES</p>
               </li>
-              <li className={style.menuItem} onClick={() => router.push("/contact")}>
-                <p className={style.menuText}>CONTACT</p>
-              </li>
-              <li className={style.menuItem} onClick={() => router.push("/products/history")}>
-                <p className={style.menuText}>購入履歴</p>
+              <li className={style.menuItem} onClick={() => router.push("/cart")}>
+                <p className={style.menuText}>CART</p>
               </li>
               {userInfo.role === "root" && (
                 <>
@@ -50,6 +47,9 @@ const SideBar: FC = ({ children }) => {
                   </li>
                 </>
               )}
+              <li className={style.menuItem} onClick={() => router.push("/login")}>
+                <p className={style.menuText}>LOGIN</p>
+              </li>
               <li className={style.menuItem} onClick={logOut}>
                 <p className={style.menuText}>LOGOUT</p>
               </li>

@@ -27,7 +27,6 @@ router.get("/", auth, async (req, res) => {
         return res.json({ cart: [], updatedAt: null });
       }
     }
-    console.log(data.updatedAt, "アップデート");
 
     // ハッシュ化したカートの最終更新日を返す。
     const updatedAtHash = await bcrypt.hash(data.updatedAt.toString(), 10);
@@ -93,7 +92,6 @@ router.post("/count/:productId", auth, async (req, res) => {
     console.log(myCartProduct);
     const target = myCartProduct.products.find((prod) => prod.product.toString() === productId);
 
-    console.log(target);
     // すべての在庫数を超えないかをチェックする。(マイナスになってしまわないかチェック)
     const result = cartStock - target.amount + newAmmount;
 

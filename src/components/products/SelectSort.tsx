@@ -5,6 +5,8 @@ const SelectSort: FC = () => {
   const router = useRouter();
   const query = router.query;
   const [selectValue, setSelectValue] = useState(1);
+  const root = query.root as string | undefined;
+  const rootQuery = root === "root" ? "&root=root" : "";
 
   useEffect(() => {
     //  現在のsort番号の取得
@@ -15,13 +17,13 @@ const SelectSort: FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
     setSelectValue(parseInt(value));
-    let url = `/products/?sort=${value}`;
-    if (query.p) url = url + `&p=${query.p}`;
-    if (query.kind) url = url + `&kind=${query.kind}`;
-    if (query.price) url = url + `&price=${query.price}`;
-    if (query.size) url = url + `&size=${query.size}`;
-    if (query.genre) url = url + `&genre=${query.genre}`;
-    if (query.keyword) url = url + `&keyword=${query.keyword}`;
+    let url = `/products/?sort=${value}${rootQuery}`;
+    if (query.p) url = url + `&p=${query.p}${rootQuery}`;
+    if (query.kind) url = url + `&kind=${query.kind}${rootQuery}`;
+    if (query.price) url = url + `&price=${query.price}${rootQuery}`;
+    if (query.size) url = url + `&size=${query.size}${rootQuery}`;
+    if (query.genre) url = url + `&genre=${query.genre}${rootQuery}`;
+    if (query.keyword) url = url + `&keyword=${query.keyword}${rootQuery}`;
 
     router.push(url);
   };

@@ -1,8 +1,7 @@
 @import "config";
 
 .root {
-  width: 300px;
-  height: 1150px;
+  width: 100%;
   background-color: gray;
   .parentUL {
     text-align: left;
@@ -23,6 +22,9 @@
         background-color: $Sprimary;
       }
     }
+  }
+  @media screen and (min-width: 800px) {
+    height: 1150px;
   }
 }
 

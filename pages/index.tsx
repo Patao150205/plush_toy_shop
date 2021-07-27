@@ -7,7 +7,7 @@ type Props = {
   data: any;
 };
 
-const Home: FC<Props> = ({ data }) => {
+const Top: FC<Props> = ({ data }) => {
   const dispatch = useAppDispatch();
   return (
     <>
@@ -18,11 +18,4 @@ const Home: FC<Props> = ({ data }) => {
   );
 };
 
-export default Home;
-
-// export const getServerSideProps: GetServerSideProps = async (ctx) => {
-//   const res = await axios.get("https://jsonplaceholder.typicode.com/comments");
-//   console.log(res);
-//   console.log(ctx);
-//   return { props: { data: res.data } };
-// };
+export default Top;

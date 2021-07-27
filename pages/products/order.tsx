@@ -71,13 +71,14 @@ type Order = {
 const Order: FC<Props> = ({ orderProps, page, orderCount }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const totalPages = Math.ceil(parseInt(page) / 2);
+  const totalPages = Math.ceil(orderCount / 2);
 
   const [orders, setOrders] = useState(orderProps);
 
   const handlePageChange = async (page: number) => {
+    router.push(`/products/order?p=${page}`);
     const token = cookies.get("token");
-    if (!token) return;
+    if (!token) return router.push("/login");
     const res = await getOrderList(token, page);
     if (res.message === "JsonWebTokenError") {
       return router.push("/login");
@@ -85,6 +86,7 @@ const Order: FC<Props> = ({ orderProps, page, orderCount }) => {
     if (res.err) {
       return dispatch(ModalOpen({ status: "error", title: "エラー", message: res.message }));
     }
+
     setOrders(res.orders);
   };
 
@@ -151,16 +153,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       };
   }
-  const orders = res.orders;
-  const orderProps = orders.map((order: Order) => {
-    const address: Address = res.addresses.find((address: Address) => order.user._id === address.user);
 
-    return {
-      address,
-      order,
-    };
-  });
-  return { props: { orderProps, page, orderCount: res.orderCount } };
+  return { props: { orderProps: res.orders, page, orderCount: res.orderCount } };
 };
 
 export default Order;

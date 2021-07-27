@@ -1,4 +1,4 @@
-.root {
+.extract {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
@@ -9,5 +9,12 @@
   }
   .searchStatus {
     color: red;
+  }
+}
+
+.searchBtn {
+  display: block;
+  @media screen and (min-width: 800px) {
+    display: none;
   }
 }

@@ -4,28 +4,30 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch } from "stores/store";
 import { LoadingON, LoadingOFF, ModalOpen } from "stores/settingSlice";
 import { uploadImg } from "utils/uploadImg";
-import { getProduct, modifyProduct, ProductData, registProduct } from "utils/products";
+import { getProduct, modifyProduct, ProductData } from "utils/products";
 import DragAndDrop from "components/layout/DragAndDrop";
 import style from "styles/pages/products/register.module.scss";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 import nookies from "nookies";
 import { authTokenAndRoot } from "utils/auth";
+import { useRouter } from "next/router";
 
 type Props = {
-  product: ProductData;
+  productProps: ProductData & { _id: string };
   totalStock: number;
 };
 
-const Modification: FC<Props> = ({ product, totalStock }) => {
-  const { register, handleSubmit } = useForm();
-  const [loading, setLoading] = useState(false);
+const Modification: FC<Props> = ({ productProps, totalStock }) => {
   const fileInputRef = useRef<any>(null);
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
+  const [product, setProduct] = useState(productProps);
+  const { register, handleSubmit, reset } = useForm();
   const [productsImg, setProductsImg] = useState<(File | string)[]>(product.productPic ?? []);
   const [previewImg, setPreviewImg] = useState<any[]>(product.productPic ?? []);
+  const router = useRouter();
   const defaultPrimaryPicIndex = product.productPic?.indexOf(product.primaryPic);
-  console.log(defaultPrimaryPicIndex);
 
   // ドラッグ＆ドロップ
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -53,7 +55,8 @@ const Modification: FC<Props> = ({ product, totalStock }) => {
     setPreviewImg((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const sendData = async (data: ProductData) => {
+  const sendData = async (initialData: ProductData & { _id: string }) => {
+    const data = { ...initialData };
     setLoading(true);
     dispatch(LoadingON());
     // cloudinaryにアップロード
@@ -62,7 +65,7 @@ const Modification: FC<Props> = ({ product, totalStock }) => {
       if (urls) {
         data.productPic = urls;
       }
-
+      console.log("アップロードイメージ", urls);
       // PrimaryPicの生成
       if (!data.selectPic || !data.productPic) return;
 
@@ -70,17 +73,16 @@ const Modification: FC<Props> = ({ product, totalStock }) => {
       data.primaryPic = data.productPic[primaryPicIndex];
       delete data.selectPic;
     }
-
+    data._id = product._id;
     const res = await modifyProduct(data);
     if (!res.err) {
-      dispatch(ModalOpen({ status: "success", title: "登録成功", message: res }));
+      router.push(`/product/${data._id}`);
     } else {
       dispatch(ModalOpen({ status: "error", title: "エラー", message: res.errMsg }));
     }
     setLoading(false);
     dispatch(LoadingOFF());
   };
-
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
@@ -88,7 +90,7 @@ const Modification: FC<Props> = ({ product, totalStock }) => {
   return (
     <>
       <Head>
-        <title>Yuruhuwa 在庫編集</title>
+        <title>Yuruhuwa 【在庫編集】</title>
       </Head>
       <Segment textAlign="center">
         <div className="module-spacer--xl" />
@@ -234,6 +236,10 @@ const Modification: FC<Props> = ({ product, totalStock }) => {
               />
             </Form.Field>
           </Form.Group>
+          <p style={{ fontSize: "0.8rem" }}>
+            <span className="u-text--emphasis">注:</span>{" "}
+            在庫数を減らすまたは、商品陳列を解除する操作を行う場合、顧客のカートから該当の商品が削除されてしまいます。
+          </p>
           <div className="module-spacer--md" />
           <Form.Button icon="send" color="blue" size="large" content="送信" />
           <div className="module-spacer--md" />
@@ -265,7 +271,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const productId = (ctx.params?.productId as string) ?? "";
   const res = await getProduct(productId);
   console.log(res);
-  return { props: { product: res.product, totalStock: res.totalStock } };
+  return { props: { productProps: res.product, totalStock: res.totalStock } };
 };
 
 export default Modification;

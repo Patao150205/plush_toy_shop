@@ -6,7 +6,7 @@ export const uploadImg = async (imgs: any[]) => {
 
   return Promise.all(
     imgs.map(async (img) => {
-      if (!/^blob:/.test(img)) return img;
+      if (typeof img === "string") return Promise.resolve(img);
 
       const formData = new FormData();
       formData.append("file", img);

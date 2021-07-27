@@ -33,6 +33,8 @@ type Props = {
 
 const OrderCard: FC<Props> = ({ orderProps }) => {
   const { order, address } = orderProps;
+
+  console.log("やおほほほほｈ", orderProps);
   const [isOpenDetail, setIsOpenDetail] = useState(false);
   const [isOpenAddress, setIsOpenAddress] = useState(false);
 

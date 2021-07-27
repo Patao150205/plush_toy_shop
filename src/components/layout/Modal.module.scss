@@ -18,6 +18,10 @@
   max-width: 500px;
   min-width: calc(320px - 2rem);
   width: calc(100% - 2rem);
+  margin-top: 4rem;
+  max-height: 420px;
+  word-break: break-all;
+  overflow-y: scroll;
   border-radius: 8px;
   position: fixed;
   top: 50%;

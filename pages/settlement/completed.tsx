@@ -3,6 +3,7 @@ import React, { FC, useEffect } from "react";
 import style from "styles/pages/settlement/completed.module.scss";
 import { Segment, Step } from "semantic-ui-react";
 import Head from "next/head";
+import ThirdryButton from "components/UIkit/button/ThirdryButton";
 
 const Completed: FC = () => {
   const router = useRouter();
@@ -30,6 +31,11 @@ const Completed: FC = () => {
             </Step.Content>
           </Step>
         </Step.Group>
+        <div className="module-spacer--xl" />
+        <p className={style.message}>ご注文ありがとうございます🙇‍♂️</p>
+        <div>
+          <ThirdryButton content="購入履歴へ" onClick={() => router.push("/products/history")} />
+        </div>
         <div className="module-spacer--xl" />
       </Segment>
     </>

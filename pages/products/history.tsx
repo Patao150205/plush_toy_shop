@@ -38,7 +38,7 @@ const History: FC<Props> = ({ historyProp, page, orderCount }) => {
   console.log(page, orderCount);
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const totalPages = Math.ceil(parseInt(page) / 2);
+  const totalPages = Math.ceil(orderCount / 2);
 
   const handlePageChange = async (page: number) => {
     const token = cookies.get("token");
@@ -98,7 +98,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         statusCode: 302,
         destination: "/login",
       },
-    };    
+    };
   }
 
   const res = await getPurchaseHistory(token, page);
