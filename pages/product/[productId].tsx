@@ -98,6 +98,15 @@ const ProductId: FC<Props> = ({ data }) => {
     <>
       <Head>
         <title>{title}</title>
+        <meta name="twitter:card" content="summary_large_image"></meta>
+        <meta name="twitter:site" content="@Patao_program"></meta>
+        <meta name="twitter:creator" content="@Patao_program"></meta>
+        <meta property="og:title" content={`ぬいぐるみショップ Yuruhuwa 【${product.name}】 商品ページ`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://blush-toy-shop.herokuapp.com/product/${product._id}`} />
+        <meta property="og:image" content={product.primaryPic} />
+        <meta property="og:site_name" content="Yuruhuwa" />
+        <meta property="og:description" content={product.description} />
       </Head>
       <div className={style.root}>
         <div className={style.swiperWrapper}>

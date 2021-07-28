@@ -29,9 +29,12 @@ const Top: FC = () => {
         <meta property="og:title" content="ぬいぐるみショップ Yuruhuwa" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://blush-toy-shop.herokuapp.com/" />
-        <meta property="og:image" content="https://blush-toy-shop.herokuapp.com/public/shopLogo.jpg" />
+        <meta property="og:image" content="https://blush-toy-shop.herokuapp.com/shopLogo.jpg" />
         <meta property="og:site_name" content="Yuruhuwa" />
-        <meta property="og:description" content="個人開発で、ぬいぐるみショップつくってみた！" />
+        <meta
+          property="og:description"
+          content="個人開発で、ぬいぐるみショップつくってみました😆よければいじってみてください笑"
+        />
       </Head>
       <div className={style.swipperWrapper}>
         <Swiper
