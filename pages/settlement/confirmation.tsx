@@ -87,10 +87,10 @@ const Confirmation: FC<Props> = ({ error, cart, token }) => {
         </div>
         <div className="module-spacer--xl" />
         <div className={style.test}>
-        <p>テスト用クレジット番号: 3566002020360505</p>
-        <p>月/年: 今よりあとの月/年</p>
-        <p>CVC: 3桁(任意)</p>
-        <div className="module-spacer--sm" />
+          <p>テスト用クレジット番号: 3566002020360505</p>
+          <p>月/年: 今よりあとの月/年</p>
+          <p>CVC: 3桁(任意)</p>
+          <div className="module-spacer--sm" />
         </div>
         <Elements stripe={stripePromise}>
           <PayForm eachAmount={eachAmount} token={token} subTotal={subTotal} />
@@ -109,7 +109,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       redirect: {
         statusCode: 302,
-        destination: "/login",
+        destination: "/login?attention=true",
       },
     };
   }

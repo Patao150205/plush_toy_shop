@@ -67,9 +67,11 @@
   }
   .icon {
     text-align: center;
+    span {
+      cursor: pointer;
+    }
   }
   .like {
-    cursor: pointer;
     color: red;
   }
   .noHeart {

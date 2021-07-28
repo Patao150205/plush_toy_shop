@@ -122,10 +122,17 @@ const ProductCard: FC<Props> = ({ favorites, product, setProductsData }) => {
       <p className={style.height}>{height}cm (高さ)</p>
       <p className={style.icon}>
         {isRelease ? (
-          <span
-            onClick={() => handleLike(productId)}
-            className={classNames(`fas fa-heart`, { [style.like]: isFavorite })}
-          />
+          userInfo._id ? (
+            <span
+              onClick={() => handleLike(productId)}
+              className={classNames(`fas fa-heart`, { [style.like]: isFavorite })}
+            />
+          ) : (
+            <span
+              onClick={() => router.push("/login?attention=true")}
+              className={classNames(`fas fa-heart`, { [style.like]: isFavorite })}
+            />
+          )
         ) : (
           <div className={style.noHeart} />
         )}

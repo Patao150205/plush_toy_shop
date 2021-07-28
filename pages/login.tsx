@@ -11,6 +11,7 @@ import style from "styles/pages/login.module.scss";
 import { signIn, SignInState } from "utils/auth";
 import { ErrorMessage } from "@hookform/error-message";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 const login: FC = () => {
   const {
@@ -20,6 +21,7 @@ const login: FC = () => {
     formState: { errors },
   } = useForm<FormData>();
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const sendInfo = async (data: SignInState) => {
     dispatch(LoadingON());
@@ -39,7 +41,7 @@ const login: FC = () => {
       </Head>
       <Grid stackable padding="horizontal">
         <Grid.Column width="8" style={{ textAlign: "center", padding: "2rem" }}>
-          <div className="module-spacer--xl" />
+          <div className="module-spacer--md" />
           <h1 style={{ textShadow: "2px 2px 3px white", color: Color.secondary }}>ログイン</h1>
           <div>
             <p>テスト用管理者アカウント</p>
@@ -47,6 +49,9 @@ const login: FC = () => {
             <p>パスワード: 111111</p>
           </div>
           <form onSubmit={handleSubmit(sendInfo)}>
+            {router.query.attention === "true" && (
+              <p className="u-text--emphasis">お気に入り、カート機能などを使用するには、ログインが必要です。</p>
+            )}
             <PrimaryText
               getValues={getValues}
               register={register}

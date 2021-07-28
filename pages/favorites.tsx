@@ -71,7 +71,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       redirect: {
         statusCode: 302,
-        destination: "/login",
+        destination: "/login?attention=true",
       },
     };
   }
@@ -80,7 +80,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       redirect: {
         statusCode: 302,
-        destination: "/login",
+        destination: "/login?attention=true",
       },
     };
   }

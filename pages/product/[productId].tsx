@@ -17,6 +17,7 @@ import {
   deleteCart,
   userInfoSelector,
 } from "stores/userSlice";
+import Link from "next/link";
 
 type Props = {
   data: {
@@ -93,6 +94,8 @@ const ProductId: FC<Props> = ({ data }) => {
     return <NoProduct />;
   }
 
+  console.log(hasCart);
+
   return (
     <>
       <Head>
@@ -156,7 +159,17 @@ const ProductId: FC<Props> = ({ data }) => {
             )}
 
             <div className={"module-spacer--sm"} />
-            {product.isRelease &&
+
+            {!userInfo._id && (
+              <div>
+                <p className="u-text--emphasis">お気に入り、カート機能を使用するには、ログインが必要です。</p>
+                <Link href="/login">
+                  <a>ログインページへ</a>
+                </Link>
+              </div>
+            )}
+            {userInfo._id &&
+              product.isRelease &&
               (!isFavorite ? (
                 <ThirdryButton
                   width="100%"
@@ -176,7 +189,8 @@ const ProductId: FC<Props> = ({ data }) => {
                 />
               ))}
             <div className={"module-spacer--sm"} />
-            {product.isRelease &&
+            {userInfo._id &&
+              product.isRelease &&
               (!hasCart ? (
                 totalStock !== 0 ? (
                   <ThirdryButton
@@ -218,7 +232,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       return {
         redirect: {
           statusCode: 302,
-          destination: "/login",
+          destination: "/login?attention=true",
         },
       };
     }

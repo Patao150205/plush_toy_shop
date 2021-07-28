@@ -44,7 +44,7 @@ const History: FC<Props> = ({ historyProp, page, orderCount }) => {
     if (!token) return;
     const res = await getPurchaseHistory(token, page);
     if (res.message === "JsonWebTokenError") {
-      return router.push("/login");
+      return router.push("/login?attention=true");
     }
     if (res.err) {
       return dispatch(ModalOpen({ status: "error", title: "エラー", message: res.message }));
@@ -95,7 +95,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       redirect: {
         statusCode: 302,
-        destination: "/login",
+        destination: "/login?attention=true",
       },
     };
   }
@@ -105,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
       redirect: {
         statusCode: 302,
-        destination: "/login",
+        destination: "/login?attention=true",
       },
     };
   }
