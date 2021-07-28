@@ -39,6 +39,7 @@ type Props = {
           }
         ];
         _id: string;
+        status: "noSent" | "sent";
       };
     }
   ];
@@ -65,6 +66,7 @@ type Order = {
       amount: number;
     }
   ];
+  status: "noSent" | "sent";
   _id: string;
 };
 
