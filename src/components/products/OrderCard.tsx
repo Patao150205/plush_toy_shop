@@ -1,14 +1,16 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import ConfirmationCard from "components/settlement/ConfirmationCard";
 import { Divider, Modal, Button } from "semantic-ui-react";
 import style from "./OrderCard.module.scss";
 import { Address } from "../../../pages/products/order";
 import AddressTable from "components/address/AddressTable";
+import { changeOrderStatus } from "utils/products";
 
 type Props = {
   orderProps: {
     order: {
       user: {
+        _id: string;
         nickname: string;
         email: string;
         role: "root" | "user";
@@ -25,6 +27,7 @@ type Props = {
           amount: number;
         }
       ];
+      status: "noSent" | "sent";
       _id: string;
     };
     address: Address;
@@ -36,12 +39,30 @@ const OrderCard: FC<Props> = ({ orderProps }) => {
 
   const [isOpenDetail, setIsOpenDetail] = useState(false);
   const [isOpenAddress, setIsOpenAddress] = useState(false);
+  const [status, setStatus] = useState(orderProps.order.status);
+
+  const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as "noSent" | "sent";
+    const res = await changeOrderStatus(order._id, value);
+    if (!res.err) {
+      setStatus(value);
+    }
+  };
 
   return (
     <>
-      <p>注文者: {order.user.nickname}</p>
+      <p>注文者: {address.lastname + " " + address.firstname}</p>
       <p>注文日: {new Date(order.createdAt).toLocaleString()}</p>
       <p>Email: {order.user.email}</p>
+      <div>
+        <label>
+          商品状態: &nbsp;
+          <select value={status} className="u-text--emphasis" onChange={handleChange}>
+            <option value="noSent">発送準備中</option>
+            <option value="sent">発送済み</option>
+          </select>
+        </label>
+      </div>
       <div className={style.btnWrapper}>
         <div className={"module-spacer--sm"} />
         <Modal

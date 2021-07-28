@@ -134,11 +134,18 @@ export const getOrderList = async (token: string, page: string | number) => {
   }
 };
 
-// export const editProduct = async (data: ProductData) => {
-//   try {
-//     const res = await axios.post(`${BaseUrl}/api/products`, { ...data });
-//     return res.data;
-//   } catch (error) {
-//     return { err: true, message: error.response.data };
-//   }
-// };
+// 商品の注文の状態を変更
+export const changeOrderStatus = async (orderId: string, status: string) => {
+  try {
+    const res = await axiosBase.post(
+      `${BaseUrl}/api/product/order/status`,
+      { orderId, status },
+      {
+        headers: { authorization: cookies.get("token") },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    return { err: true, message: error.response.data };
+  }
+};

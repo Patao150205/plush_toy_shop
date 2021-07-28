@@ -1,5 +1,19 @@
-.root {
-  width: 100%;
-  max-width: 800px;
-  padding: 1rem;
+.status {
+  display: inline-block;
+  margin: 0 auto;
+  padding: 1rem 1rem;
+  color: white;
+  font-weight: 900;
+  border-radius: 16px;
+  i {
+    margin-right: 10px;
+  }
+}
+
+.sent {
+  background-color: rgb(55, 182, 55);
+}
+
+.noSent {
+  background-color: orangered;
 }

@@ -160,6 +160,9 @@ router.get("/order", auth, root, async (req, res) => {
   const skip = p ? 2 * (p - 1) : 0;
   try {
     const orders = await OrderModel.find().limit(2).skip(skip).sort({ createdAt: -1 }).populate("user");
+    if (orders.length === 0) {
+      return res.json({ orders: [], orderCount: 0 });
+    }
     const userIds = orders.map((order) => {
       return { user: order.user._id };
     });

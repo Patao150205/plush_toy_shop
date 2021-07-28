@@ -94,8 +94,6 @@ const ProductId: FC<Props> = ({ data }) => {
     return <NoProduct />;
   }
 
-  console.log(hasCart);
-
   return (
     <>
       <Head>

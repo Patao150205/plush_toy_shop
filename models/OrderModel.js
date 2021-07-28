@@ -13,6 +13,7 @@ const OrderSchema = new Schema(
         amount: { type: Number, required: true },
       },
     ],
+    status: { type: String, enum: ["sent", "noSent"], default: "noSent" },
   },
   { versionKey: false, timestamps: true }
 );

@@ -108,16 +108,20 @@ const Order: FC<Props> = ({ orderProps, page, orderCount }) => {
             </div>
           )}
           <div className={`module-spacer--sm`} />
-          <div className={style.pagenation}>
-            <Pagination
-              defaultActivePage={page}
-              ellipsisItem={null}
-              firstItem={null}
-              lastItem={null}
-              totalPages={totalPages}
-              onPageChange={(_, data) => handlePageChange(data.activePage as number)}
-            />
-          </div>
+          {orders.length > 0 ? (
+            <div className={style.pagenation}>
+              <Pagination
+                defaultActivePage={page}
+                ellipsisItem={null}
+                firstItem={null}
+                lastItem={null}
+                totalPages={totalPages}
+                onPageChange={(_, data) => handlePageChange(data.activePage as number)}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </Segment>
     </>

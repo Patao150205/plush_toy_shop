@@ -28,6 +28,7 @@ type Props = {
         }
       ];
       _id: string;
+      status: "noSent" | "sent";
     }
   ];
   page: string;
@@ -72,16 +73,20 @@ const History: FC<Props> = ({ historyProp, page, orderCount }) => {
             </div>
           )}
           <div className={`module-spacer--sm`} />
-          <div className={style.pagenation}>
-            <Pagination
-              defaultActivePage={page}
-              ellipsisItem={null}
-              firstItem={null}
-              lastItem={null}
-              totalPages={totalPages}
-              onPageChange={(_, data) => handlePageChange(data.activePage as number)}
-            />
-          </div>
+          {histories.length > 0 ? (
+            <div className={style.pagenation}>
+              <Pagination
+                defaultActivePage={page}
+                ellipsisItem={null}
+                firstItem={null}
+                lastItem={null}
+                totalPages={totalPages}
+                onPageChange={(_, data) => handlePageChange(data.activePage as number)}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </Segment>
     </>

@@ -1,6 +1,10 @@
 const ProductsModel = require("../models/ProductsModel");
 const router = require("express").Router();
 const { getStockList } = require("../serverUtils/getStockList");
+const auth = require("../middleware/verificationAuth");
+const root = require("../middleware/isRootUser");
+const OrderModel = require("../models/OrderModel");
+const PurchaseHistoryModel = require("../models/PurchaseHistoryModel");
 
 // @route GET api/product/:productId
 // @desc 商品情報の取得
@@ -30,6 +34,23 @@ router.get("/stock/:productId", async (req, res) => {
   try {
     const { totalStock, productStock, cartStock } = await getStockList(productId);
     res.json({ totalStock, productStock, cartStock });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("サーバーエラー");
+  }
+});
+
+// @route POST api/product/order/status
+// @desc 注文の状態を変更
+// @access Private root
+router.post("/order/status", auth, root, async (req, res) => {
+  const { orderId, status } = req.body;
+
+  await OrderModel.findByIdAndUpdate(orderId, { $set: { status } });
+  await PurchaseHistoryModel.findOneAndUpdate(orderId, { $set: { status } });
+
+  try {
+    res.send("注文の状態を変更しました。");
   } catch (error) {
     console.error(error);
     res.status(500).send("サーバーエラー");

@@ -49,8 +49,9 @@ router.post("/", auth, async (req, res) => {
           amount: prod.amount,
         };
       });
-      await OrderModel.create([{ user: userId, products: productsData }], { session });
-      await PurchaseHistoryModel.create([{ user: userId, products: productsData }], { session });
+      const ObjectId = mongoose.Types.ObjectId();
+      await OrderModel.create([{ _id: ObjectId, user: userId, products: productsData }], { session });
+      await PurchaseHistoryModel.create([{ orderId: ObjectId, user: userId, products: productsData }], { session });
       const paymentIntent = await stripe.paymentIntents.create({
         amount: sumPrice,
         currency: "jpy",
