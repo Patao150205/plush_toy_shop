@@ -5,7 +5,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Pagination, Navigation, Controller, EffectFade, Mousewheel, Autoplay } from "swiper";
 import PrimaryButton from "components/UIkit/button/PrimaryButton";
 import { useRouter } from "next/router";
-import Image from "next/image";
 
 SwiperCore.use([Pagination, Navigation, Controller, EffectFade, Mousewheel, Autoplay]);
 
@@ -64,10 +63,15 @@ const Top: FC = () => {
           <PrimaryButton content="ぬいぐるみを探す" onClick={() => router.push("/products")} />
         </div>
         <div className="module-spacer--xl" />
+        <div className={style.description}>
+          <h1><span>Yuruhuwa</span>とは？</h1>
+          <p>かわいいぬいぐるみたちに癒される🥺</p>
+          <p>そんなゆるふわなショップ❗️</p>
+          <p style={{color: 'red'}}>※注意  実際に注文しても商品は届きません。趣味で作ったものです。</p>
+        <div className="module-spacer--sm" />
+        </div>
+        <div className="module-spacer--xl" />
       </div>
-      <p className="u-text--center">
-        <a href="https://twitter.com/Patao_program">製作者Twitter</a>
-      </p>
       <div className="module-spacer--xl" />
     </>
   );

@@ -6,6 +6,7 @@ import style from "styles/pages/app.module.scss";
 import Modal from "components/layout/Modal";
 import { useAppDispatch } from "stores/store";
 import { fetchUserInfo } from "stores/userSlice";
+import Footer from './Footer';
 
 const Layout: FC = ({ children }) => {
   const dispatch = useAppDispatch();
@@ -25,6 +26,7 @@ const Layout: FC = ({ children }) => {
           <SideBar>
             <div className={style.wrapper}>{children}</div>
           </SideBar>
+          <Footer />
         </MainLoading>
       </Modal>
     </>

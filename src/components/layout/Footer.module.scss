@@ -1,0 +1,17 @@
+@import "config";
+
+.root {
+  h1 {
+    margin: 10px 0;
+  }
+  background-color: rgb(186, 186, 204);
+  text-align: center;
+  .link {
+    font-size: 1.5rem;
+  }
+  :global {
+    .fa-twitter {
+      color: rgb(25, 108, 233);
+    }
+  }
+}

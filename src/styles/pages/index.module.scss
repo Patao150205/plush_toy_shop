@@ -48,3 +48,17 @@
 .productsBtn {
   text-align: center;
 }
+
+.description {
+  h1 {
+    padding: 1rem 0;
+  }
+  span {
+    color: $Ssecondary;
+  }
+  p {
+    font-size: 1.5rem;
+  }
+  background-color: rgb(113, 113, 240);
+  text-align: center;
+}
