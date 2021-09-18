@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import ConfirmationCard from "components/settlement/ConfirmationCard";
 import { Divider, Modal, Button } from "semantic-ui-react";
 import style from "./OrderCard.module.scss";

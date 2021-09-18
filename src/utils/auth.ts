@@ -13,21 +13,13 @@ export type SignUpState = {
   email: string;
   password: string;
   isShorthandEmail: boolean;
-  // firstname: string;
-  // lastname: string;
-  // postcord: number;
-  // prefecture: string;
-  // city: string;
-  // streetAdress: string;
-  // building: string;
-  // phoneNumber: number;
 };
 
 export const authToken = async (token: string) => {
   try {
     const res = await axios.post(`${BaseUrl}/api/auth/token`, {}, { headers: { authorization: token } });
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, errMsg: error.response.data };
   }
 };
@@ -36,7 +28,7 @@ export const authTokenAndRoot = async (token: string) => {
   try {
     const res = await axios.post(`${BaseUrl}/api/auth/token/root`, {}, { headers: { authorization: token } });
     return res.data;
-  } catch (error) {
+  } catch (error:any) {
     return { err: true, errMsg: error.response.data };
   }
 };
@@ -47,7 +39,7 @@ export const temporaryRegist = async (userInfo: SignUpState) => {
       ...userInfo,
     });
     return res.data;
-  } catch (err) {
+  } catch (err:any) {
     return { err: true, errMsg: err.response.data };
   }
 };
@@ -56,18 +48,18 @@ export const confirmCurrectHash = async (hash: string) => {
   try {
     const res = await axios.post(`${BaseUrl}/api/auth/register/${hash}`);
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { error: true, errMsg: error.response.data };
   }
 };
 
 export const signIn = async (userInfo: SignInState) => {
   try {
-    const res = await axios.post(`${BaseUrl}/api/auth/`, {
+    const res = await axios.post(`${BaseUrl}/api/auth`, {
       ...userInfo,
     });
     return res.data;
-  } catch (err) {
+  } catch (err:any) {
     return { err: true, errMsg: err.response.data };
   }
 };

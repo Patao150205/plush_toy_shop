@@ -15,7 +15,7 @@ export const uploadImg = async (imgs: any[]) => {
       try {
         const res = await axios.post(process.env.CLOUDINARY_URL as string, formData);
         return res.data.url;
-      } catch (error) {
+      } catch (error: any) {
         console.error(error.response);
         return error;
       }

@@ -20,7 +20,7 @@ export const getAddressData = async (token: string | undefined) => {
   try {
     const res = await axios.get(`${BaseUrl}/api/address`, { headers: { authorization: token } });
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
     return { err: true, errMsg: error.response.data };
   }
@@ -34,7 +34,7 @@ export const sendAddressData = async (data: AddressData) => {
       { headers: { authorization: cookie.get("token") } }
     );
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, errMsg: error.response.data };
   }
 };

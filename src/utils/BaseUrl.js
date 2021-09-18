@@ -1,4 +1,3 @@
-const BaseUrl =
-  process.env.NODE_ENV !== "production" ? "http://localhost:3000" : "https://blush-toy-shop.herokuapp.com";
+const BaseUrl = process.env.NODE_ENV !== 'production' ? `` : ``;
 
 module.exports = BaseUrl;

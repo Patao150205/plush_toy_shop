@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import axiosBase from "axios";
 import BaseUrl from "./BaseUrl";
-import { store } from "stores/store";
 import cookies from "js-cookie";
-import { updateCart, updateFavorites } from "stores/userSlice";
 
 const axios = axiosBase.create({ headers: { authorization: cookies.get("token") } });
 
@@ -45,7 +43,7 @@ export const getFavoritesProduct = async (token?: string) => {
     });
 
     return newData;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, errMsg: error.response.data };
   }
 };
@@ -68,7 +66,7 @@ export const getCartProduct = async (token: string) => {
     });
 
     return { cart: newData, updatedAt: res.data.updatedAt };
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, errMsg: error.response.data };
   }
 };
@@ -77,7 +75,7 @@ export const changeCartStock = async (productId: string, newAmmount: number) => 
   try {
     const res = await axios.post(`/api/cart/count/${productId}`, { newAmmount });
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, errMsg: error.response.data };
   }
 };

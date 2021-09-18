@@ -27,7 +27,7 @@ export const getProduct = async (productId: string) => {
   try {
     const res = await axiosBase.get(`${BaseUrl}/api/product/${productId}`);
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, errMsg: error.response.data };
   }
 };
@@ -37,7 +37,7 @@ export const getStockList = async (productId: string) => {
   try {
     const res = await axiosBase.get(`${BaseUrl}/api/product/stock/${productId}`);
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, errMsg: error.response.data };
   }
 };
@@ -47,7 +47,7 @@ export const getProducts = async (path: string) => {
   try {
     const res = await axiosBase.get(`${BaseUrl}/api${path}`);
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, errMsg: error.response.data };
   }
 };
@@ -57,7 +57,7 @@ export const getProductsRoot = async (path: string, token: string) => {
   try {
     const res = await axiosBase.get(`${BaseUrl}/api${path}`, { headers: { authorization: token } });
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, errMsg: error.response.data };
   }
 };
@@ -67,7 +67,7 @@ export const SearchProducts = async (keyword: string) => {
   try {
     const res = await axiosBase.get(`${BaseUrl}/api/search?keyword=${keyword}`);
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, errMsg: error.response.data };
   }
 };
@@ -83,7 +83,7 @@ export const registProduct = async (data: ProductData) => {
   try {
     const res = await axios.post(`${BaseUrl}/api/products`, { ...data });
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, errMsg: error.response.data };
   }
 };
@@ -99,7 +99,7 @@ export const modifyProduct = async (data: ProductData) => {
   try {
     const res = await axios.post(`${BaseUrl}/api/products/modification`, { ...data });
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, errMsg: error.response.data };
   }
 };
@@ -109,7 +109,7 @@ export const deleteProduct = async (productId: string) => {
   try {
     const res = await axios.delete(`${BaseUrl}/api/products/${productId}`);
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, message: error.response.data };
   }
 };
@@ -119,7 +119,7 @@ export const getPurchaseHistory = async (token: string, page: string | number) =
   try {
     const res = await axiosBase.get(`${BaseUrl}/api/products/history?p=${page}`, { headers: { authorization: token } });
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, message: error.response.data };
   }
 };
@@ -129,7 +129,7 @@ export const getOrderList = async (token: string, page: string | number) => {
   try {
     const res = await axiosBase.get(`${BaseUrl}/api/products/order?p=${page}`, { headers: { authorization: token } });
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, message: error.response.data };
   }
 };
@@ -145,7 +145,7 @@ export const changeOrderStatus = async (orderId: string, status: string) => {
       }
     );
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     return { err: true, message: error.response.data };
   }
 };

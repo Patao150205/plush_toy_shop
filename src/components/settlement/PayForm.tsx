@@ -54,7 +54,7 @@ const PayForm: FC<Props> = ({ subTotal, token, eachAmount }) => {
           window.location.href = "/settlement/completed";
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       await axios.post(`${BaseUrl}/api/settlement/rollback`);
       dispatch(
         ModalOpen({
