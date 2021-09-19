@@ -7,9 +7,13 @@ import { GetServerSideProps } from "next";
 import nookies from "nookies";
 import { authToken } from "utils/auth";
 import { logOut } from "utils/auth";
+import { useAppSelector } from 'stores/store';
+import { userInfoSelector } from 'stores/userSlice';
 
 const User: FC = () => {
   const router = useRouter();
+  const userInfo = useAppSelector(userInfoSelector);
+
   return (
     <>
       <Head>
@@ -18,6 +22,8 @@ const User: FC = () => {
       <div className={style.root}>
         <Segment>
           <h1>ユーザー</h1>
+          <div className="module-spacer--xs" />
+          <p>こんにちは!! {userInfo.nickname} さん</p>
           <div className={`module-spacer--xs ${style.border}`} />
           <div className="module-spacer--xs" />
           <h2>購入履歴</h2>

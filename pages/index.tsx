@@ -67,7 +67,7 @@ const Top: FC = () => {
           <h1><span>Yuruhuwa</span>とは？</h1>
           <p>かわいいぬいぐるみたちに癒される🥺</p>
           <p>そんなゆるふわなショップ❗️</p>
-          <p style={{color: 'red'}}>※注意  実際に注文しても商品は届きません。趣味で作ったものです。</p>
+          <p style={{color: 'red'}}>※注意  実際に注文しても商品は届きません。</p>
         <div className="module-spacer--sm" />
         </div>
         <div className="module-spacer--xl" />

@@ -1,18 +1,18 @@
-const ProductsModel = require("../models/ProductsModel");
-const router = require("express").Router();
-const extractSerachQuery = require("../serverUtils/searchQueryCondition");
-const extractSortQuery = require("../serverUtils/sortQueryCondition");
-const auth = require("../middleware/verificationAuth");
-const root = require("../middleware/isRootUser");
-const PurchaseHistoryModel = require("../models/PurchaseHistoryModel");
-const OrderModel = require("../models/OrderModel");
-const AddressModel = require("../models/AddressModel");
-const CartModel = require("../models/CartModel");
+const ProductsModel = require('../models/ProductsModel');
+const router = require('express').Router();
+const extractSerachQuery = require('../serverUtils/searchQueryCondition');
+const extractSortQuery = require('../serverUtils/sortQueryCondition');
+const auth = require('../middleware/verificationAuth');
+const root = require('../middleware/isRootUser');
+const PurchaseHistoryModel = require('../models/PurchaseHistoryModel');
+const OrderModel = require('../models/OrderModel');
+const AddressModel = require('../models/AddressModel');
+const CartModel = require('../models/CartModel');
 
 // @route GET api/products
 // @desc 商品一覧の取得
 // @access Public
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   const q = req.query;
   const skipCount = q.p ? 20 * (q.p - 1) : 0;
   let search = extractSerachQuery(q);
@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
       .skip(skipCount)
       .limit(20)
       .sort(sort)
-      .select("name primaryPic price New Hot height isRelease");
+      .select('name primaryPic price New Hot height isRelease');
     const count = await ProductsModel.find(search).countDocuments();
     const sendData = {
       products: data,
@@ -32,14 +32,14 @@ router.get("/", async (req, res) => {
     res.json(sendData);
   } catch (error) {
     console.error(error);
-    res.status(500).send("サーバーエラー");
+    res.status(500).send('サーバーエラー');
   }
 });
 
 // @route GET api/products/root
 // @desc 商品一覧の取得(管理者用),リリースされていない商品も表示します。
 // @access Private
-router.get("/root", auth, root, async (req, res) => {
+router.get('/root', auth, root, async (req, res) => {
   const q = req.query;
   const skipCount = q.p ? 20 * (q.p - 1) : 0;
   let search = extractSerachQuery(q);
@@ -51,7 +51,7 @@ router.get("/root", auth, root, async (req, res) => {
       .skip(skipCount)
       .limit(20)
       .sort(sort)
-      .select("name primaryPic price New Hot height isRelease");
+      .select('name primaryPic price New Hot height isRelease');
     const count = await ProductsModel.find(search).countDocuments();
     const sendData = {
       products: data,
@@ -60,30 +60,30 @@ router.get("/root", auth, root, async (req, res) => {
     res.json(sendData);
   } catch (error) {
     console.error(error);
-    res.status(500).send("サーバーエラー");
+    res.status(500).send('サーバーエラー');
   }
 });
 
 // @route POST api/products
 // @desc 商品情報の登録
 // @access Private
-router.post("/", auth, root, async (req, res) => {
+router.post('/', auth, root, async (req, res) => {
   try {
     const product = new ProductsModel({
       ...req.body,
     });
     await product.save();
-    res.send("商品情報の登録に成功しました。");
+    res.send('商品情報の登録に成功しました。');
   } catch (error) {
     console.error(error);
-    res.status(500).send("サーバーエラー");
+    res.status(500).send('サーバーエラー');
   }
 });
 
 // @route POST api/products/modification
 // @desc 商品情報の編集
 // @access Private
-router.post("/modification", auth, root, async (req, res) => {
+router.post('/modification', auth, root, async (req, res) => {
   try {
     const { stock, isRelease, _id } = req.body;
     const product = await ProductsModel.findById(_id);
@@ -99,46 +99,46 @@ router.post("/modification", auth, root, async (req, res) => {
 
     await ProductsModel.findByIdAndUpdate(_id, { ...req.body });
 
-    res.send("商品情報の編集に成功しました。");
+    res.send('商品情報の編集に成功しました。');
   } catch (error) {
     console.error(error);
-    res.status(500).send("サーバーエラー");
+    res.status(500).send('サーバーエラー');
   }
 });
 
 // @route DELETE api/products
 // @desc 商品情報の削除
 // @access Private
-router.delete("/:productId", auth, async (req, res) => {
+router.delete('/:productId', auth, async (req, res) => {
   const productId = req.params.productId;
   try {
     await ProductsModel.findByIdAndDelete(productId);
     await CartModel.updateMany({}, { $pull: { products: { product: productId } } }, { multi: true });
-    res.send("商品情報を削除しました。");
+    res.send('商品情報を削除しました。');
   } catch (error) {
     console.error(error);
-    res.status(500).send("サーバーエラー");
+    res.status(500).send('サーバーエラー');
   }
 });
 
 // @route GET api/products/search
 // @desc 商品情報の検索
 // @access Public
-router.get("/search", async (req, res) => {
+router.get('/search', async (req, res) => {
   try {
     const keyword = new RegExp(`.*${req.query.keyword}.*`);
-    const products = await ProductsModel.find({ name: keyword }).limit(20).select("name primaryPic");
+    const products = await ProductsModel.find({ name: keyword }).limit(20).select('name primaryPic');
     res.json(products);
   } catch (error) {
     console.error(error);
-    res.status(500).send("サーバーエラー");
+    res.status(500).send('サーバーエラー');
   }
 });
 
 // @route GET api/products/search
 // @desc 商品履歴の取得
 // @access Private
-router.get("/history", auth, async (req, res) => {
+router.get('/history', auth, async (req, res) => {
   const { userId } = req;
   const { p } = req.query;
   const skip = p ? 2 * (p - 1) : 0;
@@ -148,23 +148,23 @@ router.get("/history", auth, async (req, res) => {
     res.json({ histories, orderCount });
   } catch (error) {
     console.error(error);
-    res.status(500).send("サーバーエラー");
+    res.status(500).send('サーバーエラー');
   }
 });
 
 // @route GET api/products/search
 // @desc 発注リストの取得
 // @access Private root
-router.get("/order", auth, root, async (req, res) => {
+router.get('/order', auth, root, async (req, res) => {
   const { p } = req.query;
   const skip = p ? 2 * (p - 1) : 0;
   try {
-    const orders = await OrderModel.find().limit(2).skip(skip).sort({ createdAt: -1 }).populate("user");
+    const orders = await OrderModel.find().limit(2).skip(skip).sort({ createdAt: -1 }).populate('user');
     if (orders.length === 0) {
       return res.json({ orders: [], orderCount: 0 });
     }
     const userIds = orders.map((order) => {
-      return { user: order.user._id };
+      return { user: order.user._id.toString() };
     });
 
     const addresses = await AddressModel.find({ $or: userIds });
@@ -181,7 +181,7 @@ router.get("/order", auth, root, async (req, res) => {
     res.json({ orders: orderAndEmail, orderCount });
   } catch (error) {
     console.error(error);
-    res.status(500).send("サーバーエラー");
+    res.status(500).send('サーバーエラー');
   }
 });
 

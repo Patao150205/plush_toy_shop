@@ -5,12 +5,11 @@ import cookies from "js-cookie";
 import style from "styles/pages/auth/register/[hash].module.scss";
 import { Segment } from "semantic-ui-react";
 import SecondaryButton from "components/UIkit/button/SecondaryButton";
-import { useRouter } from "next/router";
 import Head from "next/head";
 
 const RegisterHash: FC<{ token: string }> = ({ token }) => {
-  cookies.set("token", token);
-  const router = useRouter();
+  
+    cookies.set("token", token);
 
   return (
     <>
@@ -35,7 +34,7 @@ const RegisterHash: FC<{ token: string }> = ({ token }) => {
                 <SecondaryButton
                   content="OK"
                   onClick={() => {
-                    router.push("/");
+                    window.location.href = '/';
                   }}
                 />
               </div>
