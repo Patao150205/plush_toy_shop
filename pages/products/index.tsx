@@ -123,5 +123,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const relativePath = strIns(ctx.resolvedUrl, 9, "/root");
     datas = await getProductsRoot(relativePath, token);
   }
+  console.log(datas);
   return { props: { datas } };
 };
