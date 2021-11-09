@@ -6,7 +6,7 @@
 
 ## URL＆テストアカウント
 
-[Yuruhuwa ホーム](https://blush-toy-shop.herokuapp.com/)
+[Yuruhuwa ホーム](https://plush-toy-shop.patapatao.com/)
 
     email: test@yahoo.co.jp
     password: 111111
