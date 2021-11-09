@@ -22,13 +22,14 @@ const Top: FC = () => {
     <>
       <Head>
         <title>Yuruhuwa 【TOP】</title>
+        <meta name="description" content="かわいい💗ぬいぐるみ達に、癒やされる、そんなぬいぐるみ専門のECショップです！" />
         <meta name="twitter:card" content="summary"></meta>
         <meta name="twitter:site" content="@Patao_program"></meta>
         <meta name="twitter:creator" content="@Patao_program"></meta>
         <meta property="og:title" content="ぬいぐるみショップ Yuruhuwa" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://blush-toy-shop.herokuapp.com/" />
-        <meta property="og:image" content="https://blush-toy-shop.herokuapp.com/shopLogo.jpg" />
+        <meta property="og:url" content="https://plush-toy-shop.patapatao.com" />
+        <meta property="og:image" content="https://plush-toy-shop.patapatao.com" />
         <meta property="og:site_name" content="Yuruhuwa" />
         <meta
           property="og:description"
